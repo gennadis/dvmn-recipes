@@ -4,4 +4,4 @@ venv
 env
 
 .env
-
+*.sqlite3
