@@ -35,7 +35,7 @@ class Recipe(models.Model):
     ingredients = models.ManyToManyField(
         to=Ingredient,
         verbose_name="Recipe ingredients",
-        through="RecipeIngredient",
+        through="RecipeIngredientAmount",
     )
     image = models.ImageField(
         verbose_name="Food image",
@@ -65,7 +65,7 @@ class Recipe(models.Model):
         return f"Recipe: {self.name}"
 
 
-class RecipeIngredient(models.Model):
+class RecipeIngredientAmount(models.Model):
     ingredient = models.ForeignKey(
         verbose_name="Recipe ingredient",
         to=Ingredient,
