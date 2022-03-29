@@ -1,6 +1,16 @@
 from django.db import models
 
 
+class MealType(models.Model):
+    name = models.CharField(
+        verbose_name="Meal type",
+        max_length=100,
+    )
+
+    def __str__(self) -> str:
+        return f"Meal type: {self.name}"
+
+
 class Ingredient(models.Model):
     name = models.CharField(verbose_name="Ingredient name", max_length=200)
     unit = models.CharField(verbose_name="Unit of measurement", max_length=20)
@@ -37,7 +47,11 @@ class Recipe(models.Model):
         verbose_name="Recipe working time in minutes",
         default=0,
     )
-    # TODO: meal type
+    meal_type = models.ManyToManyField(
+        verbose_name="Recipe meal type",
+        to=MealType,
+        related_name="recipes",
+    )
     # TODO: nutrition
     created_at = models.DateTimeField(
         verbose_name="Recipe creation time",
