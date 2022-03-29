@@ -74,7 +74,7 @@ class RecipeIngredient(models.Model):
     recipe = models.ForeignKey(
         verbose_name="Recipe name",
         to=Recipe,
-        related_name="ingredients",
+        related_name="ingredients_amount",
         on_delete=models.CASCADE,
     )
     amount = models.DecimalField(
