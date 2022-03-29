@@ -25,6 +25,7 @@ class Recipe(models.Model):
     ingredients = models.ManyToManyField(
         to=Ingredient,
         verbose_name="Recipe ingredients",
+        through="RecipeIngredient",
     )
     image = models.ImageField(
         verbose_name="Food image",
@@ -46,5 +47,25 @@ class Recipe(models.Model):
     class Meta:
         ordering = ("-created_at",)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"Recipe: {self.name}"
+
+
+class RecipeIngredient(models.Model):
+    ingredient = models.ForeignKey(
+        verbose_name="Recipe ingredient",
+        to=Ingredient,
+        on_delete=models.CASCADE,
+    )
+    recipe = models.ForeignKey(
+        verbose_name="Recipe name",
+        to=Recipe,
+        related_name="ingredients",
+        on_delete=models.CASCADE,
+    )
+    amount = models.DecimalField(
+        verbose_name="Ingredient amount in Recipe",
+        default=0,
+        max_digits=8,
+        decimal_places=1,
+    )
