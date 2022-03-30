@@ -16,8 +16,18 @@ class TelegramUser(models.Model):
         null=True,
         validators=[MinLengthValidator(5)],
     )
-    first_name = models.CharField(verbose_name="First name", max_length=64)
-    last_name = models.CharField(verbose_name="Last name", max_length=64)
+    first_name = models.CharField(
+        verbose_name="First name",
+        max_length=64,
+        blank=True,
+        null=True,
+    )
+    last_name = models.CharField(
+        verbose_name="Last name",
+        max_length=64,
+        blank=True,
+        null=True,
+    )
     phone_number = PhoneNumberField()
 
     def __str__(self) -> str:
