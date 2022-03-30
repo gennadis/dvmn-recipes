@@ -1,4 +1,3 @@
-from ast import Sub
 from environs import Env
 
 from aiogram import Bot, Dispatcher, executor, types
@@ -7,20 +6,22 @@ from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import State, StatesGroup
 
 
-MAIN_KEYBOARD = types.ReplyKeyboardMarkup(
-    resize_keyboard=True
-).add(*["Мои подписки", "Создать подписку"])
-
-ASK_FOR_PHONE_KEYBOARD = types.ReplyKeyboardMarkup(
-    resize_keyboard=True,
-    one_time_keyboard=True
-).add(
-    types.KeyboardButton(
-        "Отправить номер телефона",
-        request_contact=True
-    )
+from keyboards import (
+    MAIN_KEYBOARD,
+    ASK_FOR_PHONE_KEYBOARD,
+    how_much_persons_keyboard,
+    make_one_time_keyboard
 )
 
+
+ALLERGENS = [
+    'аллерген 1',
+    'аллерген 2',
+    'аллерген 3',
+    'аллерген 4',
+    'аллерген 5'
+
+]
 
 class UserProfile(StatesGroup):
     id = State()
@@ -53,6 +54,9 @@ async def save_profile(state, fs, cursor):
     fs.commit()
 
 
+
+
+
 if __name__ == '__main__':
     env = Env()
     env.read_env()
@@ -74,6 +78,7 @@ if __name__ == '__main__':
         # else:
         await message.answer('Здравствуйте!\n\nКак Вас зовут?\n(введите имя)')
         await UserProfile.name.set()
+
 
 
     @bot.message_handler(state=UserProfile.name)
@@ -106,52 +111,100 @@ if __name__ == '__main__':
 
     @bot.message_handler(lambda message: message.text == "Мои подписки")
     async def get_user_subscriptions(message: types.Message):
-        await message.answer('Здесь будут Ваши подписки!')
+
+        # Здесь будут список названий подписок пользователя
+        user_subscriptions_titles = ['Крутая подписка', 'Очень крутая подписка', 'Супер-пупер подписка']
+
+        # проверка есть ли хотя бы одна подписка. Если нет - сообщить
+        await message.answer('Выберите вашу подписку из списка внизу', reply_markup=make_one_time_keyboard(user_subscriptions_titles))
 
     
     @bot.message_handler(lambda message: message.text == "Создать подписку")
     async def create_subscription(message: types.Message):
-        await message.answer('Здесь можно будет создать подписку.\n\nСовсем скоро...')
+        await message.answer('Укажите тип меню.')
+        await Subscription.type_menu.set()
 
 
     @bot.message_handler(state=Subscription.type_menu)
-    async def get_type_menu(message: types.Message):
-        pass
+    async def get_type_menu(message: types.Message, state: FSMContext):
+        await state.update_data(type_menu=message.text)
+        await message.answer('Отлично, укажите количество персон', reply_markup=how_much_persons_keyboard())
+        await Subscription.persons.set()
 
 
     @bot.message_handler(state=Subscription.persons)
-    async def get_number_of_persons(message: types.Message):
-        pass
+    async def get_number_of_persons(message: types.Message, state: FSMContext):
+        await state.update_data(persons=message.text)
+        await message.answer(
+            'Отлично, укажите количество приемов пищи',
+            reply_markup=make_one_time_keyboard([str(x + 1) for x in range(4)])
+        )
+        await Subscription.eatings.set()
 
 
     @bot.message_handler(state=Subscription.eatings)
-    async def get_number_of_eatings(message: types.Message):
-        pass
+    async def get_number_of_eatings(message: types.Message, state: FSMContext):
+        await state.update_data(eatings=message.text)
+        await message.answer('Отлично, укажите аллергены - продукты которых не должно быть ', reply_markup=make_one_time_keyboard(ALLERGENS))
+        await Subscription.allergens.set()
 
 
     @bot.message_handler(state=Subscription.allergens)
-    async def get_allergens(message: types.Message):
-        pass
+    async def get_allergens(message: types.Message, state: FSMContext):
+        if message.text == 'Готово':
+            
+            await message.answer(
+                'Отлично, выберите период подписки',
+                reply_markup=make_one_time_keyboard([
+                    '7 дней',
+                    '14 дней',
+                    '1 месяц'
+                ])
+            )
+            await Subscription.period.set()
+        elif message.text in ALLERGENS:
+            try:
+                state_data = await state.get_data()
+                user_allergens = state_data.get('allergens')
+                user_allergens.append(message.text)
+            except AttributeError:
+                user_allergen = [f'{message.text}']
+            await state.update_data(allergens=user_allergens)
+            await message.answer("Добавим еще один?", reply_markup=make_one_time_keyboard(ALLERGENS + ['Готово']))
+            await Subscription.allergens.set()
 
 
     @bot.message_handler(state=Subscription.period)
-    async def get_subscription_period(message: types.Message):
-        pass
+    async def get_subscription_period(message: types.Message, state: FSMContext):
+        await state.update_data(period=message.text)
+        await message.answer('Введите промокод')
+        await Subscription.promo.set()
 
 
     @bot.message_handler(state=Subscription.promo)
-    async def get_promo(message: types.Message):
-        pass
+    async def get_promo(message: types.Message, state: FSMContext):
+        await state.update_data(promo=message.text)
+        await message.answer('Итак, подписка сформирована. Осталось ее оплатить и можно идти за продуктами.', reply_markup=make_one_time_keyboard(['Оплатить подписку']))
+        await Subscription.payment.set()
 
 
     @bot.message_handler(state=Subscription.payment)
-    async def make_payment(message: types.Message):
-        pass
+    async def make_payment(message: types.Message, state: FSMContext):
+        await state.update_data(payment=message.text)
+        await message.answer('Оплата успешно завершена.', reply_markup=MAIN_KEYBOARD)
+        
 
 
 
-
-
+    @bot.message_handler(lambda message: message.text == 'Вернуться на главную', state='*')
+    async def return_to_main(message: types.Message, state: FSMContext):
+        await state.finish()
+        await message.reply('Возвращаемся на главную', reply_markup=MAIN_KEYBOARD)
+    
+    @bot.message_handler()
+    async def return_to_main(message: types.Message, state: FSMContext):
+        await state.finish()
+        await message.reply('Перехват не распознанных сообщений', reply_markup=MAIN_KEYBOARD)
 
 
     executor.start_polling(bot)
