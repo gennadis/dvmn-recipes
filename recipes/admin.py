@@ -1,6 +1,13 @@
 from django.contrib import admin
 
-from .models import Recipe, Ingredient, MealType, RecipeIngredientAmount, TelegramUser
+from .models import (
+    Recipe,
+    Ingredient,
+    MealType,
+    RecipeIngredientAmount,
+    TelegramUser,
+    Subscription,
+)
 
 
 class RecipeIngredientAmountInline(admin.TabularInline):
@@ -24,5 +31,10 @@ class RecipesAdmin(admin.ModelAdmin):
 
 
 @admin.register(TelegramUser)
+class RecipesAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(Subscription)
 class RecipesAdmin(admin.ModelAdmin):
     pass
