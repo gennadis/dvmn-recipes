@@ -141,6 +141,13 @@ class Recipe(models.Model):
     class Meta:
         ordering = ("-created_at",)
 
+    def get_recipe_allergies(self):
+        allergies = []
+        for ingredient in self.ingredients.filter(allergy__isnull=False):
+            allergies.append(ingredient.allergy.first())
+            print(f"{ingredient} = {ingredient.allergy.first()}")
+        return allergies
+
     def __str__(self) -> str:
         return f"Recipe: {self.name}"
 
