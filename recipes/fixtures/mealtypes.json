@@ -3,7 +3,7 @@
         "model": "recipes.mealtype",
         "pk": 1,
         "fields": {
-            "name": "appetizers and snaks"
+            "name": "appetizers and snacks"
         }
     },
     {

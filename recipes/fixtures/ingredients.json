@@ -3,13 +3,37 @@
         "model": "recipes.ingredient",
         "pk": 1,
         "fields": {
+            "name": "tap water",
+            "unit": "milliliters"
+        }
+    },
+    {
+        "model": "recipes.ingredient",
+        "pk": 2,
+        "fields": {
+            "name": "boiled water",
+            "unit": "milliliters"
+        }
+    },
+    {
+        "model": "recipes.ingredient",
+        "pk": 3,
+        "fields": {
+            "name": "bread",
+            "unit": "gramms"
+        }
+    },
+    {
+        "model": "recipes.ingredient",
+        "pk": 4,
+        "fields": {
             "name": "mozzarella cheese",
             "unit": "gramms"
         }
     },
     {
         "model": "recipes.ingredient",
-        "pk": 2,
+        "pk": 5,
         "fields": {
             "name": "garlic",
             "unit": "piece"
@@ -17,7 +41,7 @@
     },
     {
         "model": "recipes.ingredient",
-        "pk": 3,
+        "pk": 6,
         "fields": {
             "name": "cream",
             "unit": "milliliters"
@@ -25,7 +49,7 @@
     },
     {
         "model": "recipes.ingredient",
-        "pk": 4,
+        "pk": 7,
         "fields": {
             "name": "milk",
             "unit": "milliliters"
@@ -33,7 +57,7 @@
     },
     {
         "model": "recipes.ingredient",
-        "pk": 5,
+        "pk": 8,
         "fields": {
             "name": "yoghurt",
             "unit": "milliliters"
@@ -41,7 +65,7 @@
     },
     {
         "model": "recipes.ingredient",
-        "pk": 6,
+        "pk": 9,
         "fields": {
             "name": "egg",
             "unit": "piece"
@@ -49,7 +73,7 @@
     },
     {
         "model": "recipes.ingredient",
-        "pk": 7,
+        "pk": 10,
         "fields": {
             "name": "sunflower oil",
             "unit": "milliliters"
@@ -57,7 +81,7 @@
     },
     {
         "model": "recipes.ingredient",
-        "pk": 8,
+        "pk": 11,
         "fields": {
             "name": "peanut oil",
             "unit": "milliliters"
@@ -65,7 +89,7 @@
     },
     {
         "model": "recipes.ingredient",
-        "pk": 9,
+        "pk": 12,
         "fields": {
             "name": "orange",
             "unit": "piece"
@@ -73,7 +97,7 @@
     },
     {
         "model": "recipes.ingredient",
-        "pk": 10,
+        "pk": 13,
         "fields": {
             "name": "lemon",
             "unit": "piece"
@@ -81,7 +105,7 @@
     },
     {
         "model": "recipes.ingredient",
-        "pk": 11,
+        "pk": 14,
         "fields": {
             "name": "mango",
             "unit": "piece"
@@ -89,7 +113,7 @@
     },
     {
         "model": "recipes.ingredient",
-        "pk": 12,
+        "pk": 15,
         "fields": {
             "name": "cacao",
             "unit": "teaspoon"
@@ -97,7 +121,7 @@
     },
     {
         "model": "recipes.ingredient",
-        "pk": 13,
+        "pk": 16,
         "fields": {
             "name": "sugar",
             "unit": "teaspoon"
@@ -105,7 +129,7 @@
     },
     {
         "model": "recipes.ingredient",
-        "pk": 14,
+        "pk": 17,
         "fields": {
             "name": "mint",
             "unit": "piece"
@@ -113,7 +137,7 @@
     },
     {
         "model": "recipes.ingredient",
-        "pk": 15,
+        "pk": 18,
         "fields": {
             "name": "chicken",
             "unit": "gramms"
@@ -121,7 +145,7 @@
     },
     {
         "model": "recipes.ingredient",
-        "pk": 16,
+        "pk": 19,
         "fields": {
             "name": "beef",
             "unit": "gramms"
@@ -129,7 +153,7 @@
     },
     {
         "model": "recipes.ingredient",
-        "pk": 17,
+        "pk": 20,
         "fields": {
             "name": "minced meat",
             "unit": "gramms"
@@ -137,7 +161,7 @@
     },
     {
         "model": "recipes.ingredient",
-        "pk": 18,
+        "pk": 21,
         "fields": {
             "name": "salmon",
             "unit": "gramms"
@@ -145,7 +169,7 @@
     },
     {
         "model": "recipes.ingredient",
-        "pk": 19,
+        "pk": 22,
         "fields": {
             "name": "rice",
             "unit": "gramms"
@@ -153,7 +177,7 @@
     },
     {
         "model": "recipes.ingredient",
-        "pk": 20,
+        "pk": 23,
         "fields": {
             "name": "pasta",
             "unit": "gramms"
@@ -161,7 +185,7 @@
     },
     {
         "model": "recipes.ingredient",
-        "pk": 21,
+        "pk": 24,
         "fields": {
             "name": "white beans",
             "unit": "gramms"
@@ -169,7 +193,7 @@
     },
     {
         "model": "recipes.ingredient",
-        "pk": 22,
+        "pk": 25,
         "fields": {
             "name": "honey",
             "unit": "teaspoon"
@@ -177,7 +201,7 @@
     },
     {
         "model": "recipes.ingredient",
-        "pk": 23,
+        "pk": 26,
         "fields": {
             "name": "chili",
             "unit": "piece"
@@ -185,7 +209,7 @@
     },
     {
         "model": "recipes.ingredient",
-        "pk": 24,
+        "pk": 27,
         "fields": {
             "name": "mushrooms",
             "unit": "gramms"
@@ -193,7 +217,7 @@
     },
     {
         "model": "recipes.ingredient",
-        "pk": 25,
+        "pk": 28,
         "fields": {
             "name": "potatoes",
             "unit": "gramms"
@@ -201,7 +225,7 @@
     },
     {
         "model": "recipes.ingredient",
-        "pk": 26,
+        "pk": 29,
         "fields": {
             "name": "carrots",
             "unit": "piece"
@@ -209,7 +233,7 @@
     },
     {
         "model": "recipes.ingredient",
-        "pk": 27,
+        "pk": 30,
         "fields": {
             "name": "tomatoes",
             "unit": "piece"
@@ -217,7 +241,7 @@
     },
     {
         "model": "recipes.ingredient",
-        "pk": 28,
+        "pk": 31,
         "fields": {
             "name": "cucumber",
             "unit": "piece"
@@ -225,7 +249,7 @@
     },
     {
         "model": "recipes.ingredient",
-        "pk": 29,
+        "pk": 32,
         "fields": {
             "name": "onion",
             "unit": "piece"
@@ -233,7 +257,7 @@
     },
     {
         "model": "recipes.ingredient",
-        "pk": 30,
+        "pk": 33,
         "fields": {
             "name": "avocado",
             "unit": "piece"
@@ -241,7 +265,7 @@
     },
     {
         "model": "recipes.ingredient",
-        "pk": 31,
+        "pk": 34,
         "fields": {
             "name": "spinach",
             "unit": "piece"

@@ -1,6 +1,6 @@
 # MEAL TYPES
 meal_types_names = [
-    "appetizers and snaks",
+    "appetizers and snacks",
     "baked goods",
     "breakfast and brunch",
     "dessert",
@@ -22,6 +22,9 @@ piece = "piece"
 milliliter = "milliliters"
 
 ingredients_pairs = [
+    ("tap water", milliliter),
+    ("boiled water", milliliter),
+    ("bread", gramm),
     ("mozzarella cheese", gramm),
     ("garlic", piece),
     ("cream", milliliter),
