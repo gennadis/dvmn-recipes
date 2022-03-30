@@ -1,20 +1,31 @@
-from django.db.models import Model
+from typing import Optional
+
 from django.core.management.base import BaseCommand
 
 from recipes.models import TelegramUser
 
 
-def create_new_user(user_profile: dict) -> Model:
-    telegram_user = TelegramUser.objects.create(
+def create_new_user(user_profile: dict) -> TelegramUser:
+    new_user = TelegramUser.objects.create(
         telegram_id=user_profile.get("id"),
         telegram_username=user_profile.get("username"),
         first_name=user_profile.get("first_name"),
         last_name=user_profile.get("last_name"),
         phone_number=user_profile.get("phone_number"),
     )
-    telegram_user.save()
+    new_user.save()
 
-    return telegram_user
+    return new_user
+
+
+def get_existing_user(user_profile: dict) -> Optional[TelegramUser]:
+    try:
+        telegram_id = user_profile.get("id")
+        existing_user = TelegramUser.objects.get(telegram_id=telegram_id)
+        return existing_user
+
+    except TelegramUser.DoesNotExist:
+        return None
 
 
 class Command(BaseCommand):
@@ -28,5 +39,7 @@ class Command(BaseCommand):
             "last_name": "Test Last Name 123",
             "phone_number": "+7-999-123-45-00",
         }
-        new_user = create_new_user(user_profile)
-        print(new_user)
+        # new_user = create_new_user(user_profile)
+        existing_user = get_existing_user(user_profile)
+        print(existing_user)
+        print(existing_user.phone_number)
