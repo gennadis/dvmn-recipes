@@ -1,0 +1,44 @@
+[
+    {
+        "model": "recipes.allergy",
+        "pk": 1,
+        "fields": {
+            "name": "Seafood"
+        }
+    },
+    {
+        "model": "recipes.allergy",
+        "pk": 2,
+        "fields": {
+            "name": "Meat"
+        }
+    },
+    {
+        "model": "recipes.allergy",
+        "pk": 3,
+        "fields": {
+            "name": "Cereal"
+        }
+    },
+    {
+        "model": "recipes.allergy",
+        "pk": 4,
+        "fields": {
+            "name": "Honey"
+        }
+    },
+    {
+        "model": "recipes.allergy",
+        "pk": 5,
+        "fields": {
+            "name": "Nuts"
+        }
+    },
+    {
+        "model": "recipes.allergy",
+        "pk": 6,
+        "fields": {
+            "name": "Milk"
+        }
+    }
+]
