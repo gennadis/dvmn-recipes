@@ -37,6 +37,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    "phonenumber_field",
     "recipes.apps.RecipesConfig",
     "django.contrib.admin",
     "django.contrib.auth",
