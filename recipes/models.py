@@ -116,3 +116,55 @@ class RecipeIngredientAmount(models.Model):
         max_digits=8,
         decimal_places=1,
     )
+
+
+class Subscription(models.Model):
+    SEAFOOD = "Seafood"
+    MEAT = "Meat"
+    CEREAL = "Cereal"
+    HONEY = "Honey"
+    NUTS = "Nuts"
+    MILK = "Milk"
+
+    ALLERGIES_TYPES = [
+        (SEAFOOD, "Seafood products allergy"),
+        (MEAT, "Meat products allergy"),
+        (CEREAL, "Cereal products allergy"),
+        (HONEY, "Honey products allergy"),
+        (NUTS, "Nuts products allergy"),
+        (MILK, "Milk products allergy"),
+    ]
+
+    owner = models.ForeignKey(
+        verbose_name="Subscription owner",
+        to=TelegramUser,
+        on_delete=models.CASCADE,
+    )
+    meal_type = models.ForeignKey(
+        verbose_name="Meal type",
+        to=MealType,
+        on_delete=models.CASCADE,
+    )
+    servings = models.PositiveSmallIntegerField(
+        verbose_name="Servings amount",
+        default=1,
+    )
+    daily_meals_amount = models.PositiveSmallIntegerField(
+        verbose_name="Daily meals amount",
+        default=3,
+    )
+    allergies = models.CharField(
+        verbose_name="Allergies types list",
+        choices=ALLERGIES_TYPES,
+        max_length=200,
+    )
+    start_date = models.DateField(verbose_name="Subscription from")
+    end_date = models.DateField(verbose_name="Subscription until")
+    promo_code = models.TextField(verbose_name="Subscription promo code")
+    is_paid = models.BooleanField(
+        verbose_name="Subscription payment status",
+        default=False,
+    )
+
+    def __str__(self):
+        return f"Owner: {self.owner}. Payment status: {self.is_paid}"
