@@ -44,9 +44,33 @@ class MealType(models.Model):
         return f"Meal type: {self.name}"
 
 
+class Allergy(models.Model):
+    name = models.CharField(
+        verbose_name="Allergy name",
+        max_length=20,
+    )
+    description = models.CharField(
+        verbose_name="Allergy descriptiom",
+        max_length=200,
+        blank=True,
+        null=True,
+    )
+
+    class Meta:
+        verbose_name_plural = "Allergies"
+
+    def __str__(self) -> str:
+        return f"Allergy: {self.name}"
+
+
 class Ingredient(models.Model):
     name = models.CharField(verbose_name="Ingredient name", max_length=200)
     unit = models.CharField(verbose_name="Unit of measurement", max_length=20)
+    allergy = models.ManyToManyField(
+        verbose_name="Ingredient allergy",
+        to=Allergy,
+        related_name="ingredients",
+    )
 
     def __str__(self) -> str:
         return f"Ingredient: {self.name}, {self.unit}"
@@ -142,22 +166,6 @@ class RecipeIngredientAmount(models.Model):
 
 
 class Subscription(models.Model):
-    SEAFOOD = "Seafood"
-    MEAT = "Meat"
-    CEREAL = "Cereal"
-    HONEY = "Honey"
-    NUTS = "Nuts"
-    MILK = "Milk"
-
-    ALLERGIES_TYPES = [
-        (SEAFOOD, "Seafood products allergy"),
-        (MEAT, "Meat products allergy"),
-        (CEREAL, "Cereal products allergy"),
-        (HONEY, "Honey products allergy"),
-        (NUTS, "Nuts products allergy"),
-        (MILK, "Milk products allergy"),
-    ]
-
     owner = models.ForeignKey(
         verbose_name="Subscription owner",
         to=TelegramUser,
@@ -176,10 +184,10 @@ class Subscription(models.Model):
         verbose_name="Daily meals amount",
         default=3,
     )
-    allergies = models.CharField(
-        verbose_name="Allergies types list",
-        choices=ALLERGIES_TYPES,
-        max_length=200,
+    allergy = models.ManyToManyField(
+        verbose_name="Subscription allergies list",
+        to=Allergy,
+        related_name="subscriptions",
     )
     start_date = models.DateField(verbose_name="Subscription from")
     end_date = models.DateField(verbose_name="Subscription until")
