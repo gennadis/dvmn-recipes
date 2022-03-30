@@ -1,7 +1,9 @@
 import json
 import os
 
-import recipes_raw_data
+from django.core.management.base import BaseCommand
+
+from . import recipes_raw_data
 
 """python manage.py loaddata mealtypes.json ingredients.json"""
 
@@ -51,22 +53,21 @@ def make_ingredients_fixtures(
     return ingredients
 
 
-def main():
-    os.makedirs(FIXTURES_PATH, exist_ok=True)
+class Command(BaseCommand):
+    help = "Fixtures generation command"
 
-    make_meal_types_fixtures(
-        meal_type_names=recipes_raw_data.meal_types_names,
-        filename=os.path.join(
-            FIXTURES_PATH,
-            "mealtypes.json",
-        ),
-    )
+    def handle(self, *args, **kwargs):
+        os.makedirs(FIXTURES_PATH, exist_ok=True)
 
-    make_ingredients_fixtures(
-        ingredients_data=recipes_raw_data.ingredients_pairs,
-        filename=os.path.join(FIXTURES_PATH, "ingredients.json"),
-    )
+        make_meal_types_fixtures(
+            meal_type_names=recipes_raw_data.meal_types_names,
+            filename=os.path.join(
+                FIXTURES_PATH,
+                "mealtypes.json",
+            ),
+        )
 
-
-if __name__ == "__main__":
-    main()
+        make_ingredients_fixtures(
+            ingredients_data=recipes_raw_data.ingredients_pairs,
+            filename=os.path.join(FIXTURES_PATH, "ingredients.json"),
+        )
