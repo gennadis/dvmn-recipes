@@ -85,7 +85,30 @@ class Recipe(models.Model):
         to=MealType,
         related_name="recipes",
     )
-    # TODO: nutrition
+    fats = models.DecimalField(
+        verbose_name="Fats",
+        default=0,
+        decimal_places=2,
+        max_digits=12,
+    )
+    carbohydrates = models.DecimalField(
+        verbose_name="Carbohydrates",
+        default=0,
+        decimal_places=2,
+        max_digits=12,
+    )
+    proteins = models.DecimalField(
+        verbose_name="Proteins",
+        default=0,
+        decimal_places=2,
+        max_digits=12,
+    )
+    calories = models.DecimalField(
+        verbose_name="Calories",
+        default=0,
+        decimal_places=2,
+        max_digits=12,
+    )
     created_at = models.DateTimeField(
         verbose_name="Recipe creation time",
         auto_now_add=True,
