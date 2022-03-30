@@ -5,5 +5,8 @@ env
 
 .env
 *.sqlite3
+*.jpg
+*.jpeg
+*.gif
 
 test_db.py
