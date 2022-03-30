@@ -1,9 +1,28 @@
-from code import interact
 from django.contrib import admin
 
-from .models import Recipe, Ingredient, MealType, RecipeIngredientAmount
+from .models import Recipe, Ingredient, MealType, RecipeIngredientAmount, TelegramUser
 
 
-@admin.register(Recipe, Ingredient, MealType, RecipeIngredientAmount)
+class RecipeIngredientAmountInline(admin.TabularInline):
+    model = RecipeIngredientAmount
+    verbose_name = "ingredient amount"
+
+
+@admin.register(Recipe)
+class RecipesAdmin(admin.ModelAdmin):
+    inlines = (RecipeIngredientAmountInline,)
+
+
+@admin.register(Ingredient)
+class RecipesAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(MealType)
+class RecipesAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(TelegramUser)
 class RecipesAdmin(admin.ModelAdmin):
     pass

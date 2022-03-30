@@ -1,4 +1,37 @@
 from django.db import models
+from django.core.validators import MinLengthValidator
+from phonenumber_field.modelfields import PhoneNumberField
+
+
+class TelegramUser(models.Model):
+    telegram_id = models.PositiveIntegerField(
+        verbose_name="Telegram user id",
+        unique=True,
+    )
+    telegram_username = models.CharField(
+        verbose_name="Telegram username",
+        unique=True,
+        max_length=32,
+        blank=True,
+        null=True,
+        validators=[MinLengthValidator(5)],
+    )
+    first_name = models.CharField(
+        verbose_name="First name",
+        max_length=64,
+        blank=True,
+        null=True,
+    )
+    last_name = models.CharField(
+        verbose_name="Last name",
+        max_length=64,
+        blank=True,
+        null=True,
+    )
+    phone_number = PhoneNumberField()
+
+    def __str__(self) -> str:
+        return f"@{self.telegram_username}, user id: {self.telegram_id}"
 
 
 class MealType(models.Model):
