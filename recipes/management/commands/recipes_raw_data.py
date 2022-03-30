@@ -6,6 +6,17 @@ meal_types_names = [
     "keto",
 ]
 
+# ALLERGIES
+ALLERGIES = [
+    "Seafood",
+    "Meat",
+    "Cereal",
+    "Honey",
+    "Nuts",
+    "Milk",
+]
+
+
 # INGREDIENTS
 gramm = "gramms"
 cup = "cups"

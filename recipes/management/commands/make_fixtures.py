@@ -18,6 +18,22 @@ def save_json(data: list[dict], filename: str) -> str:
     return filename
 
 
+def make_allergies_fixtures(allergies_names: list[str], filename: str) -> list[dict]:
+    allergies = []
+    for count, name in enumerate(allergies_names, start=1):
+        meal_type = {
+            "model": "recipes.allergy",
+            "pk": count,
+            "fields": {
+                "name": name,
+            },
+        }
+        allergies.append(meal_type)
+
+    save_json(data=allergies, filename=filename)
+    return allergies
+
+
 def make_meal_types_fixtures(meal_type_names: list[str], filename: str) -> list[dict]:
     meal_types = []
     for count, name in enumerate(meal_type_names, start=1):
@@ -70,4 +86,9 @@ class Command(BaseCommand):
         make_ingredients_fixtures(
             ingredients_data=recipes_raw_data.ingredients_pairs,
             filename=os.path.join(FIXTURES_PATH, "ingredients.json"),
+        )
+
+        make_allergies_fixtures(
+            allergies_names=recipes_raw_data.ALLERGIES,
+            filename=os.path.join(FIXTURES_PATH, "allergies.json"),
         )
