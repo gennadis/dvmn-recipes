@@ -70,6 +70,7 @@ class Ingredient(models.Model):
         verbose_name="Ingredient allergy",
         to=Allergy,
         related_name="ingredients",
+        blank=True,
     )
 
     def __str__(self) -> str:
@@ -195,6 +196,7 @@ class Subscription(models.Model):
         verbose_name="Subscription allergies list",
         to=Allergy,
         related_name="subscriptions",
+        blank=True,
     )
     start_date = models.DateField(verbose_name="Subscription from")
     end_date = models.DateField(verbose_name="Subscription until")
