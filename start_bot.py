@@ -192,6 +192,7 @@ if __name__ == '__main__':
     async def make_payment(message: types.Message, state: FSMContext):
         await state.update_data(payment=message.text)
         await message.answer('Оплата успешно завершена.', reply_markup=MAIN_KEYBOARD)
+        await state.finish()
         
 
 
