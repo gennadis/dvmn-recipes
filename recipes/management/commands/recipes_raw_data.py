@@ -1,17 +1,9 @@
 # MEAL TYPES
 meal_types_names = [
-    "appetizers and snacks",
-    "baked goods",
-    "breakfast and brunch",
-    "dessert",
-    "quick and easy",
-    "lunch",
-    "main dish",
-    "salad",
-    "side dish",
-    "slow cooker",
-    "soups and stews",
-    "special occasions",
+    "classic",
+    "low carb",
+    "vegan",
+    "keto",
 ]
 
 # INGREDIENTS

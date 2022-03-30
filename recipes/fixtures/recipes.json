@@ -1,43 +1,43 @@
 [
     {
         "model": "recipes.recipe",
-        "pk": 1,
+        "pk": 2,
         "fields": {
             "name": "Toast with mozzarella and garlic",
             "servings": 1,
             "steps": "Just make some toasts.",
-            "image": "recipes/toast.jpeg",
+            "image": "recipes/food_images/toast_i1LPro7.jpeg",
             "working_time": 3,
-            "created_at": "2022-03-30T13:18:55.597Z",
+            "created_at": "2022-03-30T13:57:22.537Z",
             "meal_type": [
-                5
+                1
             ]
         }
     },
     {
         "model": "recipes.recipeingredientamount",
-        "pk": 1,
+        "pk": 4,
         "fields": {
             "ingredient": 3,
-            "recipe": 1,
+            "recipe": 2,
             "amount": "100.0"
         }
     },
     {
         "model": "recipes.recipeingredientamount",
-        "pk": 2,
+        "pk": 5,
         "fields": {
             "ingredient": 4,
-            "recipe": 1,
+            "recipe": 2,
             "amount": "50.0"
         }
     },
     {
         "model": "recipes.recipeingredientamount",
-        "pk": 3,
+        "pk": 6,
         "fields": {
             "ingredient": 5,
-            "recipe": 1,
+            "recipe": 2,
             "amount": "1.0"
         }
     }

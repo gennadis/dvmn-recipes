@@ -3,84 +3,28 @@
         "model": "recipes.mealtype",
         "pk": 1,
         "fields": {
-            "name": "appetizers and snacks"
+            "name": "classic"
         }
     },
     {
         "model": "recipes.mealtype",
         "pk": 2,
         "fields": {
-            "name": "baked goods"
+            "name": "low carb"
         }
     },
     {
         "model": "recipes.mealtype",
         "pk": 3,
         "fields": {
-            "name": "breakfast and brunch"
+            "name": "vegan"
         }
     },
     {
         "model": "recipes.mealtype",
         "pk": 4,
         "fields": {
-            "name": "dessert"
-        }
-    },
-    {
-        "model": "recipes.mealtype",
-        "pk": 5,
-        "fields": {
-            "name": "quick and easy"
-        }
-    },
-    {
-        "model": "recipes.mealtype",
-        "pk": 6,
-        "fields": {
-            "name": "lunch"
-        }
-    },
-    {
-        "model": "recipes.mealtype",
-        "pk": 7,
-        "fields": {
-            "name": "main dish"
-        }
-    },
-    {
-        "model": "recipes.mealtype",
-        "pk": 8,
-        "fields": {
-            "name": "salad"
-        }
-    },
-    {
-        "model": "recipes.mealtype",
-        "pk": 9,
-        "fields": {
-            "name": "side dish"
-        }
-    },
-    {
-        "model": "recipes.mealtype",
-        "pk": 10,
-        "fields": {
-            "name": "slow cooker"
-        }
-    },
-    {
-        "model": "recipes.mealtype",
-        "pk": 11,
-        "fields": {
-            "name": "soups and stews"
-        }
-    },
-    {
-        "model": "recipes.mealtype",
-        "pk": 12,
-        "fields": {
-            "name": "special occasions"
+            "name": "keto"
         }
     }
 ]
