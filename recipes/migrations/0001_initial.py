@@ -8,57 +8,151 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Ingredient',
+            name="Ingredient",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=200, verbose_name='Ingredient name')),
-                ('unit', models.CharField(max_length=20, verbose_name='Unit of measurement')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "name",
+                    models.CharField(max_length=200, verbose_name="Ingredient name"),
+                ),
+                (
+                    "unit",
+                    models.CharField(max_length=20, verbose_name="Unit of measurement"),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='MealType',
+            name="MealType",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=100, verbose_name='Meal type')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=100, verbose_name="Meal type")),
             ],
         ),
         migrations.CreateModel(
-            name='Recipe',
+            name="Recipe",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=200, verbose_name='Recipe name')),
-                ('servings', models.SmallIntegerField(default=1, verbose_name='Recipe servings in persons')),
-                ('steps', models.CharField(max_length=512, verbose_name='Recipe steps')),
-                ('image', models.ImageField(blank=True, null=True, upload_to='recipes/', verbose_name='Food image')),
-                ('working_time', models.IntegerField(default=0, verbose_name='Recipe working time in minutes')),
-                ('created_at', models.DateTimeField(auto_now_add=True, verbose_name='Recipe creation time')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=200, verbose_name="Recipe name")),
+                (
+                    "servings",
+                    models.SmallIntegerField(
+                        default=1, verbose_name="Recipe servings in persons"
+                    ),
+                ),
+                (
+                    "steps",
+                    models.CharField(max_length=512, verbose_name="Recipe steps"),
+                ),
+                (
+                    "image",
+                    models.ImageField(
+                        blank=True,
+                        null=True,
+                        upload_to="recipes/",
+                        verbose_name="Food image",
+                    ),
+                ),
+                (
+                    "working_time",
+                    models.IntegerField(
+                        default=0, verbose_name="Recipe working time in minutes"
+                    ),
+                ),
+                (
+                    "created_at",
+                    models.DateTimeField(
+                        auto_now_add=True, verbose_name="Recipe creation time"
+                    ),
+                ),
             ],
             options={
-                'ordering': ('-created_at',),
+                "ordering": ("-created_at",),
             },
         ),
         migrations.CreateModel(
-            name='RecipeIngredient',
+            name="RecipeIngredientAmount",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('amount', models.DecimalField(decimal_places=1, default=0, max_digits=8, verbose_name='Ingredient amount in Recipe')),
-                ('ingredient', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='recipes.ingredient', verbose_name='Recipe ingredient')),
-                ('recipe', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='ingredients_amount', to='recipes.recipe', verbose_name='Recipe name')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "amount",
+                    models.DecimalField(
+                        decimal_places=1,
+                        default=0,
+                        max_digits=8,
+                        verbose_name="Ingredient amount in Recipe",
+                    ),
+                ),
+                (
+                    "ingredient",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="recipes.ingredient",
+                        verbose_name="Recipe ingredient",
+                    ),
+                ),
+                (
+                    "recipe",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="ingredients_amount",
+                        to="recipes.recipe",
+                        verbose_name="Recipe name",
+                    ),
+                ),
             ],
         ),
         migrations.AddField(
-            model_name='recipe',
-            name='ingredients',
-            field=models.ManyToManyField(through='recipes.RecipeIngredient', to='recipes.ingredient', verbose_name='Recipe ingredients'),
+            model_name="recipe",
+            name="ingredients",
+            field=models.ManyToManyField(
+                through="recipes.RecipeIngredientAmount",
+                to="recipes.ingredient",
+                verbose_name="Recipe ingredients",
+            ),
         ),
         migrations.AddField(
-            model_name='recipe',
-            name='meal_type',
-            field=models.ManyToManyField(related_name='recipes', to='recipes.mealtype', verbose_name='Recipe meal type'),
+            model_name="recipe",
+            name="meal_type",
+            field=models.ManyToManyField(
+                related_name="recipes",
+                to="recipes.mealtype",
+                verbose_name="Recipe meal type",
+            ),
         ),
     ]
