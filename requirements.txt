@@ -5,3 +5,4 @@ environs==9.5.0
 aiogram==2.19
 django-phonenumber-field==6.1.0
 phonenumbers==8.12.45
+python-dateutil==2.8.2
