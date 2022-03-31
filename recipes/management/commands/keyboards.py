@@ -26,3 +26,7 @@ def make_digit_keyboard(how_much: int = 6, row_width: int = 3, one_time: bool = 
     keyboard.add(*[str(x + 1) for x in range(how_much)])
     keyboard.add("Вернуться на главную")
     return keyboard
+
+def make_inline_keyboard(button, key):
+    button = types.InlineKeyboardButton(button)
+    return types.InlineKeyboardMarkup().add(button)

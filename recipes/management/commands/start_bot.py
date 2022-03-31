@@ -10,14 +10,48 @@ from recipes.management.commands.crud import create_new_user
 from recipes.management.commands.keyboards import (ASK_FOR_PHONE_KEYBOARD,
                                                    MAIN_KEYBOARD,
                                                    make_digit_keyboard,
-                                                   make_keyboard)
+                                                   make_keyboard,
+                                                   make_inline_keyboard)
+from recipes.management.commands.bot_processing import (create_payment,
+                                                        check_payment)
 from recipes.models import (TelegramUser,
                             Allergy,
                             Subscription)
 
+# delete
+def valid_promocodes():
+    return ['blabla', 'Wylsa', 'bullshit']
+
+#delete
+PROMO = {
+    'blabla': 10,
+    'Wylsa': 45,
+    'bullshit': 13
+}
+
+
+
+
 MENU_TYPES = ("Классическое", "Низкоуглеводное", "Вегетарианское", "Кето")
 
-SUBSCRIPTION_PERIODS = ("1 месяц", "3 месяца", "6 месяцев", "12 месяцев")
+SUBSCRIPTIONS = {
+    "1 месяц": {
+        "cost": 300,
+        "currency": 'RUR'
+    },
+    "3 месяца": {
+        "cost": 550,
+        "currency": 'RUR'
+    },
+    "6 месяцев": {
+        "cost": 1650,
+        "currency": 'RUR'
+    },
+    "12 месяцев": {
+        "cost": 3000,
+        "currency": 'RUR'
+    }
+}
 
 ALLERGENS = ["аллерген 1", "аллерген 2", "аллерген 3", "аллерген 4", "аллерген 5"]
 
@@ -38,11 +72,11 @@ class Subscription(StatesGroup):
     allergens = State()
     period = State()
     promo = State()
-    payment = State()
+    payment_id = State()
 
 
 @sync_to_async
-def get_allergens():
+def get_allergens_objects():
     return list(
         Allergy.objects.all()
     )
@@ -60,7 +94,10 @@ class Command(BaseCommand):
         storage = MemoryStorage()
         bot = Dispatcher(bot_init, storage=storage)
 
+        yookassa_shop_id = env.int("YOOKASSA_SHOP_ID")
+        yookassa_secret_key = env.str("YOOKASSA_SECRET_KEY")
 
+        
         @bot.message_handler(commands="start")
         async def hello(message: types.Message):
             try:
@@ -73,6 +110,14 @@ class Command(BaseCommand):
                 print('ERROR hello')
                 await message.answer("Здравствуйте!\n\nКак Вас зовут?\n(введите имя)")
                 await UserProfile.first_name.set()
+
+        @bot.message_handler(
+            lambda message: message.text == "Вернуться на главную", state="*"
+        )
+        async def return_to_main(message: types.Message, state: FSMContext):
+            await state.finish()
+            await message.reply("Возвращаемся на главную", reply_markup=MAIN_KEYBOARD)
+
 
 
         @bot.message_handler(state=UserProfile.first_name)
@@ -154,7 +199,7 @@ class Command(BaseCommand):
         @bot.message_handler(state=Subscription.eatings)
         async def get_number_of_eatings(message: types.Message, state: FSMContext):
             global allergens
-            allergens = [x.name for x in await get_allergens()]
+            allergens = [x.name for x in await get_allergens_objects()]
             
             await state.update_data(eatings=message.text)
             await message.answer(
@@ -167,10 +212,10 @@ class Command(BaseCommand):
 
         @bot.message_handler(state=Subscription.allergens)
         async def get_allergens(message: types.Message, state: FSMContext):
-            if message.text == "Готово"
+            if message.text in ["Готово", "Аллергенов нет"]:
                 await message.answer(
                     "Отлично, выберите период подписки",
-                    reply_markup=make_keyboard(SUBSCRIPTION_PERIODS),
+                    reply_markup=make_keyboard(list(SUBSCRIPTIONS.keys())),
                 )
                 await Subscription.period.set()
             elif message.text in allergens:
@@ -192,32 +237,66 @@ class Command(BaseCommand):
         @bot.message_handler(state=Subscription.period)
         async def get_subscription_period(message: types.Message, state: FSMContext):
             await state.update_data(period=message.text)
-            await message.answer("Введите промокод", reply_markup=types.ReplyKeyboardRemove)
+            await message.answer("Введите промокод", reply_markup=make_keyboard(["Пропустить"]))
             await Subscription.promo.set()
+
 
         @bot.message_handler(state=Subscription.promo)
         async def get_promo(message: types.Message, state: FSMContext):
-            await state.update_data(promo=message.text)
-            await message.answer(
-                "Итак, подписка сформирована. Осталось ее оплатить и можно идти за продуктами.",
-                reply_markup=make_keyboard(["Оплатить подписку"]),
-            )
-            await Subscription.payment.set()
+            state_data = await state.get_data()
+            currency = SUBSCRIPTIONS[state_data["period"]]["currency"]
 
-        @bot.message_handler(state=Subscription.payment)
+            if message.text == 'Пропустить':
+                await state.update_data(promo=None)
+                cost = SUBSCRIPTIONS[state_data["period"]]["cost"]
+                benefit_text = ''
+
+            elif message.text in valid_promocodes():
+                await state.update_data(promo=message.text)
+                benefit = round(SUBSCRIPTIONS[state_data["period"]]["cost"] * PROMO[message.text] * 0.01)
+                cost = SUBSCRIPTIONS[state_data["period"]]["cost"] - benefit
+                benefit_text = f'Вы сэкономили {benefit} {currency}\n'
+
+            else:
+                await message.reply(
+                    'Такого промокода нет.\n\nВведите корректный или пропустите шаг.',
+                    reply_markup=make_keyboard(["Пропустить"])
+                )
+                await Subscription.promo.set()
+                return
+
+            await message.answer(
+                (f'Ура, подписка сформирована.\n\nСтоимость подписки = {cost} {currency}\n'
+                 f'{benefit_text}\nОсталось ее оплатить и можно идти за продуктами.'),
+                reply_markup=types.ReplyKeyboardRemove()
+            )
+
+            
+            payment = create_payment(yookassa_shop_id, yookassa_secret_key)
+            await state.update_data(payment_id=payment.id)
+            await message.answer(
+                payment.confirmation.confirmation_url,
+                reply_markup=make_keyboard(["Платеж прошел?"])
+            )
+            await Subscription.payment_id.set()
+
+
+        @bot.message_handler(state=Subscription.payment_id)
         async def make_payment(message: types.Message, state: FSMContext):
-            await state.update_data(payment=message.text)
-            await message.answer(
-                "Оплата успешно завершена.", reply_markup=MAIN_KEYBOARD
-            )
-            await state.finish()
+            state_data = await state.get_data()
+            if check_payment(state_data.get("payment_id"), yookassa_shop_id, yookassa_secret_key):
+                await message.answer(
+                    "Оплата успешно завершена.", reply_markup=MAIN_KEYBOARD
+                )
+                await state.finish()
+            else:
+                await message.answer(
+                    "А вы точно оплатили? Если да, подождите пару минут и нажмите кнопку проверки еще раз.",
+                    reply_markup=make_keyboard(["Платеж прошел?"])
+                )
+                await Subscription.payment_id.set()
 
-        @bot.message_handler(
-            lambda message: message.text == "Вернуться на главную", state="*"
-        )
-        async def return_to_main(message: types.Message, state: FSMContext):
-            await state.finish()
-            await message.reply("Возвращаемся на главную", reply_markup=MAIN_KEYBOARD)
+        
 
         @bot.message_handler()
         async def return_to_main(message: types.Message, state: FSMContext):
