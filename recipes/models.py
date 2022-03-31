@@ -1,5 +1,9 @@
 from django.db import models
-from django.core.validators import MinLengthValidator
+from django.core.validators import (
+    MinLengthValidator,
+    MaxValueValidator,
+    MinValueValidator,
+)
 from phonenumber_field.modelfields import PhoneNumberField
 
 
@@ -172,6 +176,33 @@ class RecipeIngredientAmount(models.Model):
     )
 
 
+class PromoCode(models.Model):
+    code = models.CharField(
+        verbose_name="Promo code",
+        max_length=10,
+        blank=True,
+        null=True,
+    )
+    description = models.CharField(
+        verbose_name="Short description",
+        max_length=200,
+        blank=True,
+        null=True,
+    )
+    discount = models.PositiveIntegerField(
+        verbose_name="Discount amount",
+        default=0,
+        validators=[
+            MinValueValidator(0),
+            MaxValueValidator(100),
+        ],
+    )
+    valid_thru = models.DateField(verbose_name="Code valid thru date")
+
+    def __str__(self) -> str:
+        return f"Promo code: {self.code}. Discount: {self.discount} Valid thru: {self.valid_thru}"
+
+
 class Subscription(models.Model):
     name = models.CharField(
         verbose_name="Subscription name",
@@ -206,7 +237,13 @@ class Subscription(models.Model):
     )
     start_date = models.DateField(verbose_name="Subscription from")
     end_date = models.DateField(verbose_name="Subscription until")
-    promo_code = models.TextField(verbose_name="Subscription promo code")
+    promo_code = models.ForeignKey(
+        verbose_name="Promo code",
+        to=PromoCode,
+        on_delete=models.DO_NOTHING,
+        blank=True,
+        null=True,
+    )
     is_paid = models.BooleanField(
         verbose_name="Subscription payment status",
         default=False,
