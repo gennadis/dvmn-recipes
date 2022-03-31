@@ -173,6 +173,13 @@ class RecipeIngredientAmount(models.Model):
 
 
 class Subscription(models.Model):
+    name = models.CharField(
+        verbose_name="Subscription name",
+        max_length=50,
+        blank=True,
+        null=True,
+        default=f"Default subscription",
+    )
     owner = models.ForeignKey(
         verbose_name="Subscription owner",
         to=TelegramUser,

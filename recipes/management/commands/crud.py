@@ -52,10 +52,10 @@ def get_existing_user(user_profile: dict) -> Optional[TelegramUser]:
         return None
 
 
-def get_subscription(user_telegram_id: str) -> Subscription:
+def get_subscriptions(user_telegram_id: str) -> Subscription:
     user = TelegramUser.objects.get(telegram_id=user_telegram_id)
-    subscription = Subscription.objects.get(owner=user)
-    return subscription
+    subscriptions = Subscription.objects.filter(owner=user).all()
+    return subscriptions
 
 
 def save_subscription(user_telegram_id: str, subscription_details: dict):
@@ -96,18 +96,20 @@ class Command(BaseCommand):
 
     def handle(self, *args, **kwargs):
         user_telegram_id = "12345"
-        subscription_details = {
-            "meal_type": "keto",
-            "servings": 1,
-            "daily_meals_amount": 3,
-            "allergies": ["milk", "nuts", "honey"],
-            "start_date": datetime.now(),
-            "end_date": datetime.now() + relativedelta(month=1),
-            "promo_code": "EMPTY",
-            "is_paid": True,
-        }
-        subscription = save_subscription(
-            user_telegram_id=user_telegram_id,
-            subscription_details=subscription_details,
-        )
-        print(subscription)
+        user_subscriptions = get_subscriptions(user_telegram_id=user_telegram_id)
+        print(user_subscriptions)
+        # subscription_details = {
+        #     "meal_type": "keto",
+        #     "servings": 1,
+        #     "daily_meals_amount": 3,
+        #     "allergies": ["milk", "nuts", "honey"],
+        #     "start_date": datetime.now(),
+        #     "end_date": datetime.now() + relativedelta(month=1),
+        #     "promo_code": "EMPTY",
+        #     "is_paid": True,
+        # }
+        # subscription = save_subscription(
+        #     user_telegram_id=user_telegram_id,
+        #     subscription_details=subscription_details,
+        # )
+        # print(subscription)
