@@ -10,6 +10,7 @@ from recipes.models import (
     Allergy,
     Ingredient,
     MealType,
+    PromoCode,
     Recipe,
     TelegramUser,
     Subscription,
@@ -91,13 +92,27 @@ def get_random_allowed_recipe(user_telegram_id: str) -> Recipe:
     return random.choice(allowed_recipes)
 
 
+def validate_promo_code(user_code: str):
+    try:
+        promo_code = PromoCode.objects.get(code=user_code.upper())
+        return promo_code
+
+    except PromoCode.DoesNotExist:
+        return False
+
+
 class Command(BaseCommand):
     help = "Some basic test CRUD operations"
 
     def handle(self, *args, **kwargs):
-        user_telegram_id = "12345"
-        user_subscriptions = get_subscriptions(user_telegram_id=user_telegram_id)
-        print(user_subscriptions)
+        user_promo_code = "hello"
+        promo_status = validate_promo_code(user_code=user_promo_code)
+        print(promo_status)
+
+        # user_telegram_id = "12345"
+        # user_subscriptions = get_subscriptions(user_telegram_id=user_telegram_id)
+        # print(user_subscriptions)
+
         # subscription_details = {
         #     "meal_type": "keto",
         #     "servings": 1,
