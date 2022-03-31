@@ -2,7 +2,7 @@ from typing import Optional
 
 from django.core.management.base import BaseCommand
 
-from recipes.models import TelegramUser
+from recipes.models import TelegramUser, Subscription
 
 
 def create_new_user(user_profile: dict) -> TelegramUser:
@@ -38,18 +38,18 @@ def get_existing_user(user_profile: dict) -> Optional[TelegramUser]:
         return None
 
 
+def get_subscriptions(user_telegram_id: str) -> Subscription:
+    user = TelegramUser.objects.get(telegram_id=user_telegram_id)
+    subscription = Subscription.objects.get(owner=user)
+    return subscription
+
+
 class Command(BaseCommand):
     help = "Some basic test CRUD operations"
 
     def handle(self, *args, **kwargs):
-        user_profile = {
-            "id": 12345678901234,
-            "username": "Test_Username_123",
-            "first_name": "Test First Name 123",
-            "last_name": "Test Last Name 123",
-            "phone_number": "+7-999-123-45-00",
-        }
-        # new_user = create_new_user(user_profile)
-        existing_user = get_existing_user(user_profile)
-        print(existing_user)
-        print(existing_user.phone_number)
+        user_telegram_id = "12345"
+        subscription = get_subscriptions(user_telegram_id=user_telegram_id)
+        print(subscription)
+        print(subscription.allergy)
+        print(subscription.daily_meals_amount)
