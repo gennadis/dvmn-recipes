@@ -1,19 +1,19 @@
 # MEAL TYPES
 meal_types_names = [
-    "classic",
-    "low carb",
-    "vegan",
-    "keto",
+    "Классическое",
+    "Низкоуглеводное",
+    "Веганское",
+    "Кето",
 ]
 
 # ALLERGIES
 ALLERGIES = [
-    "Seafood",
-    "Meat",
-    "Cereal",
-    "Honey",
-    "Nuts",
-    "Milk",
+    "Морепродукты",
+    "Мясо",
+    "Зерновые",
+    "Мёд",
+    "Орехи",
+    "Молоко",
 ]
 
 

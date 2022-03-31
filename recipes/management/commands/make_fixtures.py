@@ -5,7 +5,7 @@ from django.core.management.base import BaseCommand
 
 from . import recipes_raw_data
 
-"""python manage.py loaddata mealtypes.json ingredients.json recipes.json"""
+"""python manage.py loaddata mealtypes.json ingredients.json allergies.json"""
 
 
 FIXTURES_PATH = "./recipes/fixtures/"
