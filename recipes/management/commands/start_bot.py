@@ -11,13 +11,16 @@ from recipes.management.commands.keyboards import (ASK_FOR_PHONE_KEYBOARD,
                                                    MAIN_KEYBOARD,
                                                    make_digit_keyboard,
                                                    make_keyboard)
-from recipes.models import TelegramUser
+from recipes.models import (TelegramUser,
+                            Allergy,
+                            Subscription)
 
 MENU_TYPES = ("Классическое", "Низкоуглеводное", "Вегетарианское", "Кето")
 
 SUBSCRIPTION_PERIODS = ("1 месяц", "3 месяца", "6 месяцев", "12 месяцев")
 
 ALLERGENS = ["аллерген 1", "аллерген 2", "аллерген 3", "аллерген 4", "аллерген 5"]
+
 
 
 class UserProfile(StatesGroup):
@@ -38,6 +41,13 @@ class Subscription(StatesGroup):
     payment = State()
 
 
+@sync_to_async
+def get_allergens():
+    return list(
+        Allergy.objects.all()
+    )
+
+
 class Command(BaseCommand):
     help = "Start Telegram bot"
 
@@ -55,6 +65,7 @@ class Command(BaseCommand):
         async def hello(message: types.Message):
             try:
                 user_data = await sync_to_async(TelegramUser.objects.get)(telegram_id=message.from_user.id)
+                print(user_data)
                 await message.answer(
                     f"{user_data.first_name}, hello again!", reply_markup=MAIN_KEYBOARD
                 )
@@ -137,27 +148,32 @@ class Command(BaseCommand):
             )
             await Subscription.eatings.set()
 
+
+        
+
         @bot.message_handler(state=Subscription.eatings)
         async def get_number_of_eatings(message: types.Message, state: FSMContext):
+            global allergens
+            allergens = [x.name for x in await get_allergens()]
+            
             await state.update_data(eatings=message.text)
             await message.answer(
                 "Отлично, укажите аллергены - продукты которых не должно быть ",
                 reply_markup=make_keyboard(
-                    ALLERGENS, extended_buttons=["Аллергенов нет"]
+                    allergens, extended_buttons=["Аллергенов нет"]
                 ),
             )
             await Subscription.allergens.set()
 
         @bot.message_handler(state=Subscription.allergens)
         async def get_allergens(message: types.Message, state: FSMContext):
-            if message.text == "Готово":
-
+            if message.text == "Готово"
                 await message.answer(
                     "Отлично, выберите период подписки",
                     reply_markup=make_keyboard(SUBSCRIPTION_PERIODS),
                 )
                 await Subscription.period.set()
-            elif message.text in ALLERGENS:
+            elif message.text in allergens:
                 try:
                     state_data = await state.get_data()
                     user_allergens = state_data.get("allergens")
@@ -168,9 +184,10 @@ class Command(BaseCommand):
                 await state.update_data(allergens=user_allergens)
                 await message.answer(
                     "Добавим еще один?",
-                    reply_markup=make_keyboard(ALLERGENS, extended_buttons=["Готово"]),
+                    reply_markup=make_keyboard(allergens, extended_buttons=["Готово"]),
                 )
                 await Subscription.allergens.set()
+
 
         @bot.message_handler(state=Subscription.period)
         async def get_subscription_period(message: types.Message, state: FSMContext):
