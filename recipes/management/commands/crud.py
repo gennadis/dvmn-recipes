@@ -2,7 +2,7 @@ from typing import Optional
 
 from django.core.management.base import BaseCommand
 
-from recipes.models import TelegramUser
+from recipes.models import Ingredient, Recipe, TelegramUser, Subscription
 
 
 def create_new_user(user_profile: dict) -> TelegramUser:
@@ -18,6 +18,16 @@ def create_new_user(user_profile: dict) -> TelegramUser:
     return new_user
 
 
+def check_user_exist(user_profile: dict) -> Optional[TelegramUser]:
+    try:
+        telegram_id = user_profile.get("id")
+        user = TelegramUser.objects.get(telegram_id=telegram_id)
+        return True
+
+    except TelegramUser.DoesNotExist:
+        return False
+
+
 def get_existing_user(user_profile: dict) -> Optional[TelegramUser]:
     try:
         telegram_id = user_profile.get("id")
@@ -28,18 +38,44 @@ def get_existing_user(user_profile: dict) -> Optional[TelegramUser]:
         return None
 
 
+def get_subscription(user_telegram_id: str) -> Subscription:
+    user = TelegramUser.objects.get(telegram_id=user_telegram_id)
+    subscription = Subscription.objects.get(owner=user)
+    return subscription
+
+
+def get_random_recipe(user_telegram_id: str) -> Recipe:
+    user = TelegramUser.objects.get(telegram_id=user_telegram_id)
+
+    user_allergies = Subscription.objects.get(owner=user).allergy.all()
+    print(f"User allergies: {[alergy.name for alergy in user_allergies]}")
+    print()
+
+    user_allowed_ingredients = Ingredient.objects.exclude(allergy__in=user_allergies)
+    print(
+        f"User allowed ingredients: {[ingredient.name for ingredient in user_allowed_ingredients]}"
+    )
+    print()
+
+    user_disallower_ingredients = Ingredient.objects.filter(allergy__in=user_allergies)
+    print(
+        f"User disallowed ingredients: {[ingredient.name for ingredient in user_disallower_ingredients]}"
+    )
+    print()
+
+    recipes = Recipe.objects.filter(ingredients__in=user_allowed_ingredients)
+
+    return recipes
+    # return recipes
+    # for recipe in recipes:
+    #     if recipe.get_recipe_allergies(ingredients) != user_allergies:
+    #         return recipe
+
+
 class Command(BaseCommand):
     help = "Some basic test CRUD operations"
 
     def handle(self, *args, **kwargs):
-        user_profile = {
-            "id": 12345678901234,
-            "username": "Test_Username_123",
-            "first_name": "Test First Name 123",
-            "last_name": "Test Last Name 123",
-            "phone_number": "+7-999-123-45-00",
-        }
-        # new_user = create_new_user(user_profile)
-        existing_user = get_existing_user(user_profile)
-        print(existing_user)
-        print(existing_user.phone_number)
+        user_telegram_id = "12345"
+        random_recipe = get_random_recipe(user_telegram_id=user_telegram_id)
+        print(random_recipe)
