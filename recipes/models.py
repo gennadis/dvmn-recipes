@@ -35,7 +35,7 @@ class TelegramUser(models.Model):
     phone_number = PhoneNumberField()
 
     def __str__(self) -> str:
-        return f"@{self.telegram_username}, user id: {self.telegram_id}"
+        return f"telegram_id {self.telegram_id}"
 
 
 class MealType(models.Model):
@@ -45,7 +45,7 @@ class MealType(models.Model):
     )
 
     def __str__(self) -> str:
-        return f"Meal type: {self.name}"
+        return f"{self.name}"
 
 
 class Allergy(models.Model):
@@ -64,7 +64,7 @@ class Allergy(models.Model):
         verbose_name_plural = "Allergies"
 
     def __str__(self) -> str:
-        return f"Allergy: {self.name}"
+        return f"{self.name}"
 
 
 class Ingredient(models.Model):
@@ -78,7 +78,7 @@ class Ingredient(models.Model):
     )
 
     def __str__(self) -> str:
-        return f"Ingredient: {self.name}, {self.unit}"
+        return f"{self.name}, {self.unit}"
 
 
 class Recipe(models.Model):
@@ -153,7 +153,7 @@ class Recipe(models.Model):
         return allergies
 
     def __str__(self) -> str:
-        return f"Recipe: {self.name}"
+        return f"{self.name}"
 
 
 class RecipeIngredientAmount(models.Model):
@@ -200,7 +200,7 @@ class PromoCode(models.Model):
     valid_thru = models.DateField(verbose_name="Code valid thru date")
 
     def __str__(self) -> str:
-        return f"Promo code: {self.code}. Discount: {self.discount} Valid thru: {self.valid_thru}"
+        return f"{self.code}. {self.discount}%. Valid thru {self.valid_thru}"
 
 
 class Subscription(models.Model):
@@ -250,4 +250,4 @@ class Subscription(models.Model):
     )
 
     def __str__(self):
-        return f"Owner: {self.owner}. Payment status: {self.is_paid}"
+        return f"Owner: {self.owner}. Valid thru: {self.end_date}"
