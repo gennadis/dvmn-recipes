@@ -18,6 +18,16 @@ def create_new_user(user_profile: dict) -> TelegramUser:
     return new_user
 
 
+def check_user_exist(user_profile: dict) -> Optional[TelegramUser]:
+    try:
+        telegram_id = user_profile.get("id")
+        user = TelegramUser.objects.get(telegram_id=telegram_id)
+        return True
+
+    except TelegramUser.DoesNotExist:
+        return False
+
+
 def get_existing_user(user_profile: dict) -> Optional[TelegramUser]:
     try:
         telegram_id = user_profile.get("id")
