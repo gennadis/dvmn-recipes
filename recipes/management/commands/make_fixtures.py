@@ -5,7 +5,7 @@ from django.core.management.base import BaseCommand
 
 from . import recipes_raw_data
 
-"""python manage.py loaddata mealtypes.json ingredients.json allergies.json"""
+"""python manage.py loaddata mealtypes.json ingredients.json allergies.json promocodes.json"""
 
 
 FIXTURES_PATH = "./recipes/fixtures/"
@@ -21,6 +21,24 @@ def save_json(data: list[dict], filename: str) -> str:
         )
 
     return filename
+
+
+def make_promo_code_fixtures(promo_codes_list: list[str], filename: str) -> list[dict]:
+    promo_codes = []
+    for count, code in enumerate(promo_codes_list, start=1):
+        promo_code = {
+            "model": "recipes.promocode",
+            "pk": count,
+            "fields": {
+                "code": code,
+                "discount": count * 10,
+                "valid_thru": "2030-10-10",
+            },
+        }
+        promo_codes.append(promo_code)
+
+    save_json(data=promo_codes, filename=filename)
+    return promo_codes
 
 
 def make_allergies_fixtures(allergies_names: list[str], filename: str) -> list[dict]:
@@ -96,4 +114,8 @@ class Command(BaseCommand):
         make_allergies_fixtures(
             allergies_names=recipes_raw_data.ALLERGIES,
             filename=os.path.join(FIXTURES_PATH, "allergies.json"),
+        )
+        make_promo_code_fixtures(
+            promo_codes_list=recipes_raw_data.PROMO_CODES,
+            filename=os.path.join(FIXTURES_PATH, "promocodes.json"),
         )

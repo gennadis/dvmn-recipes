@@ -16,6 +16,13 @@ ALLERGIES = [
     "Молоко",
 ]
 
+# PROMO CODES
+PROMO_CODES = [
+    "ПРИВЕТ",
+    "ПОЕХАЛИ",
+    "РЕЦЕПТЫ",
+]
+
 
 # INGREDIENTS
 gramm = "gramms"
