@@ -38,7 +38,7 @@ def get_existing_user(user_profile: dict) -> Optional[TelegramUser]:
         return None
 
 
-def get_subscriptions(user_telegram_id: str) -> Subscription:
+def get_subscription(user_telegram_id: str) -> Subscription:
     user = TelegramUser.objects.get(telegram_id=user_telegram_id)
     subscription = Subscription.objects.get(owner=user)
     return subscription
@@ -49,7 +49,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **kwargs):
         user_telegram_id = "12345"
-        subscription = get_subscriptions(user_telegram_id=user_telegram_id)
+        subscription = get_subscription(user_telegram_id=user_telegram_id)
         print(subscription)
         print(subscription.allergy)
         print(subscription.daily_meals_amount)
