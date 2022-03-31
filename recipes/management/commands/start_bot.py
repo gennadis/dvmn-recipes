@@ -1,27 +1,21 @@
-from environs import Env
-
-from django.core.management.base import BaseCommand
-
 from aiogram import Bot, Dispatcher, executor, types
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import State, StatesGroup
+from asgiref.sync import sync_to_async
+from django.core.management.base import BaseCommand
+from environs import Env
 
-from recipes.models import TelegramUser
 from recipes.management.commands.crud import create_new_user
-
-from recipes.management.commands.keyboards import (
-    MAIN_KEYBOARD,
-    ASK_FOR_PHONE_KEYBOARD,
-    make_digit_keyboard,
-    make_keyboard,
-)
+from recipes.management.commands.keyboards import (ASK_FOR_PHONE_KEYBOARD,
+                                                   MAIN_KEYBOARD,
+                                                   make_digit_keyboard,
+                                                   make_keyboard)
+from recipes.models import TelegramUser
 
 MENU_TYPES = ("Классическое", "Низкоуглеводное", "Вегетарианское", "Кето")
 
-
 SUBSCRIPTION_PERIODS = ("1 месяц", "3 месяца", "6 месяцев", "12 месяцев")
-
 
 ALLERGENS = ["аллерген 1", "аллерген 2", "аллерген 3", "аллерген 4", "аллерген 5"]
 
@@ -44,20 +38,6 @@ class Subscription(StatesGroup):
     payment = State()
 
 
-# async def save_profile(state: FSMContext):
-#     profile = await state.get_data()
-
-#     new_user = TelegramUser.objects.create(
-#         telegram_id=profile.get("id"),
-#         telegram_username=profile.get("username"),
-#         first_name=profile.get("name"),
-#         last_name=profile.get("surname"),
-#         phone_number=profile.get("phone")
-#     )
-#     new_user.save()
-#     return new_user
-
-
 class Command(BaseCommand):
     help = "Start Telegram bot"
 
@@ -66,29 +46,23 @@ class Command(BaseCommand):
         env = Env()
         env.read_env()
 
-        # JUST FOR TEST
-        import sqlite3
-
-        fs = sqlite3.connect("test_base.sqlite3")
-        cursor = fs.cursor()
-
         bot_init = Bot(token=env.str("BOT_TOKEN"), parse_mode=types.ParseMode.HTML)
         storage = MemoryStorage()
         bot = Dispatcher(bot_init, storage=storage)
 
+
         @bot.message_handler(commands="start")
         async def hello(message: types.Message):
-            user_data = TelegramUser.objects.get(telegram_id=message.from_user.id)
-            if user_data is None:
-                await message.answer(
-                    "Здравствуйте!\n\nКак Вас зовут?\n(введите имя)",
-                    reply_markup=types.ReplyKeyboardRemove,
-                )
-                await UserProfile.first_name.set()
-            else:
+            try:
+                user_data = await sync_to_async(TelegramUser.objects.get)(telegram_id=message.from_user.id)
                 await message.answer(
                     f"{user_data.first_name}, hello again!", reply_markup=MAIN_KEYBOARD
                 )
+            except TelegramUser.DoesNotExist:
+                print('ERROR hello')
+                await message.answer("Здравствуйте!\n\nКак Вас зовут?\n(введите имя)")
+                await UserProfile.first_name.set()
+
 
         @bot.message_handler(state=UserProfile.first_name)
         async def get_user_name(message: types.Message, state: FSMContext):
@@ -97,6 +71,7 @@ class Command(BaseCommand):
             await state.update_data(first_name=message.text)
             await message.answer("Спасибо.\n\nНапишите еще фамилию, пожалуйста")
             await UserProfile.last_name.set()
+
 
         @bot.message_handler(state=UserProfile.last_name)
         async def get_user_surname(message: types.Message, state: FSMContext):
@@ -107,16 +82,17 @@ class Command(BaseCommand):
             )
             await UserProfile.phone_number.set()
 
-        @bot.message_handler(
-            state=UserProfile.phone_number, content_types=types.ContentTypes.CONTACT
-        )
+
+        @bot.message_handler(state=UserProfile.phone_number, content_types=types.ContentTypes.CONTACT)
         async def get_user_phone(message: types.Message, state: FSMContext):
             await state.update_data(phone_number=message.contact.phone_number)
-            await create_new_user(state.get_data())
+            user_data = await state.get_data()
+            await create_new_user(user_data)
             await state.finish()
             await message.answer(
                 "Отлично, ваш профиль сохранен!", reply_markup=MAIN_KEYBOARD
             )
+
 
         @bot.message_handler(lambda message: message.text == "Мои подписки")
         async def get_user_subscriptions(message: types.Message):
@@ -134,12 +110,14 @@ class Command(BaseCommand):
                 reply_markup=make_keyboard(user_subscriptions_titles, 1),
             )
 
+
         @bot.message_handler(lambda message: message.text == "Создать подписку")
         async def create_subscription(message: types.Message):
             await message.answer(
-                "Укажите тип меню.", reply_markup=make_keyboard(MENU_TYPES, 4)
+                "Укажите тип меню.", reply_markup=make_keyboard(MENU_TYPES, 1)
             )
             await Subscription.type_menu.set()
+
 
         @bot.message_handler(state=Subscription.type_menu)
         async def get_type_menu(message: types.Message, state: FSMContext):
@@ -148,6 +126,7 @@ class Command(BaseCommand):
                 "Отлично, укажите количество персон", reply_markup=make_digit_keyboard()
             )
             await Subscription.persons.set()
+
 
         @bot.message_handler(state=Subscription.persons)
         async def get_number_of_persons(message: types.Message, state: FSMContext):
@@ -175,7 +154,7 @@ class Command(BaseCommand):
 
                 await message.answer(
                     "Отлично, выберите период подписки",
-                    reply_markup=SUBSCRIPTION_PERIODS(["7 дней", "14 дней", "1 месяц"]),
+                    reply_markup=make_keyboard(SUBSCRIPTION_PERIODS),
                 )
                 await Subscription.period.set()
             elif message.text in ALLERGENS:
@@ -184,7 +163,7 @@ class Command(BaseCommand):
                     user_allergens = state_data.get("allergens")
                     if message.text not in user_allergens:
                         user_allergens.append(message.text)
-                except AttributeError:
+                except TypeError:
                     user_allergens = [f"{message.text}"]
                 await state.update_data(allergens=user_allergens)
                 await message.answer(
@@ -196,7 +175,7 @@ class Command(BaseCommand):
         @bot.message_handler(state=Subscription.period)
         async def get_subscription_period(message: types.Message, state: FSMContext):
             await state.update_data(period=message.text)
-            await message.answer("Введите промокод")
+            await message.answer("Введите промокод", reply_markup=types.ReplyKeyboardRemove)
             await Subscription.promo.set()
 
         @bot.message_handler(state=Subscription.promo)
