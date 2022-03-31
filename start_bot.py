@@ -5,12 +5,29 @@ from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import State, StatesGroup
 
+from recipes.models import TelegramUser
+from recipes.management.commands.crud import create_new_user
 
 from keyboards import (
     MAIN_KEYBOARD,
     ASK_FOR_PHONE_KEYBOARD,
-    how_much_persons_keyboard,
-    make_one_time_keyboard
+    make_digit_keyboard,
+    make_keyboard
+)
+
+MENU_TYPES = (
+    'Классическое',
+    'Низкоуглеводное',
+    'Вегетарианское',
+    'Кето'
+)
+
+
+SUBSCRIPTION_PERIODS = (
+    '1 месяц',
+    '3 месяца',
+    '6 месяцев',
+    '12 месяцев'
 )
 
 
@@ -25,9 +42,10 @@ ALLERGENS = [
 
 class UserProfile(StatesGroup):
     id = State()
-    name = State()
-    surname = State()
-    phone = State()
+    username = State()
+    first_name = State()
+    last_name = State()
+    phone_number = State()
 
 
 class Subscription(StatesGroup):
@@ -40,20 +58,19 @@ class Subscription(StatesGroup):
     payment = State()
     
 
-async def save_profile(state, fs, cursor):
-    profile = await state.get_data()
-    cursor.execute(
-        "INSERT INTO users VALUES(?, ?, ?, ?);",
-        (
-            profile.get("id"),
-            profile.get("name"),
-            profile.get("surname"),
-            profile.get("phone")
-        )
-    )
-    fs.commit()
+# async def save_profile(state: FSMContext):
+#     profile = await state.get_data()
 
-
+#     new_user = TelegramUser.objects.create(
+#         telegram_id=profile.get("id"),
+#         telegram_username=profile.get("username"),
+#         first_name=profile.get("name"),
+#         last_name=profile.get("surname"),
+#         phone_number=profile.get("phone")
+#     )
+#     new_user.save()
+#     return new_user
+    
 
 
 
@@ -73,38 +90,37 @@ if __name__ == '__main__':
 
     @bot.message_handler(commands="start")
     async def hello(message: types.Message):
-        # Check if it is new user
-        #    await message.answer(f'{user_name}, hello again!', reply_markup=MAIN_KEYBOARD)
-        # else:
-        await message.answer('Здравствуйте!\n\nКак Вас зовут?\n(введите имя)')
-        await UserProfile.name.set()
+        user_data = TelegramUser.objects.get(telegram_id=message.from_user.id)
+        if user_data is None:
+            await message.answer('Здравствуйте!\n\nКак Вас зовут?\n(введите имя)', reply_markup=types.ReplyKeyboardRemove)
+            await UserProfile.first_name.set()
+        else:
+            await message.answer(f'{user_data.first_name}, hello again!', reply_markup=MAIN_KEYBOARD)
 
 
-
-    @bot.message_handler(state=UserProfile.name)
+    @bot.message_handler(state=UserProfile.first_name)
     async def get_user_name(message: types.Message, state: FSMContext):
         await state.update_data(id=message.from_user.id)
-        await state.update_data(name=message.text)
+        await state.update_data(username=message.from_user.username)
+        await state.update_data(first_name=message.text)
         await message.answer('Спасибо.\n\nНапишите еще фамилию, пожалуйста')
-        await UserProfile.surname.set()
+        await UserProfile.last_name.set()
 
     
-    @bot.message_handler(state=UserProfile.surname)
+    @bot.message_handler(state=UserProfile.last_name)
     async def get_user_surname(message: types.Message, state: FSMContext):
-        await state.update_data(surname=message.text)
+        await state.update_data(last_name=message.text)
         await message.answer(
             'Супер!\n\nОсталось отправить номер телефона для управления подписками.',
             reply_markup=ASK_FOR_PHONE_KEYBOARD
         )
-        await UserProfile.phone.set()
+        await UserProfile.phone_number.set()
     
-
-    @bot.message_handler(state=UserProfile.phone, content_types=types.ContentTypes.CONTACT)
+    
+    @bot.message_handler(state=UserProfile.phone_number, content_types=types.ContentTypes.CONTACT)
     async def get_user_phone(message: types.Message, state: FSMContext):
-        await state.update_data(phone=message.contact.phone_number)
-        
-        # delete fs, cursor before MVP
-        await save_profile(state, fs, cursor)
+        await state.update_data(phone_number=message.contact.phone_number)
+        await create_new_user(state.get_data())
         await state.finish()
         await message.answer('Отлично, ваш профиль сохранен!', reply_markup=MAIN_KEYBOARD)
 
@@ -116,19 +132,19 @@ if __name__ == '__main__':
         user_subscriptions_titles = ['Крутая подписка', 'Очень крутая подписка', 'Супер-пупер подписка']
 
         # проверка есть ли хотя бы одна подписка. Если нет - сообщить
-        await message.answer('Выберите вашу подписку из списка внизу', reply_markup=make_one_time_keyboard(user_subscriptions_titles))
+        await message.answer('Выберите вашу подписку из списка внизу', reply_markup=make_keyboard(user_subscriptions_titles, 1))
 
     
     @bot.message_handler(lambda message: message.text == "Создать подписку")
     async def create_subscription(message: types.Message):
-        await message.answer('Укажите тип меню.')
+        await message.answer('Укажите тип меню.', reply_markup=make_keyboard(MENU_TYPES, 4))
         await Subscription.type_menu.set()
 
 
     @bot.message_handler(state=Subscription.type_menu)
     async def get_type_menu(message: types.Message, state: FSMContext):
         await state.update_data(type_menu=message.text)
-        await message.answer('Отлично, укажите количество персон', reply_markup=how_much_persons_keyboard())
+        await message.answer('Отлично, укажите количество персон', reply_markup=make_digit_keyboard())
         await Subscription.persons.set()
 
 
@@ -137,7 +153,7 @@ if __name__ == '__main__':
         await state.update_data(persons=message.text)
         await message.answer(
             'Отлично, укажите количество приемов пищи',
-            reply_markup=make_one_time_keyboard([str(x + 1) for x in range(4)])
+            reply_markup=make_digit_keyboard()
         )
         await Subscription.eatings.set()
 
@@ -145,7 +161,10 @@ if __name__ == '__main__':
     @bot.message_handler(state=Subscription.eatings)
     async def get_number_of_eatings(message: types.Message, state: FSMContext):
         await state.update_data(eatings=message.text)
-        await message.answer('Отлично, укажите аллергены - продукты которых не должно быть ', reply_markup=make_one_time_keyboard(ALLERGENS))
+        await message.answer(
+            'Отлично, укажите аллергены - продукты которых не должно быть ',
+            reply_markup=make_keyboard(ALLERGENS, extended_buttons=["Аллергенов нет"])
+        )
         await Subscription.allergens.set()
 
 
@@ -155,7 +174,7 @@ if __name__ == '__main__':
             
             await message.answer(
                 'Отлично, выберите период подписки',
-                reply_markup=make_one_time_keyboard([
+                reply_markup=SUBSCRIPTION_PERIODS([
                     '7 дней',
                     '14 дней',
                     '1 месяц'
@@ -166,11 +185,15 @@ if __name__ == '__main__':
             try:
                 state_data = await state.get_data()
                 user_allergens = state_data.get('allergens')
-                user_allergens.append(message.text)
+                if message.text not in user_allergens:
+                    user_allergens.append(message.text)
             except AttributeError:
-                user_allergen = [f'{message.text}']
+                user_allergens = [f'{message.text}']
             await state.update_data(allergens=user_allergens)
-            await message.answer("Добавим еще один?", reply_markup=make_one_time_keyboard(ALLERGENS + ['Готово']))
+            await message.answer(
+                "Добавим еще один?",
+                reply_markup=make_keyboard(ALLERGENS, extended_buttons=["Готово"])
+            )
             await Subscription.allergens.set()
 
 
@@ -184,7 +207,10 @@ if __name__ == '__main__':
     @bot.message_handler(state=Subscription.promo)
     async def get_promo(message: types.Message, state: FSMContext):
         await state.update_data(promo=message.text)
-        await message.answer('Итак, подписка сформирована. Осталось ее оплатить и можно идти за продуктами.', reply_markup=make_one_time_keyboard(['Оплатить подписку']))
+        await message.answer(
+            'Итак, подписка сформирована. Осталось ее оплатить и можно идти за продуктами.',
+            reply_markup=make_keyboard(['Оплатить подписку'])
+        )
         await Subscription.payment.set()
 
 
