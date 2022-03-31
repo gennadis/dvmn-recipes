@@ -4,7 +4,10 @@ from django.core.management.base import BaseCommand
 
 from recipes.models import Ingredient, Recipe, TelegramUser, Subscription
 
+from asgiref.sync import sync_to_async
 
+
+@sync_to_async
 def create_new_user(user_profile: dict) -> TelegramUser:
     new_user = TelegramUser.objects.create(
         telegram_id=user_profile.get("id"),
