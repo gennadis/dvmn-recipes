@@ -3,42 +3,42 @@
         "model": "recipes.allergy",
         "pk": 1,
         "fields": {
-            "name": "\u041c\u043e\u0440\u0435\u043f\u0440\u043e\u0434\u0443\u043a\u0442\u044b"
+            "name": "Морепродукты"
         }
     },
     {
         "model": "recipes.allergy",
         "pk": 2,
         "fields": {
-            "name": "\u041c\u044f\u0441\u043e"
+            "name": "Мясо"
         }
     },
     {
         "model": "recipes.allergy",
         "pk": 3,
         "fields": {
-            "name": "\u0417\u0435\u0440\u043d\u043e\u0432\u044b\u0435"
+            "name": "Зерновые"
         }
     },
     {
         "model": "recipes.allergy",
         "pk": 4,
         "fields": {
-            "name": "\u041c\u0451\u0434"
+            "name": "Мёд"
         }
     },
     {
         "model": "recipes.allergy",
         "pk": 5,
         "fields": {
-            "name": "\u041e\u0440\u0435\u0445\u0438"
+            "name": "Орехи"
         }
     },
     {
         "model": "recipes.allergy",
         "pk": 6,
         "fields": {
-            "name": "\u041c\u043e\u043b\u043e\u043a\u043e"
+            "name": "Молоко"
         }
     }
 ]

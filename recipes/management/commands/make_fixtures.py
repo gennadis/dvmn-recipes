@@ -13,7 +13,12 @@ FIXTURES_PATH = "./recipes/fixtures/"
 
 def save_json(data: list[dict], filename: str) -> str:
     with open(filename, "w") as file:
-        json.dump(data, file, indent=4)
+        json.dump(
+            obj=data,
+            fp=file,
+            indent=4,
+            ensure_ascii=False,
+        )
 
     return filename
 
