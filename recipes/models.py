@@ -146,7 +146,6 @@ class Recipe(models.Model):
         allergies = []
         for ingredient in self.ingredients.filter(allergy__isnull=False):
             allergies.append(ingredient.allergy.first())
-            print(f"{ingredient} = {ingredient.allergy.first()}")
         return allergies
 
     def __str__(self) -> str:
