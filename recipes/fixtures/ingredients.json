@@ -215,7 +215,7 @@
         "model": "recipes.ingredient",
         "pk": 57,
         "fields": {
-            "name": "Осьминог",
+            "name": "осьминог",
             "unit": "шт.",
             "allergy": [
                 1
@@ -226,7 +226,7 @@
         "model": "recipes.ingredient",
         "pk": 58,
         "fields": {
-            "name": "Помидор",
+            "name": "помидор",
             "unit": "шт.",
             "allergy": []
         }
@@ -235,7 +235,7 @@
         "model": "recipes.ingredient",
         "pk": 59,
         "fields": {
-            "name": "Петрушка",
+            "name": "петрушка",
             "unit": "пучок",
             "allergy": []
         }
