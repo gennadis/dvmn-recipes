@@ -1,0 +1,1077 @@
+[
+    {
+        "model": "recipes.mealtype",
+        "pk": 1,
+        "fields": {
+            "name": "Классическое"
+        }
+    },
+    {
+        "model": "recipes.mealtype",
+        "pk": 2,
+        "fields": {
+            "name": "Низкоуглеводное"
+        }
+    },
+    {
+        "model": "recipes.mealtype",
+        "pk": 3,
+        "fields": {
+            "name": "Веганское"
+        }
+    },
+    {
+        "model": "recipes.mealtype",
+        "pk": 4,
+        "fields": {
+            "name": "Кето"
+        }
+    },
+    {
+        "model": "recipes.allergy",
+        "pk": 1,
+        "fields": {
+            "name": "Морепродукты",
+            "description": null
+        }
+    },
+    {
+        "model": "recipes.allergy",
+        "pk": 2,
+        "fields": {
+            "name": "Мясо",
+            "description": null
+        }
+    },
+    {
+        "model": "recipes.allergy",
+        "pk": 3,
+        "fields": {
+            "name": "Зерновые",
+            "description": null
+        }
+    },
+    {
+        "model": "recipes.allergy",
+        "pk": 4,
+        "fields": {
+            "name": "Мёд",
+            "description": null
+        }
+    },
+    {
+        "model": "recipes.allergy",
+        "pk": 5,
+        "fields": {
+            "name": "Орехи",
+            "description": null
+        }
+    },
+    {
+        "model": "recipes.allergy",
+        "pk": 6,
+        "fields": {
+            "name": "Молоко",
+            "description": null
+        }
+    },
+    {
+        "model": "recipes.ingredient",
+        "pk": 35,
+        "fields": {
+            "name": "кефир",
+            "unit": "мл.",
+            "allergy": [
+                6
+            ]
+        }
+    },
+    {
+        "model": "recipes.ingredient",
+        "pk": 36,
+        "fields": {
+            "name": "манная крупа",
+            "unit": "гр.",
+            "allergy": []
+        }
+    },
+    {
+        "model": "recipes.ingredient",
+        "pk": 37,
+        "fields": {
+            "name": "сахар",
+            "unit": "гр.",
+            "allergy": []
+        }
+    },
+    {
+        "model": "recipes.ingredient",
+        "pk": 38,
+        "fields": {
+            "name": "сливочное масло",
+            "unit": "гр.",
+            "allergy": [
+                6
+            ]
+        }
+    },
+    {
+        "model": "recipes.ingredient",
+        "pk": 39,
+        "fields": {
+            "name": "яйца",
+            "unit": "шт.",
+            "allergy": []
+        }
+    },
+    {
+        "model": "recipes.ingredient",
+        "pk": 40,
+        "fields": {
+            "name": "ванильный экстракт",
+            "unit": "ч.л.",
+            "allergy": []
+        }
+    },
+    {
+        "model": "recipes.ingredient",
+        "pk": 41,
+        "fields": {
+            "name": "разрыхлитель",
+            "unit": "гр.",
+            "allergy": []
+        }
+    },
+    {
+        "model": "recipes.ingredient",
+        "pk": 42,
+        "fields": {
+            "name": "соль",
+            "unit": "щепотка",
+            "allergy": []
+        }
+    },
+    {
+        "model": "recipes.ingredient",
+        "pk": 43,
+        "fields": {
+            "name": "мука пшеничная",
+            "unit": "гр.",
+            "allergy": [
+                3
+            ]
+        }
+    },
+    {
+        "model": "recipes.ingredient",
+        "pk": 44,
+        "fields": {
+            "name": "мука цельнозерновая",
+            "unit": "гр.",
+            "allergy": [
+                3
+            ]
+        }
+    },
+    {
+        "model": "recipes.ingredient",
+        "pk": 45,
+        "fields": {
+            "name": "дрожжи сухие",
+            "unit": "гр.",
+            "allergy": []
+        }
+    },
+    {
+        "model": "recipes.ingredient",
+        "pk": 46,
+        "fields": {
+            "name": "масло оливковое",
+            "unit": "ст.л.",
+            "allergy": []
+        }
+    },
+    {
+        "model": "recipes.ingredient",
+        "pk": 47,
+        "fields": {
+            "name": "вода",
+            "unit": "мл.",
+            "allergy": []
+        }
+    },
+    {
+        "model": "recipes.ingredient",
+        "pk": 48,
+        "fields": {
+            "name": "молоко",
+            "unit": "гр.",
+            "allergy": [
+                6
+            ]
+        }
+    },
+    {
+        "model": "recipes.ingredient",
+        "pk": 49,
+        "fields": {
+            "name": "мороженое сливочное",
+            "unit": "гр.",
+            "allergy": [
+                6
+            ]
+        }
+    },
+    {
+        "model": "recipes.ingredient",
+        "pk": 50,
+        "fields": {
+            "name": "ягоды замороженные",
+            "unit": "гр.",
+            "allergy": []
+        }
+    },
+    {
+        "model": "recipes.ingredient",
+        "pk": 51,
+        "fields": {
+            "name": "чечевица красная",
+            "unit": "гр.",
+            "allergy": [
+                3
+            ]
+        }
+    },
+    {
+        "model": "recipes.ingredient",
+        "pk": 52,
+        "fields": {
+            "name": "картофель",
+            "unit": "шт.",
+            "allergy": []
+        }
+    },
+    {
+        "model": "recipes.ingredient",
+        "pk": 53,
+        "fields": {
+            "name": "лук репчатый",
+            "unit": "шт.",
+            "allergy": []
+        }
+    },
+    {
+        "model": "recipes.ingredient",
+        "pk": 54,
+        "fields": {
+            "name": "морковь",
+            "unit": "шт.",
+            "allergy": []
+        }
+    },
+    {
+        "model": "recipes.ingredient",
+        "pk": 55,
+        "fields": {
+            "name": "паприка",
+            "unit": "ч.л.",
+            "allergy": []
+        }
+    },
+    {
+        "model": "recipes.ingredient",
+        "pk": 56,
+        "fields": {
+            "name": "сок лимонный",
+            "unit": "ч.л.",
+            "allergy": []
+        }
+    },
+    {
+        "model": "recipes.ingredient",
+        "pk": 57,
+        "fields": {
+            "name": "осьминог",
+            "unit": "шт.",
+            "allergy": [
+                1
+            ]
+        }
+    },
+    {
+        "model": "recipes.ingredient",
+        "pk": 58,
+        "fields": {
+            "name": "помидор",
+            "unit": "шт.",
+            "allergy": []
+        }
+    },
+    {
+        "model": "recipes.ingredient",
+        "pk": 59,
+        "fields": {
+            "name": "петрушка",
+            "unit": "пучок",
+            "allergy": []
+        }
+    },
+    {
+        "model": "recipes.ingredient",
+        "pk": 60,
+        "fields": {
+            "name": "крупа гречневая",
+            "unit": "гр.",
+            "allergy": [
+                3
+            ]
+        }
+    },
+    {
+        "model": "recipes.ingredient",
+        "pk": 61,
+        "fields": {
+            "name": "чеснок",
+            "unit": "шт.",
+            "allergy": []
+        }
+    },
+    {
+        "model": "recipes.ingredient",
+        "pk": 62,
+        "fields": {
+            "name": "растительное масло",
+            "unit": "мл.",
+            "allergy": []
+        }
+    },
+    {
+        "model": "recipes.ingredient",
+        "pk": 63,
+        "fields": {
+            "name": "шампиньоны",
+            "unit": "шт.",
+            "allergy": []
+        }
+    },
+    {
+        "model": "recipes.ingredient",
+        "pk": 64,
+        "fields": {
+            "name": "мясо",
+            "unit": "кг.",
+            "allergy": [
+                2
+            ]
+        }
+    },
+    {
+        "model": "recipes.ingredient",
+        "pk": 65,
+        "fields": {
+            "name": "капуста белокочанная",
+            "unit": "гр.",
+            "allergy": []
+        }
+    },
+    {
+        "model": "recipes.ingredient",
+        "pk": 66,
+        "fields": {
+            "name": "хлеб белый",
+            "unit": "гр.",
+            "allergy": [
+                3
+            ]
+        }
+    },
+    {
+        "model": "recipes.ingredient",
+        "pk": 67,
+        "fields": {
+            "name": "сыр голландский",
+            "unit": "гр.",
+            "allergy": [
+                6
+            ]
+        }
+    },
+    {
+        "model": "recipes.ingredient",
+        "pk": 68,
+        "fields": {
+            "name": "кукурузные палочки",
+            "unit": "гр.",
+            "allergy": []
+        }
+    },
+    {
+        "model": "recipes.ingredient",
+        "pk": 69,
+        "fields": {
+            "name": "сосиски",
+            "unit": "шт.",
+            "allergy": [
+                2
+            ]
+        }
+    },
+    {
+        "model": "recipes.ingredient",
+        "pk": 70,
+        "fields": {
+            "name": "масло сливочное",
+            "unit": "гр.",
+            "allergy": [
+                6
+            ]
+        }
+    },
+    {
+        "model": "recipes.ingredient",
+        "pk": 71,
+        "fields": {
+            "name": "лук зеленый",
+            "unit": "пучок",
+            "allergy": []
+        }
+    },
+    {
+        "model": "recipes.ingredient",
+        "pk": 72,
+        "fields": {
+            "name": "перец черный",
+            "unit": "щепотка",
+            "allergy": []
+        }
+    },
+    {
+        "model": "recipes.ingredient",
+        "pk": 73,
+        "fields": {
+            "name": "масло растительное",
+            "unit": "ст.л.",
+            "allergy": []
+        }
+    },
+    {
+        "model": "recipes.ingredient",
+        "pk": 74,
+        "fields": {
+            "name": "куриное филе",
+            "unit": "гр.",
+            "allergy": []
+        }
+    },
+    {
+        "model": "recipes.ingredient",
+        "pk": 75,
+        "fields": {
+            "name": "горчица",
+            "unit": "ст.л.",
+            "allergy": []
+        }
+    },
+    {
+        "model": "recipes.ingredient",
+        "pk": 76,
+        "fields": {
+            "name": "соевый соус",
+            "unit": "ч.л.",
+            "allergy": []
+        }
+    },
+    {
+        "model": "recipes.ingredient",
+        "pk": 77,
+        "fields": {
+            "name": "рис",
+            "unit": "гр.",
+            "allergy": []
+        }
+    },
+    {
+        "model": "recipes.ingredient",
+        "pk": 78,
+        "fields": {
+            "name": "хлопья овсяные",
+            "unit": "гр.",
+            "allergy": [
+                3
+            ]
+        }
+    },
+    {
+        "model": "recipes.ingredient",
+        "pk": 79,
+        "fields": {
+            "name": "крабовые палочки",
+            "unit": "гр.",
+            "allergy": [
+                1
+            ]
+        }
+    },
+    {
+        "model": "recipes.ingredient",
+        "pk": 80,
+        "fields": {
+            "name": "сыр",
+            "unit": "гр.",
+            "allergy": [
+                6
+            ]
+        }
+    },
+    {
+        "model": "recipes.ingredient",
+        "pk": 81,
+        "fields": {
+            "name": "фарш (свинина + говядина)",
+            "unit": "гр.",
+            "allergy": [
+                2
+            ]
+        }
+    },
+    {
+        "model": "recipes.ingredient",
+        "pk": 82,
+        "fields": {
+            "name": "салат Айсберг",
+            "unit": "гр.",
+            "allergy": []
+        }
+    },
+    {
+        "model": "recipes.recipe",
+        "pk": 17,
+        "fields": {
+            "name": "Биточки из крабовых палочек",
+            "servings": 2,
+            "image_url": "https://gotovim-doma.ru/images/recipe/9/42/9420127ec4f9e43e4ec92358aab3276b_l.jpg",
+            "working_time": 35,
+            "fats": "0.00",
+            "carbohydrates": "0.00",
+            "proteins": "0.00",
+            "calories": "0.00",
+            "created_at": "2022-04-01T19:17:09.178Z",
+            "meal_type": [
+                3
+            ]
+        }
+    },
+    {
+        "model": "recipes.recipe",
+        "pk": 18,
+        "fields": {
+            "name": "Картофельный суп с фрикадельками",
+            "servings": 4,
+            "image_url": "https://gotovim-doma.ru/images/recipe/0/71/0718e9e896655ed38dac4cb2aff6e13d_l.jpg",
+            "working_time": 50,
+            "fats": "0.00",
+            "carbohydrates": "0.00",
+            "proteins": "0.00",
+            "calories": "0.00",
+            "created_at": "2022-04-01T19:53:56.784Z",
+            "meal_type": [
+                1
+            ]
+        }
+    },
+    {
+        "model": "recipes.recipe",
+        "pk": 19,
+        "fields": {
+            "name": "Салат \"Цезарь\" с курицей",
+            "servings": 2,
+            "image_url": "https://gotovim-doma.ru/images/recipe/3/30/330944ddeb494f2c385bfc665ab6cb25_l.jpg",
+            "working_time": 25,
+            "fats": "0.00",
+            "carbohydrates": "0.00",
+            "proteins": "0.00",
+            "calories": "0.00",
+            "created_at": "2022-04-01T19:58:41.878Z",
+            "meal_type": [
+                1
+            ]
+        }
+    },
+    {
+        "model": "recipes.recipe",
+        "pk": 20,
+        "fields": {
+            "name": "Заварные блины на кефире",
+            "servings": 3,
+            "image_url": "https://gotovim-doma.ru/images/recipe/c/f5/cf5c15986fb4838b95f0b29b470cfa46_l.jpg",
+            "working_time": 60,
+            "fats": "0.00",
+            "carbohydrates": "0.00",
+            "proteins": "0.00",
+            "calories": "0.00",
+            "created_at": "2022-04-01T20:01:18.706Z",
+            "meal_type": [
+                1
+            ]
+        }
+    },
+    {
+        "model": "recipes.recipestep",
+        "pk": 1,
+        "fields": {
+            "order": 1,
+            "instruction": "Крабовые палочки предварительно заморозить в морозильной камере.\r\nЗамороженные палочки натереть на мелкой терке.",
+            "image_url": "https://gotovim-doma.ru/images/recipe/f/65/f65a7865045609ff08d368d73d80cdcb_m.jpg",
+            "step_recipe": 17
+        }
+    },
+    {
+        "model": "recipes.recipestep",
+        "pk": 2,
+        "fields": {
+            "order": 2,
+            "instruction": "Сыр натереть на терке.\r\nЧеснок очистить и пропустить через чеснковыжималку.\r\nСоединить крабовые палочки, сыр, чеснок, добавить яйца и хорошо перемешать.",
+            "image_url": "https://gotovim-doma.ru/images/recipe/9/c7/9c77c55e03c82c514558318a607a23d2_m.jpg",
+            "step_recipe": 17
+        }
+    },
+    {
+        "model": "recipes.recipestep",
+        "pk": 3,
+        "fields": {
+            "order": 3,
+            "instruction": "Из полученной массы сформировать плоские биточки, обвалять их в муке и жарить в растительном масле с двух сторон до готовности.",
+            "image_url": "https://gotovim-doma.ru/images/recipe/7/02/702cba8e066a9c90a2c0a51683dc4de7_m.jpg",
+            "step_recipe": 17
+        }
+    },
+    {
+        "model": "recipes.recipestep",
+        "pk": 4,
+        "fields": {
+            "order": 1,
+            "instruction": "Фарш положить в миску, посолить, поперчить и хорошо перемешать.\r\nСформировать из фарша небольшие шарики - фрикадельки.",
+            "image_url": "https://gotovim-doma.ru/images/recipe/a/27/a27b636e455c17053b015365a7993921_m.jpg",
+            "step_recipe": 18
+        }
+    },
+    {
+        "model": "recipes.recipestep",
+        "pk": 5,
+        "fields": {
+            "order": 2,
+            "instruction": "Картофель вымыть, очистить и нарезать кубиками.\r\nВ кастрюлю налить воду, поставить на огонь, довести до кипения и посолить.\r\nПоложить картофель в кипящую воду и снова довести до кипения.\r\nЛук очистить и мелко нарезать.\r\nМорковь очистить и нарезать кубиками.\r\nНа разогретой с растительным маслом сковороде обжарить лук 2 минуты.\r\nДобавить морковь и жарить 4 минуты, помешивая.",
+            "image_url": "https://gotovim-doma.ru/images/recipe/a/28/a284ae8cf18e69c395f144295f5bb35d_m.jpg",
+            "step_recipe": 18
+        }
+    },
+    {
+        "model": "recipes.recipestep",
+        "pk": 6,
+        "fields": {
+            "order": 3,
+            "instruction": "В кастрюлю к картофелю добавить обжаренные овощи и аккуратно опустить фрикадельки.\r\nДовести суп до кипения и варить 10-15 минут.\r\nВыключить огонь, добавить рубленую зелень и дать настояться под крышкой.",
+            "image_url": "https://gotovim-doma.ru/images/recipe/9/88/9881732734e7f67727da801e26bd98f3_m.jpg",
+            "step_recipe": 18
+        }
+    },
+    {
+        "model": "recipes.recipestep",
+        "pk": 7,
+        "fields": {
+            "order": 1,
+            "instruction": "Куриную грудку вымыть и хорошо обсушить бумажными полотенцами.\r\nНатереть филе солью и перцем.\r\nВ сковороде разогреть сливочное масло вместе с растительным, выложить грудку и обжарить по 3-4 минуты с каждой стороны, до румяности.",
+            "image_url": "https://gotovim-doma.ru/images/recipe/8/43/843a4427fefb365c7b21959d2e6635e1_m.jpg",
+            "step_recipe": 19
+        }
+    },
+    {
+        "model": "recipes.recipestep",
+        "pk": 8,
+        "fields": {
+            "order": 2,
+            "instruction": "Затем довести до готовности в заранее разогретой(!) до 180°C духовке, около 8-10 минут.\r\nГрудку переложить на блюдо, накрыть фольгой и остудить.\r\nОхлажденную грудку нарезать ломтиками, соломкой или кубиками.",
+            "image_url": "https://gotovim-doma.ru/images/recipe/c/f9/cf99416082ea860d276ad33c5c99497d_m.jpg",
+            "step_recipe": 19
+        }
+    },
+    {
+        "model": "recipes.recipestep",
+        "pk": 9,
+        "fields": {
+            "order": 3,
+            "instruction": "Чеснок очистить и порубить.\r\nВ небольшую миску налить оливковое масло.\r\nДобавить в масло чеснок.\r\nДать настояться чесночному маслу 1 час (можно дольше).",
+            "image_url": "https://gotovim-doma.ru/images/recipe/1/ff/1ff512154e6b722eade3312344b02ef6_m.jpg",
+            "step_recipe": 19
+        }
+    },
+    {
+        "model": "recipes.recipestep",
+        "pk": 10,
+        "fields": {
+            "order": 4,
+            "instruction": "Багет нарезать небольшими кубиками.\r\nВ сковороде разогреть чесночное масло (следить, чтобы чеснок из масла не попал в сковороду, иначе он будет гореть).\r\nВыложить нарезанный багет и слегка обжарить в масле около 3 минут.",
+            "image_url": "https://gotovim-doma.ru/images/recipe/4/24/424eccfa6f0e631184a49e0f9103bc21_m.jpg",
+            "step_recipe": 19
+        }
+    },
+    {
+        "model": "recipes.recipestep",
+        "pk": 11,
+        "fields": {
+            "order": 5,
+            "instruction": "Салат произвольно нарвать руками и обсушить в карусели для сушки зелени или на полотенце.\r\nПерепелиные яйца вымыть, положить в кипящую подсоленную воду и варить 3-4 минуты с момента закипания.\r\nПереложить яйца в холодную воду, остудить и очистить от скорлупы.\r\nРазрезать яйца пополам.",
+            "image_url": "https://gotovim-doma.ru/images/recipe/4/04/4047de7f7b6452d49522d3c90bbf0542_m.jpg",
+            "step_recipe": 19
+        }
+    },
+    {
+        "model": "recipes.recipestep",
+        "pk": 12,
+        "fields": {
+            "order": 6,
+            "instruction": "На блюдо выложить листья салата.\r\nСверху разложить куриное мясо и полить салат соусом \"Цезарь\" (можно перемешать салат с соусом).",
+            "image_url": "https://gotovim-doma.ru/images/recipe/6/1f/61f896153c22568d53537b126aeafbf4_m.jpg",
+            "step_recipe": 19
+        }
+    },
+    {
+        "model": "recipes.recipestep",
+        "pk": 13,
+        "fields": {
+            "order": 7,
+            "instruction": "Разложить половинки перепелиных яиц, помидоры и по вкусу заправить соусом.\r\nПеред подачей посыпать салат гренками.",
+            "image_url": "https://gotovim-doma.ru/images/recipe/6/7a/67ae8080a6e1bd57ba6fe91a8db37d4a_m.jpg",
+            "step_recipe": 19
+        }
+    },
+    {
+        "model": "recipes.recipestep",
+        "pk": 14,
+        "fields": {
+            "order": 1,
+            "instruction": "Итак,2 яйца взбиваем с 0,5 ч.л. соли до образования пены.\r\nТонкой струйкой вливаем 1 ст.кипятка и продолжаем взбивать.\r\nПотом добавляем 1 ст. кефира и продолжаем взбивать смесь( я использовала венчик).",
+            "image_url": "https://gotovim-doma.ru/images/recipe/4/91/491ba6f928632a8afa649a6a210ed68e_m.jpg",
+            "step_recipe": 20
+        }
+    },
+    {
+        "model": "recipes.recipestep",
+        "pk": 15,
+        "fields": {
+            "order": 2,
+            "instruction": "В сухую посуду насыпать 1 ст.просеянной муки и ввести в неё кефирно-яичную смесь,при этом тщательно размешиваем тесто.\r\nПод конец положить туда соду на кончике ножа, 1 ст.л. сахара,2-3 ст.л. растительного масла(ванилин-по желанию).\r\nБлинчики получаются тонкие и кружевные.",
+            "image_url": "https://gotovim-doma.ru/images/recipe/a/a5/aa5a13a195d70d5db4ff186f9658fa91_m.jpg",
+            "step_recipe": 20
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 86,
+        "fields": {
+            "ingredient": 79,
+            "recipe": 17,
+            "amount": "200.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 87,
+        "fields": {
+            "ingredient": 80,
+            "recipe": 17,
+            "amount": "150.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 88,
+        "fields": {
+            "ingredient": 61,
+            "recipe": 17,
+            "amount": "1.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 89,
+        "fields": {
+            "ingredient": 39,
+            "recipe": 17,
+            "amount": "2.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 90,
+        "fields": {
+            "ingredient": 43,
+            "recipe": 17,
+            "amount": "50.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 91,
+        "fields": {
+            "ingredient": 47,
+            "recipe": 18,
+            "amount": "2000.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 92,
+        "fields": {
+            "ingredient": 81,
+            "recipe": 18,
+            "amount": "0.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 93,
+        "fields": {
+            "ingredient": 52,
+            "recipe": 18,
+            "amount": "5.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 94,
+        "fields": {
+            "ingredient": 54,
+            "recipe": 18,
+            "amount": "1.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 95,
+        "fields": {
+            "ingredient": 53,
+            "recipe": 18,
+            "amount": "1.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 96,
+        "fields": {
+            "ingredient": 59,
+            "recipe": 18,
+            "amount": "1.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 97,
+        "fields": {
+            "ingredient": 62,
+            "recipe": 18,
+            "amount": "20.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 98,
+        "fields": {
+            "ingredient": 42,
+            "recipe": 18,
+            "amount": "1.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 99,
+        "fields": {
+            "ingredient": 72,
+            "recipe": 18,
+            "amount": "1.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 100,
+        "fields": {
+            "ingredient": 74,
+            "recipe": 19,
+            "amount": "300.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 101,
+        "fields": {
+            "ingredient": 82,
+            "recipe": 19,
+            "amount": "200.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 102,
+        "fields": {
+            "ingredient": 58,
+            "recipe": 19,
+            "amount": "5.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 103,
+        "fields": {
+            "ingredient": 39,
+            "recipe": 19,
+            "amount": "3.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 104,
+        "fields": {
+            "ingredient": 42,
+            "recipe": 19,
+            "amount": "1.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 105,
+        "fields": {
+            "ingredient": 72,
+            "recipe": 19,
+            "amount": "2.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 106,
+        "fields": {
+            "ingredient": 66,
+            "recipe": 19,
+            "amount": "50.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 107,
+        "fields": {
+            "ingredient": 61,
+            "recipe": 19,
+            "amount": "2.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 108,
+        "fields": {
+            "ingredient": 80,
+            "recipe": 19,
+            "amount": "40.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 109,
+        "fields": {
+            "ingredient": 48,
+            "recipe": 19,
+            "amount": "40.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 110,
+        "fields": {
+            "ingredient": 39,
+            "recipe": 20,
+            "amount": "2.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 111,
+        "fields": {
+            "ingredient": 42,
+            "recipe": 20,
+            "amount": "2.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 112,
+        "fields": {
+            "ingredient": 47,
+            "recipe": 20,
+            "amount": "200.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 113,
+        "fields": {
+            "ingredient": 35,
+            "recipe": 20,
+            "amount": "200.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 114,
+        "fields": {
+            "ingredient": 43,
+            "recipe": 20,
+            "amount": "200.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 115,
+        "fields": {
+            "ingredient": 37,
+            "recipe": 20,
+            "amount": "25.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 116,
+        "fields": {
+            "ingredient": 73,
+            "recipe": 20,
+            "amount": "3.0"
+        }
+    },
+    {
+        "model": "recipes.promocode",
+        "pk": 1,
+        "fields": {
+            "code": "ПРИВЕТ",
+            "description": null,
+            "discount": 10,
+            "valid_thru": "2030-10-10"
+        }
+    },
+    {
+        "model": "recipes.promocode",
+        "pk": 2,
+        "fields": {
+            "code": "ПОЕХАЛИ",
+            "description": null,
+            "discount": 20,
+            "valid_thru": "2030-10-10"
+        }
+    },
+    {
+        "model": "recipes.promocode",
+        "pk": 3,
+        "fields": {
+            "code": "РЕЦЕПТЫ",
+            "description": null,
+            "discount": 30,
+            "valid_thru": "2030-10-10"
+        }
+    }
+]
