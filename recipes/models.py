@@ -100,9 +100,9 @@ class Recipe(models.Model):
         verbose_name="Recipe servings in persons",
         default=1,
     )
-    steps = models.CharField(
+    steps = models.TextField(
         verbose_name="Recipe steps",
-        max_length=512,
+        max_length=2048,
     )
     ingredients = models.ManyToManyField(
         to=Ingredient,
