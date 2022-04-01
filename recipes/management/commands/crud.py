@@ -3,7 +3,6 @@ from typing import Optional
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
 
-
 from django.core.management.base import BaseCommand
 
 from recipes.models import (
@@ -12,6 +11,7 @@ from recipes.models import (
     MealType,
     PromoCode,
     Recipe,
+    RecipeStep,
     TelegramUser,
     Subscription,
     RecipeIngredientAmount,
@@ -106,6 +106,22 @@ def get_recipe_ingredients(user_telegram_id: str, recipe: Recipe) -> dict:
     return ingredients
 
 
+def get_recipe_steps(user_telegram_id: str, recipe: Recipe) -> dict:
+    user = TelegramUser.objects.get(telegram_id=user_telegram_id)
+    recipe_steps = RecipeStep.objects.filter(step_recipe=recipe.pk)
+    steps = []
+    for step in recipe_steps:
+        steps.append(
+            {
+                "order": step.order,
+                "instruction": step.instruction,
+                "image_url": step.image_url,
+            }
+        )
+
+    return steps
+
+
 def validate_promo_code(user_code: str):
     try:
         promo_code = PromoCode.objects.get(code=user_code.upper())
@@ -122,6 +138,18 @@ class Command(BaseCommand):
         user_telegram_id = "12345"
         random_recipe = get_random_allowed_recipe(user_telegram_id)
         ingredients = get_recipe_ingredients(user_telegram_id, random_recipe)
+        steps = get_recipe_steps(user_telegram_id, random_recipe)
 
-        print(random_recipe.name)
-        print(ingredients)
+        print(f"Название: {random_recipe.name}")
+        print(f"Фото: {random_recipe.image_url}")
+        print("____________")
+        print("Ингредиенты:")
+        for name, amount in ingredients.items():
+            print(name, amount)
+        print("____________")
+        print("Шаги:")
+        print()
+        for step in steps:
+            print(step["image_url"])
+            print(f"Шаг {step['order']}: {step['instruction']}")
+            print()
