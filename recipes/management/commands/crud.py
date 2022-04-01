@@ -14,6 +14,7 @@ from recipes.models import (
     Recipe,
     TelegramUser,
     Subscription,
+    RecipeIngredientAmount,
 )
 
 from asgiref.sync import sync_to_async
@@ -92,6 +93,19 @@ def get_random_allowed_recipe(user_telegram_id: str) -> Recipe:
     return random.choice(allowed_recipes)
 
 
+def get_recipe_ingredients(user_telegram_id: str, recipe: Recipe) -> dict:
+    user = TelegramUser.objects.get(telegram_id=user_telegram_id)
+    recipe_ingredients_amount = RecipeIngredientAmount.objects.filter(
+        recipe=recipe.pk
+    ).all()
+
+    ingredients = {}
+    for item in recipe_ingredients_amount:
+        ingredients[item.ingredient.name] = f"{int(item.amount)} {item.ingredient.unit}"
+
+    return ingredients
+
+
 def validate_promo_code(user_code: str):
     try:
         promo_code = PromoCode.objects.get(code=user_code.upper())
@@ -105,26 +119,9 @@ class Command(BaseCommand):
     help = "Some basic test CRUD operations"
 
     def handle(self, *args, **kwargs):
-        user_promo_code = "hello"
-        promo_status = validate_promo_code(user_code=user_promo_code)
-        print(promo_status)
+        user_telegram_id = "12345"
+        random_recipe = get_random_allowed_recipe(user_telegram_id)
+        ingredients = get_recipe_ingredients(user_telegram_id, random_recipe)
 
-        # user_telegram_id = "12345"
-        # user_subscriptions = get_subscriptions(user_telegram_id=user_telegram_id)
-        # print(user_subscriptions)
-
-        # subscription_details = {
-        #     "meal_type": "keto",
-        #     "servings": 1,
-        #     "daily_meals_amount": 3,
-        #     "allergies": ["milk", "nuts", "honey"],
-        #     "start_date": datetime.now(),
-        #     "end_date": datetime.now() + relativedelta(month=1),
-        #     "promo_code": "EMPTY",
-        #     "is_paid": True,
-        # }
-        # subscription = save_subscription(
-        #     user_telegram_id=user_telegram_id,
-        #     subscription_details=subscription_details,
-        # )
-        # print(subscription)
+        print(random_recipe.name)
+        print(ingredients)
