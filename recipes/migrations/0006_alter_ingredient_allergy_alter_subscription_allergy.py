@@ -6,18 +6,39 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('recipes', '0005_allergy_remove_subscription_allergies_and_more'),
+        ("recipes", "0005_allergy_remove_subscription_allergies_and_more"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='ingredient',
-            name='allergy',
-            field=models.ManyToManyField(blank=True, related_name='ingredients', to='recipes.allergy', verbose_name='Ingredient allergy'),
+            model_name="ingredient",
+            name="allergy",
+            field=models.ManyToManyField(
+                blank=True,
+                related_name="ingredients",
+                to="recipes.allergy",
+                verbose_name="Ingredient allergy",
+            ),
         ),
         migrations.AlterField(
-            model_name='subscription',
-            name='allergy',
-            field=models.ManyToManyField(blank=True, related_name='subscriptions', to='recipes.allergy', verbose_name='Subscription allergies list'),
+            model_name="subscription",
+            name="allergy",
+            field=models.ManyToManyField(
+                blank=True,
+                related_name="subscriptions",
+                to="recipes.allergy",
+                verbose_name="Subscription allergies list",
+            ),
+        ),
+        migrations.AddField(
+            model_name="subscription",
+            name="name",
+            field=models.CharField(
+                blank=True,
+                default="Default subscription",
+                max_length=50,
+                null=True,
+                verbose_name="Subscription name",
+            ),
         ),
     ]

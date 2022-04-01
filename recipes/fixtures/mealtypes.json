@@ -3,28 +3,28 @@
         "model": "recipes.mealtype",
         "pk": 1,
         "fields": {
-            "name": "classic"
+            "name": "Классическое"
         }
     },
     {
         "model": "recipes.mealtype",
         "pk": 2,
         "fields": {
-            "name": "low carb"
+            "name": "Низкоуглеводное"
         }
     },
     {
         "model": "recipes.mealtype",
         "pk": 3,
         "fields": {
-            "name": "vegan"
+            "name": "Веганское"
         }
     },
     {
         "model": "recipes.mealtype",
         "pk": 4,
         "fields": {
-            "name": "keto"
+            "name": "Кето"
         }
     }
 ]

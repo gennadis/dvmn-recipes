@@ -3,42 +3,42 @@
         "model": "recipes.allergy",
         "pk": 1,
         "fields": {
-            "name": "Seafood"
+            "name": "Морепродукты"
         }
     },
     {
         "model": "recipes.allergy",
         "pk": 2,
         "fields": {
-            "name": "Meat"
+            "name": "Мясо"
         }
     },
     {
         "model": "recipes.allergy",
         "pk": 3,
         "fields": {
-            "name": "Cereal"
+            "name": "Зерновые"
         }
     },
     {
         "model": "recipes.allergy",
         "pk": 4,
         "fields": {
-            "name": "Honey"
+            "name": "Мёд"
         }
     },
     {
         "model": "recipes.allergy",
         "pk": 5,
         "fields": {
-            "name": "Nuts"
+            "name": "Орехи"
         }
     },
     {
         "model": "recipes.allergy",
         "pk": 6,
         "fields": {
-            "name": "Milk"
+            "name": "Молоко"
         }
     }
 ]

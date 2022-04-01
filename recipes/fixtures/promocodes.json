@@ -1,0 +1,29 @@
+[
+    {
+        "model": "recipes.promocode",
+        "pk": 1,
+        "fields": {
+            "code": "ПРИВЕТ",
+            "discount": 10,
+            "valid_thru": "2030-10-10"
+        }
+    },
+    {
+        "model": "recipes.promocode",
+        "pk": 2,
+        "fields": {
+            "code": "ПОЕХАЛИ",
+            "discount": 20,
+            "valid_thru": "2030-10-10"
+        }
+    },
+    {
+        "model": "recipes.promocode",
+        "pk": 3,
+        "fields": {
+            "code": "РЕЦЕПТЫ",
+            "discount": 30,
+            "valid_thru": "2030-10-10"
+        }
+    }
+]

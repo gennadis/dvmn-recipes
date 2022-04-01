@@ -8,6 +8,7 @@ from .models import (
     TelegramUser,
     Subscription,
     Allergy,
+    PromoCode,
 )
 
 
@@ -42,5 +43,10 @@ class RecipesAdmin(admin.ModelAdmin):
 
 
 @admin.register(Allergy)
+class RecipesAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(PromoCode)
 class RecipesAdmin(admin.ModelAdmin):
     pass

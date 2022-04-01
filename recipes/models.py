@@ -1,5 +1,9 @@
 from django.db import models
-from django.core.validators import MinLengthValidator
+from django.core.validators import (
+    MinLengthValidator,
+    MaxValueValidator,
+    MinValueValidator,
+)
 from phonenumber_field.modelfields import PhoneNumberField
 
 
@@ -30,8 +34,11 @@ class TelegramUser(models.Model):
     )
     phone_number = PhoneNumberField()
 
+    class Meta:
+        ordering = ["telegram_id"]
+
     def __str__(self) -> str:
-        return f"@{self.telegram_username}, user id: {self.telegram_id}"
+        return f"telegram_id {self.telegram_id}"
 
 
 class MealType(models.Model):
@@ -40,8 +47,11 @@ class MealType(models.Model):
         max_length=100,
     )
 
+    class Meta:
+        ordering = ["name"]
+
     def __str__(self) -> str:
-        return f"Meal type: {self.name}"
+        return f"{self.name}"
 
 
 class Allergy(models.Model):
@@ -57,10 +67,11 @@ class Allergy(models.Model):
     )
 
     class Meta:
+        ordering = ["name"]
         verbose_name_plural = "Allergies"
 
     def __str__(self) -> str:
-        return f"Allergy: {self.name}"
+        return f"{self.name}"
 
 
 class Ingredient(models.Model):
@@ -73,8 +84,11 @@ class Ingredient(models.Model):
         blank=True,
     )
 
+    class Meta:
+        ordering = ["name"]
+
     def __str__(self) -> str:
-        return f"Ingredient: {self.name}, {self.unit}"
+        return f"{self.name}, {self.unit}"
 
 
 class Recipe(models.Model):
@@ -86,9 +100,9 @@ class Recipe(models.Model):
         verbose_name="Recipe servings in persons",
         default=1,
     )
-    steps = models.CharField(
+    steps = models.TextField(
         verbose_name="Recipe steps",
-        max_length=512,
+        max_length=2048,
     )
     ingredients = models.ManyToManyField(
         to=Ingredient,
@@ -97,7 +111,7 @@ class Recipe(models.Model):
     )
     image = models.ImageField(
         verbose_name="Food image",
-        upload_to="recipes/food_images",
+        upload_to="recipes/",
         blank=True,
         null=True,
     )
@@ -140,7 +154,7 @@ class Recipe(models.Model):
     )
 
     class Meta:
-        ordering = ("-created_at",)
+        ordering = ["-created_at"]
 
     def get_recipe_allergies(self):
         allergies = []
@@ -149,7 +163,7 @@ class Recipe(models.Model):
         return allergies
 
     def __str__(self) -> str:
-        return f"Recipe: {self.name}"
+        return f"{self.name}"
 
 
 class RecipeIngredientAmount(models.Model):
@@ -170,6 +184,39 @@ class RecipeIngredientAmount(models.Model):
         max_digits=8,
         decimal_places=1,
     )
+
+    class Meta:
+        ordering = ["ingredient"]
+
+
+class PromoCode(models.Model):
+    code = models.CharField(
+        verbose_name="Promo code",
+        max_length=10,
+        blank=True,
+        null=True,
+    )
+    description = models.CharField(
+        verbose_name="Short description",
+        max_length=200,
+        blank=True,
+        null=True,
+    )
+    discount = models.PositiveIntegerField(
+        verbose_name="Discount amount",
+        default=0,
+        validators=[
+            MinValueValidator(0),
+            MaxValueValidator(100),
+        ],
+    )
+    valid_thru = models.DateField(verbose_name="Code valid thru date")
+
+    class Meta:
+        ordering = ["discount"]
+
+    def __str__(self) -> str:
+        return f"{self.code}. {self.discount}%. Valid thru {self.valid_thru}"
 
 
 class Subscription(models.Model):
@@ -206,11 +253,20 @@ class Subscription(models.Model):
     )
     start_date = models.DateField(verbose_name="Subscription from")
     end_date = models.DateField(verbose_name="Subscription until")
-    promo_code = models.TextField(verbose_name="Subscription promo code")
+    promo_code = models.ForeignKey(
+        verbose_name="Promo code",
+        to=PromoCode,
+        on_delete=models.DO_NOTHING,
+        blank=True,
+        null=True,
+    )
     is_paid = models.BooleanField(
         verbose_name="Subscription payment status",
         default=False,
     )
 
+    class Meta:
+        ordering = ["start_date"]
+
     def __str__(self):
-        return f"Owner: {self.owner}. Payment status: {self.is_paid}"
+        return f"Owner: {self.owner}. Valid thru: {self.end_date}"
