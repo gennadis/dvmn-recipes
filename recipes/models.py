@@ -34,6 +34,9 @@ class TelegramUser(models.Model):
     )
     phone_number = PhoneNumberField()
 
+    class Meta:
+        ordering = ["telegram_id"]
+
     def __str__(self) -> str:
         return f"telegram_id {self.telegram_id}"
 
@@ -43,6 +46,9 @@ class MealType(models.Model):
         verbose_name="Meal type",
         max_length=100,
     )
+
+    class Meta:
+        ordering = ["name"]
 
     def __str__(self) -> str:
         return f"{self.name}"
@@ -61,6 +67,7 @@ class Allergy(models.Model):
     )
 
     class Meta:
+        ordering = ["name"]
         verbose_name_plural = "Allergies"
 
     def __str__(self) -> str:
@@ -76,6 +83,9 @@ class Ingredient(models.Model):
         related_name="ingredients",
         blank=True,
     )
+
+    class Meta:
+        ordering = ["name"]
 
     def __str__(self) -> str:
         return f"{self.name}, {self.unit}"
@@ -144,7 +154,7 @@ class Recipe(models.Model):
     )
 
     class Meta:
-        ordering = ("-created_at",)
+        ordering = ["-created_at"]
 
     def get_recipe_allergies(self):
         allergies = []
@@ -175,6 +185,9 @@ class RecipeIngredientAmount(models.Model):
         decimal_places=1,
     )
 
+    class Meta:
+        ordering = ["ingredient"]
+
 
 class PromoCode(models.Model):
     code = models.CharField(
@@ -198,6 +211,9 @@ class PromoCode(models.Model):
         ],
     )
     valid_thru = models.DateField(verbose_name="Code valid thru date")
+
+    class Meta:
+        ordering = ["discount"]
 
     def __str__(self) -> str:
         return f"{self.code}. {self.discount}%. Valid thru {self.valid_thru}"
@@ -248,6 +264,9 @@ class Subscription(models.Model):
         verbose_name="Subscription payment status",
         default=False,
     )
+
+    class Meta:
+        ordering = ["start_date"]
 
     def __str__(self):
         return f"Owner: {self.owner}. Valid thru: {self.end_date}"
