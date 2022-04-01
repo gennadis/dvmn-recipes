@@ -1,3 +1,5 @@
+from django.forms import Textarea
+from django.db import models
 from django.contrib import admin
 
 from .models import (
@@ -9,17 +11,23 @@ from .models import (
     Subscription,
     Allergy,
     PromoCode,
+    RecipeStep,
 )
 
 
 class RecipeIngredientAmountInline(admin.TabularInline):
     model = RecipeIngredientAmount
-    verbose_name = "ingredient amount"
+    verbose_name = "Ingredient amount"
+
+
+class RecipeStepInline(admin.TabularInline):
+    model = RecipeStep
+    verbose_name = "Recipe step"
 
 
 @admin.register(Recipe)
 class RecipesAdmin(admin.ModelAdmin):
-    inlines = (RecipeIngredientAmountInline,)
+    inlines = (RecipeIngredientAmountInline, RecipeStepInline)
 
 
 @admin.register(Ingredient)

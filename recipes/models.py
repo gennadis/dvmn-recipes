@@ -100,20 +100,14 @@ class Recipe(models.Model):
         verbose_name="Recipe servings in persons",
         default=1,
     )
-    steps = models.TextField(
-        verbose_name="Recipe steps",
-        max_length=2048,
-    )
     ingredients = models.ManyToManyField(
         to=Ingredient,
         verbose_name="Recipe ingredients",
         through="RecipeIngredientAmount",
     )
-    image = models.ImageField(
-        verbose_name="Food image",
-        upload_to="recipes/",
+    image_url = models.URLField(
+        verbose_name="Recipe image URL",
         blank=True,
-        null=True,
     )
     working_time = models.IntegerField(
         verbose_name="Recipe working time in minutes",
@@ -164,6 +158,32 @@ class Recipe(models.Model):
 
     def __str__(self) -> str:
         return f"{self.name}"
+
+
+class RecipeStep(models.Model):
+    order = models.SmallIntegerField(
+        verbose_name="Step number",
+        default=0,
+    )
+    instruction = models.TextField(
+        verbose_name="Step instruction",
+        max_length=2048,
+    )
+    image_url = models.URLField(
+        verbose_name="Step image URL",
+        blank=True,
+    )
+    step_recipe = models.ForeignKey(
+        verbose_name="Step recipe",
+        to=Recipe,
+        default=None,
+        blank=True,
+        null=True,
+        on_delete=models.PROTECT,
+    )
+
+    class Meta:
+        ordering = ["order"]
 
 
 class RecipeIngredientAmount(models.Model):
