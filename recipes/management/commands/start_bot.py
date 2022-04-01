@@ -2,9 +2,11 @@ from aiogram import Bot, Dispatcher, executor, types
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import State, StatesGroup
+from aiogram.types.labeled_price import LabeledPrice
 from asgiref.sync import sync_to_async
 from django.core.management.base import BaseCommand
 from environs import Env
+import uuid
 
 from recipes.management.commands.crud import create_new_user
 from recipes.management.commands.keyboards import (ASK_FOR_PHONE_KEYBOARD,
@@ -13,7 +15,7 @@ from recipes.management.commands.keyboards import (ASK_FOR_PHONE_KEYBOARD,
                                                    make_keyboard,
                                                    make_inline_keyboard)
 from recipes.management.commands.bot_processing import (create_payment,
-                                                        check_payment)
+                                                        check_payment, send_invoice)
 from recipes.models import (TelegramUser,
                             Allergy,
                             Subscription)
@@ -271,30 +273,45 @@ class Command(BaseCommand):
                 reply_markup=types.ReplyKeyboardRemove()
             )
 
-            
-            payment = create_payment(yookassa_shop_id, yookassa_secret_key)
-            await state.update_data(payment_id=payment.id)
-            await message.answer(
-                payment.confirmation.confirmation_url,
-                reply_markup=make_keyboard(["Платеж прошел?"])
+            payment_id = uuid.uuid1
+            await state.update_data(payment_id=payment_id)
+
+            await bot_init.send_invoice(
+                chat_id = message.from_user.id,
+                title = 'Счет на оплату',
+                description=f'Подписка \"{state_data["type_menu"]}\"',
+                payload=payment_id,
+                provider_token=env.str("SBER_TOKEN"),
+                currency='RUB',
+                prices=[LabeledPrice('ooops', cost*100)]
             )
+            
             await Subscription.payment_id.set()
+
+        @bot.message_handler(content_types=['successful_payment'])
+        @bot.pre_checkout_query_handler(lambda query: True)
+        async def pre_checkout_answer(pre_checkout_query: types.PreCheckoutQuery):
+            print(pre_checkout_query.id)
+            await bot_init.answer_pre_checkout_query(
+                pre_checkout_query_id=pre_checkout_query.id,
+                ok=True,
+                error_message='FUCK!')
+        
+
+        @bot.message_handler(content_types=types.ContentTypes.SUCCESSFUL_PAYMENT)
+        async def got_payment(message: types.Message):
+            await message.answer(message.from_user.id,
+                           'Hoooooray! Thanks for payment! We will proceed your order for `{} {}`'
+                           ' as fast as possible! Stay in touch.'
+                           '\n\nUse /buy again to get a Time Machine for your friend!'.format(
+                               message.successful_payment.total_amount / 100, message.successful_payment.currency),
+                           parse_mode='Markdown')
+
 
 
         @bot.message_handler(state=Subscription.payment_id)
         async def make_payment(message: types.Message, state: FSMContext):
-            state_data = await state.get_data()
-            if check_payment(state_data.get("payment_id"), yookassa_shop_id, yookassa_secret_key):
-                await message.answer(
-                    "Оплата успешно завершена.", reply_markup=MAIN_KEYBOARD
-                )
-                await state.finish()
-            else:
-                await message.answer(
-                    "А вы точно оплатили? Если да, подождите пару минут и нажмите кнопку проверки еще раз.",
-                    reply_markup=make_keyboard(["Платеж прошел?"])
-                )
-                await Subscription.payment_id.set()
+            print(message)
 
         
 
