@@ -7,11 +7,14 @@ from asgiref.sync import sync_to_async
 from django.core.management.base import BaseCommand
 from environs import Env
 import uuid
+import datetime
 import re
 
 from recipes.management.commands.crud import (create_new_user,
                                               get_existing_user,
-                                              get_subscriptions)
+                                              get_subscriptions,
+                                              make_user_allergies_list,
+                                              save_subscription)
 
 from recipes.management.commands.keyboards import (ASK_FOR_PHONE_KEYBOARD,
                                                    MAIN_KEYBOARD,
@@ -23,6 +26,7 @@ from recipes.management.commands.bot_processing import (create_payment,
                                                         check_payment, send_invoice)
 from recipes.models import (TelegramUser,
                             Allergy,
+                            MealType,
                             Subscription as Subs)
 
 # delete
@@ -44,19 +48,23 @@ MENU_TYPES = ("Классическое", "Низкоуглеводное", "В�
 SUBSCRIPTIONS = {
     "1 месяц": {
         "cost": 300,
-        "currency": 'RUR'
+        "currency": 'RUR',
+        "timedelta": datetime.timedelta(days=31)
     },
     "3 месяца": {
         "cost": 550,
-        "currency": 'RUR'
+        "currency": 'RUR',
+        "timedelta": datetime.timedelta(days=92)
     },
     "6 месяцев": {
         "cost": 1650,
-        "currency": 'RUR'
+        "currency": 'RUR',
+        "timedelta": datetime.timedelta(days=183)
     },
     "12 месяцев": {
         "cost": 3000,
-        "currency": 'RUR'
+        "currency": 'RUR',
+        "timedelta": datetime.timedelta(days=365)
     }
 }
 
@@ -231,7 +239,10 @@ class Command(BaseCommand):
 
         @bot.message_handler(state=Subscription.allergens)
         async def get_allergens(message: types.Message, state: FSMContext):
+            state_data = await state.get_data()
             if message.text in ["Готово", "Аллергенов нет"]:
+                if state_data.get("allergens") is None:
+                    await state.update_data(allergens=[])
                 await message.answer(
                     "Отлично, выберите период подписки",
                     reply_markup=make_keyboard(list(SUBSCRIPTIONS.keys())),
@@ -240,7 +251,7 @@ class Command(BaseCommand):
             elif re.split('Добавить |Удалить ', message.text)[1] in allergens:
                 allergen = re.split('Добавить |Удалить ', message.text)[1]
                 try:
-                    state_data = await state.get_data()
+                    
                     user_allergens = state_data.get("allergens")
                     if allergen not in user_allergens:
                         user_allergens.append(allergen)
@@ -318,11 +329,27 @@ class Command(BaseCommand):
                 ok=True,
                 error_message='FUCK!')
         
-
+        
         @bot.message_handler(content_types=types.ContentTypes.SUCCESSFUL_PAYMENT, state='*')
-        async def got_payment(message: types.Message):
+        async def got_payment(message: types.Message, state: FSMContext):
+            state_data = await state.get_data()
             user = await sync_to_async(TelegramUser.objects.get)(telegram_id=message.from_user.id)
-            
+            user_meal_type = await sync_to_async(MealType.objects.get)(name=state_data["type_menu"])
+            user_allergies = await make_user_allergies_list(state_data['allergens'])
+            today = datetime.date.today()
+            subscription_details = {
+                'name': state_data['name'],
+                'owner': user,
+                'meal_type': user_meal_type,
+                'serving': state_data['persons'],
+                'daily_meals_amount': state_data['eatings'],
+                'start_date': today.strftime("%Y-%m-%d"),
+                'end_date': (today + SUBSCRIPTIONS[state_data['period']]['timedelta']).strftime("%Y-%m-%d"),
+                'promo_code': state_data['promo'],
+                'is_paid': True,
+                'allergies': user_allergies
+            }
+            await save_subscription(subscription_details)
 
 
             await message.answer(
@@ -345,7 +372,7 @@ class Command(BaseCommand):
 
         @bot.message_handler(commands="test")
         async def run_test(message: types.Message):
-            pass
+            user_meal_type = await sync_to_async(MealType.objects.get)(name="Кето")
             
 
 
