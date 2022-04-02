@@ -61,7 +61,7 @@ def get_existing_user(user_profile: dict) -> Optional[TelegramUser]:
 #     subscriptions = Subscription.objects.filter(owner=user).all()
 #     return subscriptions
 
-
+@sync_to_async
 def get_subscriptions(user: TelegramUser):
     return list(Subscription.objects.filter(owner=user).all())
 
@@ -83,9 +83,10 @@ def make_user_allergies_list(allergies):
 #         Allergy.objects.get(name=allergy_name).pk
 #         for allergy_name in subscription_details.get("allergies")
 #     ]
+
 @sync_to_async
 def save_subscription(subscription_details: dict):
-    input(subscription_details)
+    print(subscription_details)
     subscription = Subscription.objects.create(
         name=subscription_details.get("name"),
         owner=subscription_details.get("owner"),
@@ -151,12 +152,12 @@ def validate_promo_code(user_code: str):
 
 
 @sync_to_async
-def get_allergies() -> list[str]:
+def get_allergies() -> list:
     return [allergy.name for allergy in Allergy.objects.all()]
 
 
 @sync_to_async
-def get_meal_types() -> list[str]:
+def get_meal_types() -> list:
     return [meal_type.name for meal_type in MealType.objects.all()]
 
 
