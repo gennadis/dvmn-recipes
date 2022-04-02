@@ -9,3 +9,4 @@ pillow==9.0.1
 psycopg2==2.9.3
 python-dateutil==2.8.2
 python-dotenv==0.20.0
+yookassa==2.3.0
