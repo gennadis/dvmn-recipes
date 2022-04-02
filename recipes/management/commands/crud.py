@@ -61,18 +61,15 @@ def get_existing_user(user_profile: dict) -> Optional[TelegramUser]:
 #     subscriptions = Subscription.objects.filter(owner=user).all()
 #     return subscriptions
 
+
 @sync_to_async
 def get_subscriptions(user: TelegramUser):
     return list(Subscription.objects.filter(owner=user).all())
 
+
 @sync_to_async
 def make_user_allergies_list(allergies):
-    return [
-        Allergy.objects.get(name=allergy_name).pk
-        for allergy_name in allergies
-    ]
-
-
+    return [Allergy.objects.get(name=allergy_name).pk for allergy_name in allergies]
 
 
 # @sync_to_async
@@ -83,6 +80,7 @@ def make_user_allergies_list(allergies):
 #         Allergy.objects.get(name=allergy_name).pk
 #         for allergy_name in subscription_details.get("allergies")
 #     ]
+
 
 @sync_to_async
 def save_subscription(subscription_details: dict):
@@ -159,6 +157,11 @@ def get_allergies() -> list:
 @sync_to_async
 def get_meal_types() -> list:
     return [meal_type.name for meal_type in MealType.objects.all()]
+
+
+@sync_to_async
+def get_telegram_user(telegram_id: str) -> TelegramUser:
+    return TelegramUser.objects.get(telegram_id=telegram_id)
 
 
 class Command(BaseCommand):
