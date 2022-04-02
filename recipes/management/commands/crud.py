@@ -64,20 +64,31 @@ def get_existing_user(user_profile: dict) -> Optional[TelegramUser]:
 def get_subscriptions(user: TelegramUser):
     return list(Subscription.objects.filter(owner=user).all())
 
-
 @sync_to_async
-def save_subscription(user_telegram_id: str, subscription_details: dict):
-    user = TelegramUser.objects.get(telegram_id=user_telegram_id)
-    user_meal_type = MealType.objects.get(name=subscription_details.get("meal_type"))
-    user_allergies = [
+def make_user_allergies_list(allergies):
+    return [
         Allergy.objects.get(name=allergy_name).pk
-        for allergy_name in subscription_details.get("allergies")
+        for allergy_name in allergies
     ]
 
+
+
+
+# @sync_to_async
+# def save_subscription(user_telegram_id: str, subscription_details: dict):
+#     user = TelegramUser.objects.get(telegram_id=user_telegram_id)
+#     user_meal_type = MealType.objects.get(name=subscription_details.get("meal_type"))
+#     user_allergies = [
+#         Allergy.objects.get(name=allergy_name).pk
+#         for allergy_name in subscription_details.get("allergies")
+#     ]
+@sync_to_async
+def save_subscription(subscription_details: dict):
+    input(subscription_details)
     subscription = Subscription.objects.create(
         name=subscription_details.get("name"),
-        owner=user,
-        meal_type=user_meal_type,
+        owner=subscription_details.get("owner"),
+        meal_type=subscription_details.get("meal_type"),
         servings=subscription_details.get("servings"),
         daily_meals_amount=subscription_details.get("daily_meals_amount"),
         start_date=subscription_details.get("start_date"),
@@ -85,7 +96,7 @@ def save_subscription(user_telegram_id: str, subscription_details: dict):
         promo_code=subscription_details.get("promo_code"),
         is_paid=subscription_details.get("is_paid"),
     )
-    for allergy in user_allergies:
+    for allergy in subscription_details.get("allergies"):
         subscription.allergy.add(allergy)
 
     return subscription
