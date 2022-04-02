@@ -43,6 +43,7 @@ def check_user_exist(user_profile: dict) -> Optional[TelegramUser]:
     except TelegramUser.DoesNotExist:
         return False
 
+
 @sync_to_async
 def get_existing_user(user_profile: dict) -> Optional[TelegramUser]:
     try:
@@ -53,6 +54,7 @@ def get_existing_user(user_profile: dict) -> Optional[TelegramUser]:
     except TelegramUser.DoesNotExist:
         return None
 
+
 # @sync_to_async
 # def get_subscriptions(user_telegram_id: str) -> Subscription:
 #     user = TelegramUser.objects.get(telegram_id=user_telegram_id)
@@ -60,7 +62,6 @@ def get_existing_user(user_profile: dict) -> Optional[TelegramUser]:
 #     return subscriptions
 
 
-@sync_to_async
 def get_subscriptions(user: TelegramUser):
     return list(Subscription.objects.filter(owner=user).all())
 
@@ -149,25 +150,40 @@ def validate_promo_code(user_code: str):
         return False
 
 
+@sync_to_async
+def get_allergies() -> list[str]:
+    return [allergy.name for allergy in Allergy.objects.all()]
+
+
+@sync_to_async
+def get_meal_types() -> list[str]:
+    return [meal_type.name for meal_type in MealType.objects.all()]
+
+
 class Command(BaseCommand):
     help = "Some basic test CRUD operations"
 
     def handle(self, *args, **kwargs):
-        user_telegram_id = "12345"
-        random_recipe = get_random_allowed_recipe(user_telegram_id)
-        ingredients = get_recipe_ingredients(user_telegram_id, random_recipe)
-        steps = get_recipe_steps(user_telegram_id, random_recipe)
+        allergies = get_allergies()
+        meal_types = get_meal_types()
+        print(allergies)
+        print(meal_types)
 
-        print(f"Название: {random_recipe.name}")
-        print(f"Фото: {random_recipe.image_url}")
-        print("____________")
-        print("Ингредиенты:")
-        for name, amount in ingredients.items():
-            print(name, amount)
-        print("____________")
-        print("Шаги:")
-        print()
-        for step in steps:
-            print(step["image_url"])
-            print(f"Шаг {step['order']}: {step['instruction']}")
-            print()
+        # user_telegram_id = "12345"
+        # random_recipe = get_random_allowed_recipe(user_telegram_id)
+        # ingredients = get_recipe_ingredients(user_telegram_id, random_recipe)
+        # steps = get_recipe_steps(user_telegram_id, random_recipe)
+
+        # print(f"Название: {random_recipe.name}")
+        # print(f"Фото: {random_recipe.image_url}")
+        # print("____________")
+        # print("Ингредиенты:")
+        # for name, amount in ingredients.items():
+        #     print(name, amount)
+        # print("____________")
+        # print("Шаги:")
+        # print()
+        # for step in steps:
+        #     print(step["image_url"])
+        #     print(f"Шаг {step['order']}: {step['instruction']}")
+        #     print()
