@@ -18,6 +18,9 @@ from recipes.management.commands.crud import (
     save_subscription,
     get_telegram_user,
     get_promo_code,
+    get_random_allowed_recipe,
+    get_recipe_ingredients,
+    get_recipe_steps,
 )
 
 from recipes.management.commands.keyboards import (
@@ -369,7 +372,23 @@ class Command(BaseCommand):
 
         @bot.message_handler(commands="test")
         async def run_test(message: types.Message):
-            user_meal_type = await sync_to_async(MealType.objects.get)(name="Кето")
+            user = await get_telegram_user(telegram_id=message.from_user.id)
+            random_recipe = await get_random_allowed_recipe(user=user)
+            recipe_ingredients = await get_recipe_ingredients(recipe=random_recipe)
+            recipe_steps = await get_recipe_steps(recipe=random_recipe)
+
+            await message.reply(
+                f"НАЗВАНИЕ РЕЦЕПТА {random_recipe.name}", reply_markup=MAIN_KEYBOARD
+            )
+            await message.reply(
+                f"ИНГРЕДИЕНТЫ {recipe_ingredients}", reply_markup=MAIN_KEYBOARD
+            )
+
+            for step in recipe_steps:
+                await message.reply_photo(
+                    photo=step["image_url"],
+                    caption=step["instruction"],
+                )
 
         @bot.message_handler()
         async def return_to_main(message: types.Message, state: FSMContext):

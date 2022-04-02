@@ -102,8 +102,8 @@ def save_subscription(subscription_details: dict):
     return subscription
 
 
-def get_random_allowed_recipe(user_telegram_id: str) -> Recipe:
-    user = TelegramUser.objects.get(telegram_id=user_telegram_id)
+@sync_to_async
+def get_random_allowed_recipe(user: TelegramUser) -> Recipe:
     user_allergies = Subscription.objects.get(owner=user).allergy.all()
     user_banned_ingredients = Ingredient.objects.filter(allergy__in=user_allergies)
 
@@ -111,8 +111,8 @@ def get_random_allowed_recipe(user_telegram_id: str) -> Recipe:
     return random.choice(allowed_recipes)
 
 
-def get_recipe_ingredients(user_telegram_id: str, recipe: Recipe) -> dict:
-    user = TelegramUser.objects.get(telegram_id=user_telegram_id)
+@sync_to_async
+def get_recipe_ingredients(recipe: Recipe) -> dict:
     recipe_ingredients_amount = RecipeIngredientAmount.objects.filter(
         recipe=recipe.pk
     ).all()
@@ -124,8 +124,8 @@ def get_recipe_ingredients(user_telegram_id: str, recipe: Recipe) -> dict:
     return ingredients
 
 
-def get_recipe_steps(user_telegram_id: str, recipe: Recipe) -> dict:
-    user = TelegramUser.objects.get(telegram_id=user_telegram_id)
+@sync_to_async
+def get_recipe_steps(recipe: Recipe) -> dict:
     recipe_steps = RecipeStep.objects.filter(step_recipe=recipe.pk)
     steps = []
     for step in recipe_steps:
