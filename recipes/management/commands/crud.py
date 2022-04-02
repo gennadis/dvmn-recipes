@@ -43,7 +43,7 @@ def check_user_exist(user_profile: dict) -> Optional[TelegramUser]:
     except TelegramUser.DoesNotExist:
         return False
 
-
+@sync_to_async
 def get_existing_user(user_profile: dict) -> Optional[TelegramUser]:
     try:
         telegram_id = user_profile.get("id")
@@ -53,13 +53,19 @@ def get_existing_user(user_profile: dict) -> Optional[TelegramUser]:
     except TelegramUser.DoesNotExist:
         return None
 
+# @sync_to_async
+# def get_subscriptions(user_telegram_id: str) -> Subscription:
+#     user = TelegramUser.objects.get(telegram_id=user_telegram_id)
+#     subscriptions = Subscription.objects.filter(owner=user).all()
+#     return subscriptions
 
-def get_subscriptions(user_telegram_id: str) -> Subscription:
-    user = TelegramUser.objects.get(telegram_id=user_telegram_id)
-    subscriptions = Subscription.objects.filter(owner=user).all()
-    return subscriptions
+
+@sync_to_async
+def get_subscriptions(user):
+    return list(Subscription.objects.filter(owner=user).all())
 
 
+@sync_to_async
 def save_subscription(user_telegram_id: str, subscription_details: dict):
     user = TelegramUser.objects.get(telegram_id=user_telegram_id)
     user_meal_type = MealType.objects.get(name=subscription_details.get("meal_type"))
