@@ -337,7 +337,7 @@ class Command(BaseCommand):
                 "name": state_data["name"],
                 "owner": user,
                 "meal_type": user_meal_type,
-                "serving": int(state_data["persons"]),
+                "servings": int(state_data["persons"]),
                 "daily_meals_amount": int(state_data["eatings"]),
                 "start_date": today.strftime("%Y-%m-%d"),
                 "end_date": (
