@@ -61,7 +61,7 @@ def get_existing_user(user_profile: dict) -> Optional[TelegramUser]:
 
 
 @sync_to_async
-def get_subscriptions(user):
+def get_subscriptions(user: TelegramUser):
     return list(Subscription.objects.filter(owner=user).all())
 
 
@@ -75,6 +75,7 @@ def save_subscription(user_telegram_id: str, subscription_details: dict):
     ]
 
     subscription = Subscription.objects.create(
+        name=subscription_details.get("name"),
         owner=user,
         meal_type=user_meal_type,
         servings=subscription_details.get("servings"),
