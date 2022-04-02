@@ -17,6 +17,7 @@ from recipes.management.commands.crud import (
     make_user_allergies_list,
     save_subscription,
     get_telegram_user,
+    get_promo_code,
 )
 
 from recipes.management.commands.keyboards import (
@@ -32,7 +33,13 @@ from recipes.management.commands.bot_processing import (
     check_payment,
     send_invoice,
 )
-from recipes.models import TelegramUser, Allergy, MealType, Subscription as Subs
+from recipes.models import (
+    PromoCode,
+    TelegramUser,
+    Allergy,
+    MealType,
+    Subscription as Subs,
+)
 
 # delete
 def valid_promocodes():
@@ -40,7 +47,7 @@ def valid_promocodes():
 
 
 # delete
-PROMO = {"blabla": 10, "Wylsa": 45, "bullshit": 13}
+# PROMO = {"blabla": 10, "Wylsa": 45, "bullshit": 13}
 
 
 MENU_TYPES = ("Классическое", "Низкоуглеводное", "Вегетарианское", "Кето")
@@ -272,24 +279,25 @@ class Command(BaseCommand):
                 await state.update_data(promo=None)
                 cost = SUBSCRIPTIONS[state_data["period"]]["cost"]
                 benefit_text = ""
-
-            elif message.text in valid_promocodes():
-                await state.update_data(promo=message.text)
-                benefit = round(
-                    SUBSCRIPTIONS[state_data["period"]]["cost"]
-                    * PROMO[message.text]
-                    * 0.01
-                )
-                cost = SUBSCRIPTIONS[state_data["period"]]["cost"] - benefit
-                benefit_text = f"Вы сэкономили {benefit} {currency}\n"
-
             else:
-                await message.reply(
-                    "Такого промокода нет.\n\nВведите корректный или пропустите шаг.",
-                    reply_markup=make_keyboard(["Пропустить"]),
-                )
-                await Subscription.promo.set()
-                return
+                try:
+                    promo_code = await get_promo_code(user_code=message.text)
+                    await state.update_data(promo=promo_code)
+                    benefit = round(
+                        SUBSCRIPTIONS[state_data["period"]]["cost"]
+                        * promo_code.discount
+                        * 0.01
+                    )
+                    cost = SUBSCRIPTIONS[state_data["period"]]["cost"] - benefit
+                    benefit_text = f"Вы сэкономили {benefit} {currency}\n"
+
+                except PromoCode.DoesNotExist:
+                    await message.reply(
+                        "Такого промокода нет.\n\nВведите корректный или пропустите шаг.",
+                        reply_markup=make_keyboard(["Пропустить"]),
+                    )
+                    await Subscription.promo.set()
+                    return
 
             await message.answer(
                 (
