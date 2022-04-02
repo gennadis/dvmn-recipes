@@ -140,13 +140,9 @@ def get_recipe_steps(user_telegram_id: str, recipe: Recipe) -> dict:
     return steps
 
 
-def validate_promo_code(user_code: str):
-    try:
-        promo_code = PromoCode.objects.get(code=user_code.upper())
-        return promo_code
-
-    except PromoCode.DoesNotExist:
-        return False
+@sync_to_async
+def get_promo_code(user_code: str):
+    return PromoCode.objects.get(code=user_code.upper())
 
 
 @sync_to_async
