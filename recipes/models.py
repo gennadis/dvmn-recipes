@@ -239,6 +239,39 @@ class PromoCode(models.Model):
         return f"{self.code}. {self.discount}%. Valid thru {self.valid_thru}"
 
 
+class SubscriptionPlan(models.Model):
+    class Currency(models.TextChoices):
+        RUR = "RUR", ("Russian ruble")
+        EUR = "EUR", ("Euro")
+        USD = "USD", ("USD")
+
+    class Duration(models.IntegerChoices):
+        ONE = 1
+        THREE = 3
+        SIX = 6
+        TWELVE = 12
+
+    name = models.CharField(
+        verbose_name="Subscription plan name",
+        max_length=100,
+    )
+    price = models.PositiveIntegerField(
+        verbose_name="Subscription plan price",
+    )
+    currency = models.CharField(
+        max_length=3,
+        choices=Currency.choices,
+        default=Currency.RUR,
+    )
+    duration = models.IntegerField(
+        choices=Duration.choices,
+        default=Duration.ONE,
+    )
+
+    def __str__(self) -> str:
+        return f"{self.name} - {self.duration}"
+
+
 class Subscription(models.Model):
     name = models.CharField(
         verbose_name="Subscription name",
@@ -251,6 +284,11 @@ class Subscription(models.Model):
         verbose_name="Subscription owner",
         to=TelegramUser,
         on_delete=models.CASCADE,
+    )
+    plan = models.ForeignKey(
+        verbose_name="Subscription plan",
+        to=SubscriptionPlan,
+        on_delete=models.DO_NOTHING,
     )
     meal_type = models.ForeignKey(
         verbose_name="Meal type",
