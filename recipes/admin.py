@@ -12,6 +12,7 @@ from .models import (
     Allergy,
     PromoCode,
     RecipeStep,
+    SubscriptionPlan,
 )
 
 
@@ -56,5 +57,10 @@ class RecipesAdmin(admin.ModelAdmin):
 
 
 @admin.register(PromoCode)
+class RecipesAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(SubscriptionPlan)
 class RecipesAdmin(admin.ModelAdmin):
     pass
