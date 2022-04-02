@@ -8,7 +8,10 @@ from django.core.management.base import BaseCommand
 from environs import Env
 import uuid
 
-from recipes.management.commands.crud import create_new_user
+from recipes.management.commands.crud import (create_new_user,
+                                              get_existing_user,
+                                              get_subscriptions)
+
 from recipes.management.commands.keyboards import (ASK_FOR_PHONE_KEYBOARD,
                                                    MAIN_KEYBOARD,
                                                    make_digit_keyboard,
@@ -18,7 +21,7 @@ from recipes.management.commands.bot_processing import (create_payment,
                                                         check_payment, send_invoice)
 from recipes.models import (TelegramUser,
                             Allergy,
-                            Subscription)
+                            Subscription as Subs)
 
 # delete
 def valid_promocodes():
@@ -104,7 +107,6 @@ class Command(BaseCommand):
         async def hello(message: types.Message):
             try:
                 user_data = await sync_to_async(TelegramUser.objects.get)(telegram_id=message.from_user.id)
-                print(user_data)
                 await message.answer(
                     f"{user_data.first_name}, hello again!", reply_markup=MAIN_KEYBOARD
                 )
@@ -113,6 +115,8 @@ class Command(BaseCommand):
                 await message.answer("Здравствуйте!\n\nКак Вас зовут?\n(введите имя)")
                 await UserProfile.first_name.set()
 
+
+        @bot.message_handler(commands="main", state="*")
         @bot.message_handler(
             lambda message: message.text == "Вернуться на главную", state="*"
         )
@@ -154,19 +158,22 @@ class Command(BaseCommand):
 
         @bot.message_handler(lambda message: message.text == "Мои подписки")
         async def get_user_subscriptions(message: types.Message):
-
-            # Здесь будут список названий подписок пользователя
-            user_subscriptions_titles = [
-                "Крутая подписка",
-                "Очень крутая подписка",
-                "Супер-пупер подписка",
-            ]
-
-            # проверка есть ли хотя бы одна подписка. Если нет - сообщить
-            await message.answer(
-                "Выберите вашу подписку из списка внизу",
-                reply_markup=make_keyboard(user_subscriptions_titles, 1),
-            )
+            
+            user = await sync_to_async(TelegramUser.objects.get)(telegram_id=message.from_user.id)
+            subscriptions = await get_subscriptions(user)
+            
+            subscriptions_names = [subscription.name for subscription in subscriptions]
+            
+            if subscriptions_names:
+                await message.answer(
+                    "Выберите вашу подписку из списка внизу",
+                    reply_markup=make_keyboard(subscriptions_names, 1),
+                )
+            else:
+                await message.answer(
+                    'Похоже что у вас нет подписок.\nХотите создать первую?',
+                    reply_markup=make_keyboard(["Создать подписку"], 1)
+                )
 
 
         @bot.message_handler(lambda message: message.text == "Создать подписку")
@@ -314,6 +321,20 @@ class Command(BaseCommand):
             print(message)
 
         
+        
+
+
+        # @sync_to_async
+        # def get_subscriptions(user):
+        #     return list(Subs.objects.filter(owner=user).all())
+
+
+        @bot.message_handler(commands="test")
+        async def run_test(message: types.Message):
+            pass
+            
+
+
 
         @bot.message_handler()
         async def return_to_main(message: types.Message, state: FSMContext):
@@ -321,5 +342,12 @@ class Command(BaseCommand):
             await message.reply(
                 "Перехват не распознанных сообщений", reply_markup=MAIN_KEYBOARD
             )
+
+
+
+
+        
+
+
 
         executor.start_polling(bot)
