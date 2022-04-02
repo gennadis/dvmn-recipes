@@ -10,37 +10,37 @@ import uuid
 import datetime
 import re
 
-from recipes.management.commands.crud import (create_new_user,
-                                              get_existing_user,
-                                              get_subscriptions,
-                                              make_user_allergies_list,
-                                              save_subscription)
+from recipes.management.commands.crud import (
+    create_new_user,
+    get_existing_user,
+    get_subscriptions,
+    make_user_allergies_list,
+    save_subscription,
+    get_telegram_user,
+)
 
-from recipes.management.commands.keyboards import (ASK_FOR_PHONE_KEYBOARD,
-                                                   MAIN_KEYBOARD,
-                                                   make_digit_keyboard,
-                                                   make_keyboard,
-                                                   make_inline_keyboard,
-                                                   make_dynamic_keyboard)
-from recipes.management.commands.bot_processing import (create_payment,
-                                                        check_payment, send_invoice)
-from recipes.models import (TelegramUser,
-                            Allergy,
-                            MealType,
-                            Subscription as Subs)
+from recipes.management.commands.keyboards import (
+    ASK_FOR_PHONE_KEYBOARD,
+    MAIN_KEYBOARD,
+    make_digit_keyboard,
+    make_keyboard,
+    make_inline_keyboard,
+    make_dynamic_keyboard,
+)
+from recipes.management.commands.bot_processing import (
+    create_payment,
+    check_payment,
+    send_invoice,
+)
+from recipes.models import TelegramUser, Allergy, MealType, Subscription as Subs
 
 # delete
 def valid_promocodes():
-    return ['blabla', 'Wylsa', 'bullshit']
-
-#delete
-PROMO = {
-    'blabla': 10,
-    'Wylsa': 45,
-    'bullshit': 13
-}
+    return ["blabla", "Wylsa", "bullshit"]
 
 
+# delete
+PROMO = {"blabla": 10, "Wylsa": 45, "bullshit": 13}
 
 
 MENU_TYPES = ("Классическое", "Низкоуглеводное", "Вегетарианское", "Кето")
@@ -48,28 +48,27 @@ MENU_TYPES = ("Классическое", "Низкоуглеводное", "В�
 SUBSCRIPTIONS = {
     "1 месяц": {
         "cost": 300,
-        "currency": 'RUR',
-        "timedelta": datetime.timedelta(days=31)
+        "currency": "RUR",
+        "timedelta": datetime.timedelta(days=31),
     },
     "3 месяца": {
         "cost": 550,
-        "currency": 'RUR',
-        "timedelta": datetime.timedelta(days=92)
+        "currency": "RUR",
+        "timedelta": datetime.timedelta(days=92),
     },
     "6 месяцев": {
         "cost": 1650,
-        "currency": 'RUR',
-        "timedelta": datetime.timedelta(days=183)
+        "currency": "RUR",
+        "timedelta": datetime.timedelta(days=183),
     },
     "12 месяцев": {
         "cost": 3000,
-        "currency": 'RUR',
-        "timedelta": datetime.timedelta(days=365)
-    }
+        "currency": "RUR",
+        "timedelta": datetime.timedelta(days=365),
+    },
 }
 
 ALLERGENS = ["аллерген 1", "аллерген 2", "аллерген 3", "аллерген 4", "аллерген 5"]
-
 
 
 class UserProfile(StatesGroup):
@@ -93,9 +92,7 @@ class Subscription(StatesGroup):
 
 @sync_to_async
 def get_allergens_objects():
-    return list(
-        Allergy.objects.all()
-    )
+    return list(Allergy.objects.all())
 
 
 class Command(BaseCommand):
@@ -113,19 +110,19 @@ class Command(BaseCommand):
         yookassa_shop_id = env.int("YOOKASSA_SHOP_ID")
         yookassa_secret_key = env.str("YOOKASSA_SECRET_KEY")
 
-        
         @bot.message_handler(commands="start")
         async def hello(message: types.Message):
             try:
-                user_data = await sync_to_async(TelegramUser.objects.get)(telegram_id=message.from_user.id)
+                user_data = await get_telegram_user(telegram_id=message.from_user.id)
                 await message.answer(
                     f"{user_data.first_name}, hello again!", reply_markup=MAIN_KEYBOARD
                 )
             except TelegramUser.DoesNotExist:
-                print('ERROR hello')
+                print(
+                    f"ERROR hello - TelegramUser.DoesNotExist id={message.from_user.id}"
+                )
                 await message.answer("Здравствуйте!\n\nКак Вас зовут?\n(введите имя)")
                 await UserProfile.first_name.set()
-
 
         @bot.message_handler(commands="main", state="*")
         @bot.message_handler(
@@ -135,8 +132,6 @@ class Command(BaseCommand):
             await state.finish()
             await message.reply("Возвращаемся на главную", reply_markup=MAIN_KEYBOARD)
 
-
-
         @bot.message_handler(state=UserProfile.first_name)
         async def get_user_name(message: types.Message, state: FSMContext):
             await state.update_data(id=message.from_user.id)
@@ -144,7 +139,6 @@ class Command(BaseCommand):
             await state.update_data(first_name=message.text)
             await message.answer("Спасибо.\n\nНапишите еще фамилию, пожалуйста")
             await UserProfile.last_name.set()
-
 
         @bot.message_handler(state=UserProfile.last_name)
         async def get_user_surname(message: types.Message, state: FSMContext):
@@ -155,8 +149,9 @@ class Command(BaseCommand):
             )
             await UserProfile.phone_number.set()
 
-
-        @bot.message_handler(state=UserProfile.phone_number, content_types=types.ContentTypes.CONTACT)
+        @bot.message_handler(
+            state=UserProfile.phone_number, content_types=types.ContentTypes.CONTACT
+        )
         async def get_user_phone(message: types.Message, state: FSMContext):
             await state.update_data(phone_number=message.contact.phone_number)
             user_data = await state.get_data()
@@ -166,14 +161,13 @@ class Command(BaseCommand):
                 "Отлично, ваш профиль сохранен!", reply_markup=MAIN_KEYBOARD
             )
 
-
         @bot.message_handler(lambda message: message.text == "Мои подписки")
         async def get_user_subscriptions(message: types.Message):
-            
-            user = await sync_to_async(TelegramUser.objects.get)(telegram_id=message.from_user.id)
+
+            user = await get_telegram_user(telegram_id=message.from_user.id)
             subscriptions = await get_subscriptions(user)
             subscriptions_names = [subscription.name for subscription in subscriptions]
-            
+
             if subscriptions_names:
                 await message.answer(
                     "Выберите вашу подписку из списка внизу",
@@ -181,16 +175,13 @@ class Command(BaseCommand):
                 )
             else:
                 await message.answer(
-                    'Похоже что у вас нет подписок.\nХотите создать первую?',
-                    reply_markup=make_keyboard(["Создать подписку"], 1)
+                    "Похоже что у вас нет подписок.\nХотите создать первую?",
+                    reply_markup=make_keyboard(["Создать подписку"], 1),
                 )
-
 
         @bot.message_handler(lambda message: message.text == "Создать подписку")
         async def create_subscription(message: types.Message):
-            await message.answer(
-                "Как назовем меню?", reply_markup=make_keyboard([], 1)
-            )
+            await message.answer("Как назовем меню?", reply_markup=make_keyboard([], 1))
             await Subscription.name.set()
 
         @bot.message_handler(state=Subscription.name)
@@ -201,7 +192,6 @@ class Command(BaseCommand):
             )
             await Subscription.type_menu.set()
 
-
         @bot.message_handler(state=Subscription.type_menu)
         async def get_type_menu(message: types.Message, state: FSMContext):
             await state.update_data(type_menu=message.text)
@@ -209,7 +199,6 @@ class Command(BaseCommand):
                 "Отлично, укажите количество персон", reply_markup=make_digit_keyboard()
             )
             await Subscription.persons.set()
-
 
         @bot.message_handler(state=Subscription.persons)
         async def get_number_of_persons(message: types.Message, state: FSMContext):
@@ -220,14 +209,11 @@ class Command(BaseCommand):
             )
             await Subscription.eatings.set()
 
-
-        
-
         @bot.message_handler(state=Subscription.eatings)
         async def get_number_of_eatings(message: types.Message, state: FSMContext):
             global allergens
             allergens = [x.name for x in await get_allergens_objects()]
-            
+
             await state.update_data(eatings=message.text)
             await message.answer(
                 "Отлично, укажите аллергены - продукты которых не должно быть ",
@@ -248,10 +234,10 @@ class Command(BaseCommand):
                     reply_markup=make_keyboard(list(SUBSCRIPTIONS.keys())),
                 )
                 await Subscription.period.set()
-            elif re.split('Добавить |Удалить ', message.text)[1] in allergens:
-                allergen = re.split('Добавить |Удалить ', message.text)[1]
+            elif re.split("Добавить |Удалить ", message.text)[1] in allergens:
+                allergen = re.split("Добавить |Удалить ", message.text)[1]
                 try:
-                    
+
                     user_allergens = state_data.get("allergens")
                     if allergen not in user_allergens:
                         user_allergens.append(allergen)
@@ -263,119 +249,119 @@ class Command(BaseCommand):
                 await state.update_data(allergens=user_allergens)
                 await message.answer(
                     "Добавим еще один?",
-                    reply_markup=make_dynamic_keyboard(allergens, user_allergens, extended_buttons=["Готово"]),
+                    reply_markup=make_dynamic_keyboard(
+                        allergens, user_allergens, extended_buttons=["Готово"]
+                    ),
                 )
                 await Subscription.allergens.set()
-
 
         @bot.message_handler(state=Subscription.period)
         async def get_subscription_period(message: types.Message, state: FSMContext):
             await state.update_data(period=message.text)
-            await message.answer("Введите промокод", reply_markup=make_keyboard(["Пропустить"]))
+            await message.answer(
+                "Введите промокод", reply_markup=make_keyboard(["Пропустить"])
+            )
             await Subscription.promo.set()
-
 
         @bot.message_handler(state=Subscription.promo)
         async def get_promo(message: types.Message, state: FSMContext):
             state_data = await state.get_data()
             currency = SUBSCRIPTIONS[state_data["period"]]["currency"]
 
-            if message.text == 'Пропустить':
+            if message.text == "Пропустить":
                 await state.update_data(promo=None)
                 cost = SUBSCRIPTIONS[state_data["period"]]["cost"]
-                benefit_text = ''
+                benefit_text = ""
 
             elif message.text in valid_promocodes():
                 await state.update_data(promo=message.text)
-                benefit = round(SUBSCRIPTIONS[state_data["period"]]["cost"] * PROMO[message.text] * 0.01)
+                benefit = round(
+                    SUBSCRIPTIONS[state_data["period"]]["cost"]
+                    * PROMO[message.text]
+                    * 0.01
+                )
                 cost = SUBSCRIPTIONS[state_data["period"]]["cost"] - benefit
-                benefit_text = f'Вы сэкономили {benefit} {currency}\n'
+                benefit_text = f"Вы сэкономили {benefit} {currency}\n"
 
             else:
                 await message.reply(
-                    'Такого промокода нет.\n\nВведите корректный или пропустите шаг.',
-                    reply_markup=make_keyboard(["Пропустить"])
+                    "Такого промокода нет.\n\nВведите корректный или пропустите шаг.",
+                    reply_markup=make_keyboard(["Пропустить"]),
                 )
                 await Subscription.promo.set()
                 return
 
             await message.answer(
-                (f'Ура, подписка сформирована.\n\nСтоимость подписки = {cost} {currency}\n'
-                 f'{benefit_text}\nОсталось ее оплатить и можно идти за продуктами.'),
-                reply_markup=make_keyboard([])
+                (
+                    f"Ура, подписка сформирована.\n\nСтоимость подписки = {cost} {currency}\n"
+                    f"{benefit_text}\nОсталось ее оплатить и можно идти за продуктами."
+                ),
+                reply_markup=make_keyboard([]),
             )
 
             payment_id = uuid.uuid1
             await state.update_data(payment_id=payment_id)
             print(state_data["name"], cost, payment_id)
 
-
             await bot_init.send_invoice(
-                chat_id = message.from_user.id,
-                title = 'Счет на оплату',
-                description=f'Подписка \"{state_data["name"]}\"',
+                chat_id=message.from_user.id,
+                title="Счет на оплату",
+                description=f'Подписка "{state_data["name"]}"',
                 payload=str(payment_id),
                 provider_token=env.str("SBER_TOKEN"),
-                currency='RUB',
-                prices=[LabeledPrice('ooops', cost*100)]
+                currency="RUB",
+                prices=[LabeledPrice("ooops", cost * 100)],
             )
-        
-        
-        @bot.pre_checkout_query_handler(lambda query:True, state="*")
+
+        @bot.pre_checkout_query_handler(lambda query: True, state="*")
         async def pre_checkout_answer(pre_checkout_query: types.PreCheckoutQuery):
             print(pre_checkout_query)
             await bot_init.answer_pre_checkout_query(
                 pre_checkout_query_id=pre_checkout_query.id,
                 ok=True,
-                error_message='FUCK!')
-        
-        
-        @bot.message_handler(content_types=types.ContentTypes.SUCCESSFUL_PAYMENT, state='*')
+                error_message="FUCK!",
+            )
+
+        @bot.message_handler(
+            content_types=types.ContentTypes.SUCCESSFUL_PAYMENT, state="*"
+        )
         async def got_payment(message: types.Message, state: FSMContext):
             state_data = await state.get_data()
-            user = await sync_to_async(TelegramUser.objects.get)(telegram_id=message.from_user.id)
-            user_meal_type = await sync_to_async(MealType.objects.get)(name=state_data["type_menu"])
-            user_allergies = await make_user_allergies_list(state_data['allergens'])
+            user = await get_telegram_user(telegram_id=message.from_user.id)
+            user_meal_type = await sync_to_async(MealType.objects.get)(
+                name=state_data["type_menu"]
+            )
+            user_allergies = await make_user_allergies_list(state_data["allergens"])
             today = datetime.date.today()
             subscription_details = {
-                'name': state_data['name'],
-                'owner': user,
-                'meal_type': user_meal_type,
-                'serving': int(state_data['persons']),
-                'daily_meals_amount': int(state_data['eatings']),
-                'start_date': today.strftime("%Y-%m-%d"),
-                'end_date': (today + SUBSCRIPTIONS[state_data['period']]['timedelta']).strftime("%Y-%m-%d"),
-                'promo_code': state_data['promo'],
-                'is_paid': True,
-                'allergies': user_allergies
+                "name": state_data["name"],
+                "owner": user,
+                "meal_type": user_meal_type,
+                "serving": int(state_data["persons"]),
+                "daily_meals_amount": int(state_data["eatings"]),
+                "start_date": today.strftime("%Y-%m-%d"),
+                "end_date": (
+                    today + SUBSCRIPTIONS[state_data["period"]]["timedelta"]
+                ).strftime("%Y-%m-%d"),
+                "promo_code": state_data["promo"],
+                "is_paid": True,
+                "allergies": user_allergies,
             }
             await save_subscription(subscription_details)
 
-
             await message.answer(
-                'Поздравляю!\nПодписка успешно оплачена и сохранена.\n\nНастало время воспользоваться ей. '
+                "Поздравляю!\nПодписка успешно оплачена и сохранена.\n\nНастало время воспользоваться ей. "
                 'Для этого нажмите "Мои подписки" и выберете нужную',
-                reply_markup=MAIN_KEYBOARD
+                reply_markup=MAIN_KEYBOARD,
             )
-
-
-
-        
-        
-        
-
 
         # @sync_to_async
         # def get_subscriptions(user):
         #     return list(Subs.objects.filter(owner=user).all())
 
-
         @bot.message_handler(commands="test")
         async def run_test(message: types.Message):
             user_meal_type = await sync_to_async(MealType.objects.get)(name="Кето")
-            
-
-
 
         @bot.message_handler()
         async def return_to_main(message: types.Message, state: FSMContext):
@@ -383,12 +369,5 @@ class Command(BaseCommand):
             await message.reply(
                 "Перехват не распознанных сообщений", reply_markup=MAIN_KEYBOARD
             )
-
-
-
-
-        
-
-
 
         executor.start_polling(bot)
