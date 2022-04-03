@@ -73,6 +73,13 @@ def get_existing_user(user_profile: dict) -> Optional[TelegramUser]:
 def get_subscriptions(user: TelegramUser):
     return list(Subscription.objects.filter(owner=user).all())
 
+@sync_to_async
+def delete_subscription(user: TelegramUser, subscription_name: str):
+    subscription_to_delete = Subscription.objects.filter(
+        owner=user, name=subscription_name
+    ).delete()
+    return subscription_to_delete
+
 
 @sync_to_async
 def make_user_allergies_list(allergies):
@@ -197,10 +204,10 @@ class Command(BaseCommand):
     help = "Some basic test CRUD operations"
 
     def handle(self, *args, **kwargs):
-        allergies = get_allergies()
-        meal_types = get_meal_types()
-        print(allergies)
-        print(meal_types)
+        # allergies = get_allergies()
+        # meal_types = get_meal_types()
+        # print(allergies)
+        # print(meal_types)
 
         # user_telegram_id = "12345"
         # random_recipe = get_random_allowed_recipe(user_telegram_id)
