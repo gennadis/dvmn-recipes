@@ -9,6 +9,8 @@ from environs import Env
 import uuid
 import datetime
 import re
+from dateutil.relativedelta import relativedelta
+
 
 from recipes.management.commands.crud import (
     create_new_user,
@@ -21,6 +23,8 @@ from recipes.management.commands.crud import (
     get_random_allowed_recipe,
     get_recipe_ingredients,
     get_recipe_steps,
+    get_subscription_plans_names,
+    get_subscription_plan,
 )
 
 from recipes.management.commands.keyboards import (
@@ -55,28 +59,28 @@ def valid_promocodes():
 
 MENU_TYPES = ("Классическое", "Низкоуглеводное", "Вегетарианское", "Кето")
 
-SUBSCRIPTIONS = {
-    "1 месяц": {
-        "cost": 300,
-        "currency": "RUR",
-        "timedelta": datetime.timedelta(days=31),
-    },
-    "3 месяца": {
-        "cost": 550,
-        "currency": "RUR",
-        "timedelta": datetime.timedelta(days=92),
-    },
-    "6 месяцев": {
-        "cost": 1650,
-        "currency": "RUR",
-        "timedelta": datetime.timedelta(days=183),
-    },
-    "12 месяцев": {
-        "cost": 3000,
-        "currency": "RUR",
-        "timedelta": datetime.timedelta(days=365),
-    },
-}
+# SUBSCRIPTIONS = {
+#     "1 месяц": {
+#         "cost": 300,
+#         "currency": "RUR",
+#         "timedelta": datetime.timedelta(days=31),
+#     },
+#     "3 месяца": {
+#         "cost": 550,
+#         "currency": "RUR",
+#         "timedelta": datetime.timedelta(days=92),
+#     },
+#     "6 месяцев": {
+#         "cost": 1650,
+#         "currency": "RUR",
+#         "timedelta": datetime.timedelta(days=183),
+#     },
+#     "12 месяцев": {
+#         "cost": 3000,
+#         "currency": "RUR",
+#         "timedelta": datetime.timedelta(days=365),
+#     },
+# }
 
 ALLERGENS = ["аллерген 1", "аллерген 2", "аллерген 3", "аллерген 4", "аллерген 5"]
 
@@ -239,9 +243,10 @@ class Command(BaseCommand):
             if message.text in ["Готово", "Аллергенов нет"]:
                 if state_data.get("allergens") is None:
                     await state.update_data(allergens=[])
+                subscription_plans_names = await get_subscription_plans_names()
                 await message.answer(
                     "Отлично, выберите период подписки",
-                    reply_markup=make_keyboard(list(SUBSCRIPTIONS.keys())),
+                    reply_markup=make_keyboard(subscription_plans_names),
                 )
                 await Subscription.period.set()
             elif re.split("Добавить |Удалить ", message.text)[1] in allergens:
@@ -275,23 +280,21 @@ class Command(BaseCommand):
 
         @bot.message_handler(state=Subscription.promo)
         async def get_promo(message: types.Message, state: FSMContext):
-            state_data = await state.get_data()
-            currency = SUBSCRIPTIONS[state_data["period"]]["currency"]
+            plan = await state.get_data()
+            subscription_plan = await get_subscription_plan(name=plan.get("period"))
+
+            currency = subscription_plan.currency
+            price = subscription_plan.price
 
             if message.text == "Пропустить":
                 await state.update_data(promo=None)
-                cost = SUBSCRIPTIONS[state_data["period"]]["cost"]
                 benefit_text = ""
             else:
                 try:
                     promo_code = await get_promo_code(user_code=message.text)
                     await state.update_data(promo=promo_code)
-                    benefit = round(
-                        SUBSCRIPTIONS[state_data["period"]]["cost"]
-                        * promo_code.discount
-                        * 0.01
-                    )
-                    cost = SUBSCRIPTIONS[state_data["period"]]["cost"] - benefit
+                    benefit = round(price * promo_code.discount * 0.01)
+                    price = price - benefit
                     benefit_text = f"Вы сэкономили {benefit} {currency}\n"
 
                 except PromoCode.DoesNotExist:
@@ -304,7 +307,7 @@ class Command(BaseCommand):
 
             await message.answer(
                 (
-                    f"Ура, подписка сформирована.\n\nСтоимость подписки = {cost} {currency}\n"
+                    f"Ура, подписка сформирована.\n\nСтоимость подписки = {price} {currency}\n"
                     f"{benefit_text}\nОсталось ее оплатить и можно идти за продуктами."
                 ),
                 reply_markup=make_keyboard([]),
@@ -312,16 +315,16 @@ class Command(BaseCommand):
 
             payment_id = uuid.uuid1
             await state.update_data(payment_id=payment_id)
-            print(state_data["name"], cost, payment_id)
+            # print(state_data["name"], cost, payment_id)
 
             await bot_init.send_invoice(
                 chat_id=message.from_user.id,
                 title="Счет на оплату",
-                description=f'Подписка "{state_data["name"]}"',
+                description=f'Подписка "{subscription_plan.name}"',
                 payload=str(payment_id),
                 provider_token=env.str("SBER_TOKEN"),
                 currency="RUB",
-                prices=[LabeledPrice("ooops", cost * 100)],
+                prices=[LabeledPrice("ooops", price * 100)],
             )
 
         @bot.pre_checkout_query_handler(lambda query: True, state="*")
@@ -344,15 +347,21 @@ class Command(BaseCommand):
             )
             user_allergies = await make_user_allergies_list(state_data["allergens"])
             today = datetime.date.today()
+
+            subscription_plan = await get_subscription_plan(
+                name=state_data.get("period")
+            )
+
             subscription_details = {
                 "name": state_data["name"],
                 "owner": user,
+                "plan": subscription_plan,
                 "meal_type": user_meal_type,
                 "servings": int(state_data["persons"]),
                 "daily_meals_amount": int(state_data["eatings"]),
                 "start_date": today.strftime("%Y-%m-%d"),
                 "end_date": (
-                    today + SUBSCRIPTIONS[state_data["period"]]["timedelta"]
+                    today + relativedelta(months=subscription_plan.duration)
                 ).strftime("%Y-%m-%d"),
                 "promo_code": state_data["promo"],
                 "is_paid": True,
