@@ -10,7 +10,7 @@ ASK_FOR_PHONE_KEYBOARD = types.ReplyKeyboardMarkup(
 ).add(types.KeyboardButton("Отправить номер телефона", request_contact=True))
 
 
-def make_keyboard(buttons: list, row_width: int = 2, one_time: bool = False, extended_buttons: list = []):
+def make_keyboard(buttons: list = [], row_width: int = 2, one_time: bool = False, extended_buttons: list = []):
     keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=row_width, one_time_keyboard=one_time).add(
         *buttons
     )
@@ -35,3 +35,6 @@ def make_inline_keyboard(button, key):
 def make_dynamic_keyboard(buttons: list, comparison: list, row_width: int = 2, one_time: bool = False, extended_buttons: list = []):
     actual_buttons = [f'Удалить {button}' if button in comparison else f'Добавить {button}' for button in buttons]
     return make_keyboard(buttons=actual_buttons, row_width=row_width, one_time=one_time, extended_buttons=extended_buttons)
+
+def await_keyboard():
+    return types.ReplyKeyboardMarkup(resize_keyboard=True).add("Загружаю рецепт...")

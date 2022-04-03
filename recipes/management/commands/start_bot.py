@@ -32,10 +32,12 @@ from recipes.management.commands.crud import (
 from recipes.management.commands.keyboards import (
     ASK_FOR_PHONE_KEYBOARD,
     MAIN_KEYBOARD,
+    await_keyboard,
     make_digit_keyboard,
     make_keyboard,
     make_inline_keyboard,
     make_dynamic_keyboard,
+    await_keyboard
 )
 from recipes.management.commands.bot_processing import (
     create_payment,
@@ -129,9 +131,6 @@ class Command(BaseCommand):
         storage = MemoryStorage()
         bot = Dispatcher(bot_init, storage=storage)
 
-        yookassa_shop_id = env.int("YOOKASSA_SHOP_ID")
-        yookassa_secret_key = env.str("YOOKASSA_SECRET_KEY")
-
         @bot.message_handler(commands="start")
         async def hello(message: types.Message):
             try:
@@ -185,7 +184,6 @@ class Command(BaseCommand):
 
         @bot.message_handler(lambda message: message.text == "Мои подписки")
         async def get_user_subscriptions(message: types.Message):
-
             user = await get_telegram_user(telegram_id=message.from_user.id)
             subscriptions = await get_subscriptions(user)
             subscriptions_names = [subscription.name for subscription in subscriptions]
@@ -204,39 +202,62 @@ class Command(BaseCommand):
       
         @bot.message_handler(state=GetRecipe.menu)
         async def get_recipe_from_subscription(message: types.Message, state: FSMContext):
-            #user = await sync_to_async(TelegramUser.objects.get)(telegram_id=message.from_user.id)
             user = await get_telegram_user(telegram_id=message.from_user.id)
             random_recipe = await get_random_allowed_recipe(user=user, menu=message.text)
-            recipe_ingredients = await get_recipe_ingredients(recipe=random_recipe)
-            recipe_steps = await get_recipe_steps(recipe=random_recipe)
             
-            await message.answer(
-                f"{random_recipe.name}", reply_markup=types.ReplyKeyboardRemove()
+            keyboard = types.InlineKeyboardMarkup(row_width=1).add(
+                types.InlineKeyboardButton('Необходимые ингредиенты', callback_data='get_ingredient'),
+                types.InlineKeyboardButton('Рецепт пошагово', callback_data='step_by_step'),
+                types.InlineKeyboardButton('Выбрать другое блюдо', callback_data='other_recipe')
             )
-            time.sleep(0.5)
+            await message.answer(random_recipe.name, reply_markup=MAIN_KEYBOARD)
+            await message.answer_photo(
+                photo=random_recipe.image_url,
+                reply_markup=keyboard
+            )
+            await state.finish()
 
+        @bot.callback_query_handler(lambda callback: callback.data == 'other_recipe')
+        async def other_recipe(callback_query: types.CallbackQuery):
+            user = await get_telegram_user(telegram_id=callback_query.from_user.id)
+            subscriptions = await get_subscriptions(user)
+            subscriptions_names = [subscription.name for subscription in subscriptions]
+            await bot_init.send_message(
+                chat_id=callback_query.from_user.id,
+                text="Напомните пожалуйста для какого меню подобрать блюдо.",
+                reply_markup=make_keyboard(subscriptions_names, 1)
+            )
+            await GetRecipe.menu.set()
+
+
+        @bot.callback_query_handler(lambda callback: callback.data == 'get_ingredient')
+        async def get_ingredients(callback_query: types.CallbackQuery):
+            recipe = await sync_to_async(Recipe.objects.get)(name=callback_query.message.caption)
+            recipe_ingredients = await get_recipe_ingredients(recipe=recipe)
             ingredient_message = 'ИНГРЕДИЕНТЫ\n'
             for ingredient, how_much in recipe_ingredients.items():
                 ingredient_message += f'\n{ingredient}: {how_much}'
-            await message.answer(ingredient_message)
-
+            await bot_init.send_message(chat_id=callback_query.from_user.id, text=ingredient_message, reply_markup=MAIN_KEYBOARD)
+            
+        
+        @bot.callback_query_handler(lambda callback: callback.data == 'step_by_step')
+        async def step_by_step(callback_query: types.CallbackQuery):
+            recipe = await sync_to_async(Recipe.objects.get)(name=callback_query.message.caption)
+            recipe_steps = await get_recipe_steps(recipe=recipe)
             for step in recipe_steps:
                 time.sleep(0.5)
-                await message.answer_photo(
+                await bot_init.send_photo(
+                    chat_id=callback_query.from_user.id,
                     photo=step["image_url"],
-                    caption=step["instruction"],
+                    caption=step["instruction"]
                 )
-            
-            await message.answer('Приятного аппетита!')
-            await message.answer('😋', reply_markup=MAIN_KEYBOARD)
-
-
-
+            await bot_init.send_message(chat_id=callback_query.from_user.id, text='Приятного аппетита!')
+            await bot_init.send_message(chat_id=callback_query.from_user.id, text='😋', reply_markup=MAIN_KEYBOARD)
 
 
         @bot.message_handler(lambda message: message.text == "Создать подписку")
         async def create_subscription(message: types.Message):
-            await message.answer("Как назовем меню?", reply_markup=make_keyboard([], 1))
+            await message.answer("Как назовем меню?", reply_markup=make_keyboard(row_width=1))
             await Subscription.name.set()
 
         @bot.message_handler(state=Subscription.name)
@@ -426,31 +447,27 @@ class Command(BaseCommand):
         async def run_test(message: types.Message):
             #user = await sync_to_async(TelegramUser.objects.get)(telegram_id=message.from_user.id)
             user = await get_telegram_user(telegram_id=message.from_user.id)
-            random_recipe = await get_random_allowed_recipe(user=user)
-            recipe_ingredients = await get_recipe_ingredients(recipe=random_recipe)
-            recipe_steps = await get_recipe_steps(recipe=random_recipe)
-            
-            await message.answer(
-                f"{random_recipe.name}", reply_markup=types.ReplyKeyboardRemove()
+            try:
+                random_recipe = await get_random_allowed_recipe(user=user, menu='Воововлв')
+            except:
+                random_recipe = await get_random_allowed_recipe(user=user, menu='Подписка номер один')
+                
+            keyboard = types.InlineKeyboardMarkup(row_width=1).add(
+                types.InlineKeyboardButton('Необходимые ингредиенты', callback_data='get_ingredient'),
+                types.InlineKeyboardButton('Рецепт пошагово', callback_data='step_by_step')
             )
-            time.sleep(0.5)
 
-            ingredient_message = 'ИНГРЕДИЕНТЫ\n'
-            for ingredient, how_much in recipe_ingredients.items():
-                ingredient_message += f'\n{ingredient}: {how_much}'
-            await message.answer(ingredient_message)
+            await message.answer_photo(
+                photo=random_recipe.image_url,
+                caption=f"{random_recipe.name}",
+                reply_markup=keyboard
+            )
 
-            for step in recipe_steps:
-                time.sleep(0.5)
-                await message.answer_photo(
-                    photo=step["image_url"],
-                    caption=step["instruction"],
-                )
-            
-            await message.answer('Приятного аппетита!')
-            await message.answer('😋', reply_markup=MAIN_KEYBOARD)
 
-        @bot.message_handler()
+        
+
+
+        @bot.message_handler(lambda message: message.text != "Загружаю рецепт...")
         async def return_to_main(message: types.Message, state: FSMContext):
             await state.finish()
             await message.reply(
