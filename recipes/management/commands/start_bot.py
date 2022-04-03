@@ -47,6 +47,8 @@ from recipes.models import (
     TelegramUser,
     Allergy,
     MealType,
+    Ingredient,
+    Recipe,
     Subscription as Subs,
 )
 
@@ -85,6 +87,10 @@ def valid_promocodes():
 # }
 
 ALLERGENS = ["аллерген 1", "аллерген 2", "аллерген 3", "аллерген 4", "аллерген 5"]
+
+
+class GetRecipe(StatesGroup):
+    menu = State()
 
 
 class UserProfile(StatesGroup):
@@ -189,11 +195,44 @@ class Command(BaseCommand):
                     "Выберите вашу подписку из списка внизу",
                     reply_markup=make_keyboard(subscriptions_names, 1),
                 )
+                await GetRecipe.menu.set()
             else:
                 await message.answer(
                     "Похоже что у вас нет подписок.\nХотите создать первую?",
                     reply_markup=make_keyboard(["Создать подписку"], 1),
                 )
+      
+        @bot.message_handler(state=GetRecipe.menu)
+        async def get_recipe_from_subscription(message: types.Message, state: FSMContext):
+            #user = await sync_to_async(TelegramUser.objects.get)(telegram_id=message.from_user.id)
+            user = await get_telegram_user(telegram_id=message.from_user.id)
+            random_recipe = await get_random_allowed_recipe(user=user, menu=message.text)
+            recipe_ingredients = await get_recipe_ingredients(recipe=random_recipe)
+            recipe_steps = await get_recipe_steps(recipe=random_recipe)
+            
+            await message.answer(
+                f"{random_recipe.name}", reply_markup=types.ReplyKeyboardRemove()
+            )
+            time.sleep(0.5)
+
+            ingredient_message = 'ИНГРЕДИЕНТЫ\n'
+            for ingredient, how_much in recipe_ingredients.items():
+                ingredient_message += f'\n{ingredient}: {how_much}'
+            await message.answer(ingredient_message)
+
+            for step in recipe_steps:
+                time.sleep(0.5)
+                await message.answer_photo(
+                    photo=step["image_url"],
+                    caption=step["instruction"],
+                )
+            
+            await message.answer('Приятного аппетита!')
+            await message.answer('😋', reply_markup=MAIN_KEYBOARD)
+
+
+
+
 
         @bot.message_handler(lambda message: message.text == "Создать подписку")
         async def create_subscription(message: types.Message):
