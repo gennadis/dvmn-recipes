@@ -3,12 +3,28 @@ import os
 
 from django.core.management.base import BaseCommand
 
-from . import recipes_raw_data
-
-"""python manage.py loaddata mealtypes.json allergies.json promocodes.json ingredients.json recipes.json"""
-
 
 FIXTURES_PATH = "./recipes/fixtures/"
+
+MEAL_TYPES = [
+    "Классическое",
+    "Низкоуглеводное",
+    "Веганское",
+    "Кето",
+]
+ALLERGIES = [
+    "Морепродукты",
+    "Мясо",
+    "Зерновые",
+    "Мёд",
+    "Орехи",
+    "Молоко",
+]
+PROMO_CODES = [
+    "ПРИВЕТ",
+    "ПОЕХАЛИ",
+    "РЕЦЕПТЫ",
+]
 
 
 def save_json(data: list[dict], filename: str) -> str:
@@ -23,22 +39,18 @@ def save_json(data: list[dict], filename: str) -> str:
     return filename
 
 
-def make_promo_code_fixtures(promo_codes_list: list[str], filename: str) -> list[dict]:
-    promo_codes = []
-    for count, code in enumerate(promo_codes_list, start=1):
-        promo_code = {
-            "model": "recipes.promocode",
+def make_meal_types_fixtures(meal_type_names: list[str], filename: str) -> list[dict]:
+    meal_types = []
+    for count, name in enumerate(meal_type_names, start=1):
+        meal_type = {
+            "model": "recipes.mealtype",
             "pk": count,
-            "fields": {
-                "code": code,
-                "discount": count * 10,
-                "valid_thru": "2030-10-10",
-            },
+            "fields": {"name": name},
         }
-        promo_codes.append(promo_code)
+        meal_types.append(meal_type)
 
-    save_json(data=promo_codes, filename=filename)
-    return promo_codes
+    save_json(data=meal_types, filename=filename)
+    return meal_types
 
 
 def make_allergies_fixtures(allergies_names: list[str], filename: str) -> list[dict]:
@@ -57,18 +69,22 @@ def make_allergies_fixtures(allergies_names: list[str], filename: str) -> list[d
     return allergies
 
 
-def make_meal_types_fixtures(meal_type_names: list[str], filename: str) -> list[dict]:
-    meal_types = []
-    for count, name in enumerate(meal_type_names, start=1):
-        meal_type = {
-            "model": "recipes.mealtype",
+def make_promo_code_fixtures(promo_codes_list: list[str], filename: str) -> list[dict]:
+    promo_codes = []
+    for count, code in enumerate(promo_codes_list, start=1):
+        promo_code = {
+            "model": "recipes.promocode",
             "pk": count,
-            "fields": {"name": name},
+            "fields": {
+                "code": code,
+                "discount": count * 10,
+                "valid_thru": "2030-10-10",
+            },
         }
-        meal_types.append(meal_type)
+        promo_codes.append(promo_code)
 
-    save_json(data=meal_types, filename=filename)
-    return meal_types
+    save_json(data=promo_codes, filename=filename)
+    return promo_codes
 
 
 def make_ingredients_fixtures(
@@ -99,23 +115,17 @@ class Command(BaseCommand):
         os.makedirs(FIXTURES_PATH, exist_ok=True)
 
         make_meal_types_fixtures(
-            meal_type_names=recipes_raw_data.meal_types_names,
+            meal_type_names=MEAL_TYPES,
             filename=os.path.join(
                 FIXTURES_PATH,
                 "mealtypes.json",
             ),
         )
-
-        make_ingredients_fixtures(
-            ingredients_data=recipes_raw_data.ingredients_pairs,
-            filename=os.path.join(FIXTURES_PATH, "ingredients.json"),
-        )
-
         make_allergies_fixtures(
-            allergies_names=recipes_raw_data.ALLERGIES,
+            allergies_names=ALLERGIES,
             filename=os.path.join(FIXTURES_PATH, "allergies.json"),
         )
         make_promo_code_fixtures(
-            promo_codes_list=recipes_raw_data.PROMO_CODES,
+            promo_codes_list=PROMO_CODES,
             filename=os.path.join(FIXTURES_PATH, "promocodes.json"),
         )
