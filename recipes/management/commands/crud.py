@@ -12,6 +12,7 @@ from recipes.models import (
     PromoCode,
     Recipe,
     RecipeStep,
+    SubscriptionPlan,
     TelegramUser,
     Subscription,
     RecipeIngredientAmount,
@@ -88,6 +89,7 @@ def save_subscription(subscription_details: dict):
     subscription = Subscription.objects.create(
         name=subscription_details.get("name"),
         owner=subscription_details.get("owner"),
+        plan=subscription_details.get("plan"),
         meal_type=subscription_details.get("meal_type"),
         servings=subscription_details.get("servings"),
         daily_meals_amount=subscription_details.get("daily_meals_amount"),
@@ -148,6 +150,19 @@ def get_promo_code(user_code: str):
 @sync_to_async
 def get_allergies() -> list:
     return [allergy.name for allergy in Allergy.objects.all()]
+
+
+@sync_to_async
+def get_subscription_plans_names() -> list[str]:
+    return [
+        subscription_plan.name for subscription_plan in SubscriptionPlan.objects.all()
+    ]
+
+
+@sync_to_async
+def get_subscription_plan(name: str):
+    test = SubscriptionPlan.objects.filter(name=name).first()
+    return test
 
 
 @sync_to_async
