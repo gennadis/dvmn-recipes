@@ -23,7 +23,8 @@ from recipes.management.commands.crud import (create_new_user, get_meal_types,
                                               get_subscriptions,
                                               get_telegram_user,
                                               make_user_allergies_list,
-                                              save_subscription)
+                                              save_subscription,
+                                              SubscriptionIsOver)
 from recipes.management.commands.keyboards import (ASK_FOR_PHONE_KEYBOARD,
                                                    MAIN_KEYBOARD,
                                                    make_digit_keyboard,
@@ -162,34 +163,59 @@ class Command(BaseCommand):
         async def get_recipe_from_subscription(message: Message,
                                                state: FSMContext):
             user = await get_telegram_user(telegram_id=message.from_user.id)
-            random_recipe = await get_random_allowed_recipe(
-                user=user,
-                menu=message.text
-            )
-
-            keyboard = InlineKeyboardMarkup(row_width=1).add(
-                InlineKeyboardButton(
-                    text='Необходимые ингредиенты',
-                    callback_data='get_ingredient'
-                ),
-                InlineKeyboardButton(
-                    text='Рецепт пошагово',
-                    callback_data='step_by_step'
-                ),
-                InlineKeyboardButton(
-                    text='Выбрать другое блюдо',
-                    callback_data='other_recipe'
+            try:
+                random_recipe = await get_random_allowed_recipe(
+                    user=user,
+                    menu=message.text
                 )
-            )
-            await message.answer(
-                random_recipe.name,
-                reply_markup=MAIN_KEYBOARD
-            )
-            await message.answer_photo(
-                photo=random_recipe.image_url,
-                reply_markup=keyboard
-            )
-            await state.finish()
+
+                keyboard = InlineKeyboardMarkup(row_width=1).add(
+                    InlineKeyboardButton(
+                        text='Необходимые ингредиенты',
+                        callback_data='get_ingredient'
+                    ),
+                    InlineKeyboardButton(
+                        text='Рецепт пошагово',
+                        callback_data='step_by_step'
+                    ),
+                    InlineKeyboardButton(
+                        text='Выбрать другое блюдо',
+                        callback_data='other_recipe'
+                    ),
+                    InlineKeyboardButton(
+                        'Удалить подписку',
+                        callback_data='delete_subscription'
+                    )
+                )
+                await message.answer(
+                    random_recipe.name,
+                    reply_markup=MAIN_KEYBOARD
+                )
+                await message.answer_photo(
+                    photo=random_recipe.image_url,
+                    reply_markup=keyboard
+                )
+
+            except SubscriptionIsOver:
+                keyboard = InlineKeyboardMarkup(
+                    row_width=1
+                ).add(
+                    InlineKeyboardButton(
+                        'Продлить действие подписки',
+                        callback_data='renew_subscription'
+                    ),
+                    InlineKeyboardButton(
+                        'Удалить подписку',
+                        callback_data='delete_subscription'
+                    )
+                )
+                await message.answer(
+                    ('Похоже, что срок действия вашей подписки закончился.\n\n'
+                     'Хотите продлить?'),
+                    reply_markup=keyboard
+                )
+            finally:
+                await state.finish()
 
         @bot.callback_query_handler(lambda callback:
                                     callback.data == 'other_recipe')
@@ -245,6 +271,32 @@ class Command(BaseCommand):
                 text='😋',
                 reply_markup=MAIN_KEYBOARD
             )
+
+        @bot.callback_query_handler(lambda callback:
+                                    callback.data == 'renew_subscription')
+        async def renew_subscription(callback_query: CallbackQuery):
+            user = await get_telegram_user(
+                telegram_id=callback_query.from_user.id
+            )
+
+        @bot.callback_query_handler(lambda callback:
+                                    callback.data == 'delete_subscription')
+        async def delete_subscription(callback_query: CallbackQuery):
+            user = await get_telegram_user(
+                telegram_id=callback_query.from_user.id
+            )
+            print(callback_query)
+
+
+
+
+
+
+
+
+
+
+
 
         @bot.message_handler(lambda message:
                              message.text == "Создать подписку")
@@ -382,7 +434,7 @@ class Command(BaseCommand):
 
             payment_id = uuid.uuid1
             await state.update_data(payment_id=payment_id)
-            
+
             await bot_init.send_invoice(
                 chat_id=message.from_user.id,
                 title="Счет на оплату",
