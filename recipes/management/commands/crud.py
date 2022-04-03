@@ -73,6 +73,7 @@ def get_existing_user(user_profile: dict) -> Optional[TelegramUser]:
 def get_subscriptions(user: TelegramUser):
     return list(Subscription.objects.filter(owner=user).all())
 
+
 @sync_to_async
 def delete_subscription(user: TelegramUser, subscription_name: str):
     subscription_to_delete = Subscription.objects.filter(
@@ -204,26 +205,4 @@ class Command(BaseCommand):
     help = "Some basic test CRUD operations"
 
     def handle(self, *args, **kwargs):
-        # allergies = get_allergies()
-        # meal_types = get_meal_types()
-        # print(allergies)
-        # print(meal_types)
-
-        # user_telegram_id = "12345"
-        # random_recipe = get_random_allowed_recipe(user_telegram_id)
-        # ingredients = get_recipe_ingredients(user_telegram_id, random_recipe)
-        # steps = get_recipe_steps(user_telegram_id, random_recipe)
-
-        # print(f"Название: {random_recipe.name}")
-        # print(f"Фото: {random_recipe.image_url}")
-        # print("____________")
-        # print("Ингредиенты:")
-        # for name, amount in ingredients.items():
-        #     print(name, amount)
-        # print("____________")
-        # print("Шаги:")
-        # print()
-        # for step in steps:
-        #     print(step["image_url"])
-        #     print(f"Шаг {step['order']}: {step['instruction']}")
-        #     print()
+        pass
