@@ -1,8 +1,8 @@
-import random
 import datetime
+import random
 from typing import Optional
-from dateutil.relativedelta import relativedelta
 
+from asgiref.sync import sync_to_async
 from django.core.management.base import BaseCommand
 
 from recipes.models import (
@@ -17,8 +17,6 @@ from recipes.models import (
     Subscription,
     RecipeIngredientAmount,
 )
-
-from asgiref.sync import sync_to_async
 
 
 class SubscriptionIsOver(Exception):
@@ -43,7 +41,6 @@ def create_new_user(user_profile: dict) -> TelegramUser:
         phone_number=user_profile.get("phone_number"),
     )
     new_user.save()
-
     return new_user
 
 
