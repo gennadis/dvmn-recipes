@@ -27,6 +27,12 @@ class SubscriptionIsOver(Exception):
     pass
 
 
+class NoSuitableRecipeWasFound(Exception):
+    """Raised when there's no suitable Recipe"""
+
+    pass
+
+
 @sync_to_async
 def create_new_user(user_profile: dict) -> TelegramUser:
     new_user = TelegramUser.objects.create(
@@ -135,6 +141,8 @@ def get_random_allowed_recipe(user: TelegramUser, menu: str) -> Recipe:
     suitable_recipes = Recipe.objects.filter(meal_type=subscription_meal_type).exclude(
         ingredients__in=subscription_banned_ingredients
     )
+    if not suitable_recipes:
+        raise NoSuitableRecipeWasFound
 
     return random.choice(suitable_recipes)
 
