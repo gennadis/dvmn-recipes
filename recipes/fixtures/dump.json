@@ -1073,5 +1073,45 @@
             "discount": 30,
             "valid_thru": "2030-10-10"
         }
+    },
+    {
+        "model": "recipes.subscriptionplan",
+        "pk": 1,
+        "fields": {
+            "name": "На 3 месяца",
+            "price": 300,
+            "currency": "RUR",
+            "duration": 3
+        }
+    },
+    {
+        "model": "recipes.subscriptionplan",
+        "pk": 2,
+        "fields": {
+            "name": "На 1 месяц",
+            "price": 100,
+            "currency": "RUR",
+            "duration": 1
+        }
+    },
+    {
+        "model": "recipes.subscriptionplan",
+        "pk": 3,
+        "fields": {
+            "name": "На полгода",
+            "price": 600,
+            "currency": "RUR",
+            "duration": 6
+        }
+    },
+    {
+        "model": "recipes.subscriptionplan",
+        "pk": 4,
+        "fields": {
+            "name": "На один год",
+            "price": 1200,
+            "currency": "RUR",
+            "duration": 12
+        }
     }
 ]
