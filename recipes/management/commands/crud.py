@@ -106,11 +106,19 @@ def save_subscription(subscription_details: dict):
 
 @sync_to_async
 def get_random_allowed_recipe(user: TelegramUser, menu: str) -> Recipe:
-    user_allergies = Subscription.objects.get(owner=user, name=menu).allergy.all()
-    user_banned_ingredients = Ingredient.objects.filter(allergy__in=user_allergies)
+    # var menu is subscription name
+    subscription = Subscription.objects.get(owner=user, name=menu)
+    subscription_meal_type = subscription.meal_type
+    subscription_allergies = subscription.allergy.all()
+    subscription_banned_ingredients = Ingredient.objects.filter(
+        allergy__in=subscription_allergies
+    )
 
-    allowed_recipes = Recipe.objects.exclude(ingredients__in=user_banned_ingredients)
-    return random.choice(allowed_recipes)
+    suitable_recipes = Recipe.objects.filter(meal_type=subscription_meal_type).exclude(
+        ingredients__in=subscription_banned_ingredients
+    )
+
+    return random.choice(suitable_recipes)
 
 
 @sync_to_async
