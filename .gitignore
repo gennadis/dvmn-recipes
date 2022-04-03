@@ -7,3 +7,4 @@ env
 *.sqlite3
 
 test_db.py
+.vscode
