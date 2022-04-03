@@ -26,6 +26,14 @@ pip install -r requirements.txt
 ```
 
 4. Rename `.env.example` to `.env` and fill your secrets in it.  
+```bash
+SECRET_KEY = "django-secret-key"
+DEBUG = False
+BOT_TOKEN = "telegram_bot_token"
+YOOKASSA_SHOP_ID = "yookassa_id"
+YOOKASSA_SECRET_KEY = "yookassa secret"
+SBER_TOKEN = "SBER token"
+```
 
 5. Migrate
 ```bash
@@ -37,27 +45,23 @@ python manage.py migrate
 python manage.py createsuperuser
 ```
 
-7. Use preconfigured fixtures to populate the database
+7. Use preconfigured fixtures to populate the database with recipes, ingredients, subscription plans, etc.
 ```bash
-python manage.py loaddata mealtypes.json allergies.json promocodes.json ingredients.json recipes.json
+python manage.py loaddata dump.json
 ```
 
-8. ...
-
-9. Run gunicorn web server
+8. Run gunicorn web server
 ```bash
 gunicorn dvmn_recipes.wsgi
 ```
 
-10. Run telegram bot
+9. Run telegram bot
 ```bash
 python manage.py start_bot
 ```
 
-## Usage
-1. Open admin panel  
-Open `Recipes` app in browser [http://127.0.0.1:8000/admin/](http://127.0.0.1:8000/admin/)
+# Usage
+1. Open `Recipes` app admin panel in browser [http://127.0.0.1:8000/admin/](http://127.0.0.1:8000/admin/)
 
-2. ...
+2. Start using bot by typing `/start` command
 
-3. Start using bot by typing `/start` command
