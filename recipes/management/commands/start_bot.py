@@ -15,6 +15,7 @@ from dateutil.relativedelta import relativedelta
 from recipes.management.commands.crud import (
     create_new_user,
     get_existing_user,
+    get_meal_types,
     get_subscriptions,
     make_user_allergies_list,
     save_subscription,
@@ -57,7 +58,7 @@ def valid_promocodes():
 # PROMO = {"blabla": 10, "Wylsa": 45, "bullshit": 13}
 
 
-MENU_TYPES = ("Классическое", "Низкоуглеводное", "Вегетарианское", "Кето")
+# MENU_TYPES = ("Классическое", "Низкоуглеводное", "Вегетарианское", "Кето")
 
 # SUBSCRIPTIONS = {
 #     "1 месяц": {
@@ -201,8 +202,9 @@ class Command(BaseCommand):
         @bot.message_handler(state=Subscription.name)
         async def get_subscription_name(message: types.Message, state: FSMContext):
             await state.update_data(name=message.text)
+            meal_types = await get_meal_types()
             await message.answer(
-                "Укажите тип меню.", reply_markup=make_keyboard(MENU_TYPES, 1)
+                "Укажите тип меню.", reply_markup=make_keyboard(meal_types, 1)
             )
             await Subscription.type_menu.set()
 
