@@ -8,6 +8,7 @@ from django.core.management.base import BaseCommand
 from environs import Env
 import uuid
 import datetime
+import time
 import re
 from dateutil.relativedelta import relativedelta
 
@@ -376,6 +377,7 @@ class Command(BaseCommand):
                 'Для этого нажмите "Мои подписки" и выберете нужную',
                 reply_markup=MAIN_KEYBOARD,
             )
+            await state.finish()
 
         # @sync_to_async
         # def get_subscriptions(user):
@@ -383,23 +385,31 @@ class Command(BaseCommand):
 
         @bot.message_handler(commands="test")
         async def run_test(message: types.Message):
+            #user = await sync_to_async(TelegramUser.objects.get)(telegram_id=message.from_user.id)
             user = await get_telegram_user(telegram_id=message.from_user.id)
             random_recipe = await get_random_allowed_recipe(user=user)
             recipe_ingredients = await get_recipe_ingredients(recipe=random_recipe)
             recipe_steps = await get_recipe_steps(recipe=random_recipe)
+            
+            await message.answer(
+                f"{random_recipe.name}", reply_markup=types.ReplyKeyboardRemove()
+            )
+            time.sleep(0.5)
 
-            await message.reply(
-                f"НАЗВАНИЕ РЕЦЕПТА {random_recipe.name}", reply_markup=MAIN_KEYBOARD
-            )
-            await message.reply(
-                f"ИНГРЕДИЕНТЫ {recipe_ingredients}", reply_markup=MAIN_KEYBOARD
-            )
+            ingredient_message = 'ИНГРЕДИЕНТЫ\n'
+            for ingredient, how_much in recipe_ingredients.items():
+                ingredient_message += f'\n{ingredient}: {how_much}'
+            await message.answer(ingredient_message)
 
             for step in recipe_steps:
-                await message.reply_photo(
+                time.sleep(0.5)
+                await message.answer_photo(
                     photo=step["image_url"],
                     caption=step["instruction"],
                 )
+            
+            await message.answer('Приятного аппетита!')
+            await message.answer('😋', reply_markup=MAIN_KEYBOARD)
 
         @bot.message_handler()
         async def return_to_main(message: types.Message, state: FSMContext):

@@ -153,7 +153,7 @@ def get_allergies() -> list:
 
 
 @sync_to_async
-def get_subscription_plans_names() -> list[str]:
+def get_subscription_plans_names() -> list:
     return [
         subscription_plan.name for subscription_plan in SubscriptionPlan.objects.all()
     ]
@@ -171,7 +171,7 @@ def get_meal_types() -> list:
 
 
 @sync_to_async
-def get_telegram_user(telegram_id: str) -> TelegramUser:
+def get_telegram_user(telegram_id: str):
     return TelegramUser.objects.get(telegram_id=telegram_id)
 
 
