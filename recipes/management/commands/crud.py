@@ -1,6 +1,6 @@
 import random
+import datetime
 from typing import Optional
-from datetime import datetime
 from dateutil.relativedelta import relativedelta
 
 from django.core.management.base import BaseCommand
@@ -19,6 +19,12 @@ from recipes.models import (
 )
 
 from asgiref.sync import sync_to_async
+
+
+class SubscriptionIsOver(Exception):
+    """Raised when the Subscription.end_date has come"""
+
+    pass
 
 
 @sync_to_async
@@ -108,6 +114,10 @@ def save_subscription(subscription_details: dict):
 def get_random_allowed_recipe(user: TelegramUser, menu: str) -> Recipe:
     # var menu is subscription name
     subscription = Subscription.objects.get(owner=user, name=menu)
+
+    if subscription.end_date < datetime.date.today():
+        raise SubscriptionIsOver
+
     subscription_meal_type = subscription.meal_type
     subscription_allergies = subscription.allergy.all()
     subscription_banned_ingredients = Ingredient.objects.filter(
