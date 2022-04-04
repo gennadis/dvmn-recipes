@@ -30,9 +30,7 @@ pip install -r requirements.txt
 SECRET_KEY = "django-secret-key"
 DEBUG = False
 BOT_TOKEN = "telegram_bot_token"
-YOOKASSA_SHOP_ID = "yookassa_id"
-YOOKASSA_SECRET_KEY = "yookassa secret"
-SBER_TOKEN = "SBER token"
+PAYMENT_TOKEN = "SBER token"
 ```
 
 5. Migrate
@@ -65,3 +63,14 @@ python manage.py start_bot
 
 2. Start using bot by typing `/start` command
 
+# About Bot
+1. if bot was restarted, send any message and bot will restart your interface.  
+
+2. if you find any error and bot doesn't respond to you, send '/main'.  
+This command forcibly terminates any processes and redirects to the main menu.  
+
+3. Even if you cleared data in your phone, when you sign in bot with the same phone number, 
+it finds you out and you'll be able to see all your subscriptions.
+
+4. Bot tested with Sber payment service.  
+You can try to change token to any service, but perhaps you will need python-developer help.
