@@ -7,37 +7,52 @@ from aiogram import Bot, Dispatcher, executor
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import State, StatesGroup
-from aiogram.types import PreCheckoutQuery, ParseMode, Message, CallbackQuery, InlineKeyboardMarkup, InlineKeyboardButton, ContentTypes
+from aiogram.types import (
+    PreCheckoutQuery,
+    ParseMode,
+    Message,
+    CallbackQuery,
+    InlineKeyboardMarkup,
+    InlineKeyboardButton,
+    ContentTypes,
+)
 from aiogram.types.labeled_price import LabeledPrice
 from asgiref.sync import sync_to_async
 from dateutil.relativedelta import relativedelta
 from django.core.management.base import BaseCommand
 from environs import Env
-from recipes.management.commands.crud import (create_new_user, get_meal_types,
-                                              get_promo_code,
-                                              get_random_allowed_recipe,
-                                              get_recipe_ingredients,
-                                              get_recipe_steps,
-                                              get_subscription_plan,
-                                              get_subscription_plans_names,
-                                              get_subscriptions,
-                                              get_telegram_user,
-                                              make_user_allergies_list,
-                                              save_subscription,
-                                              delete_subscription,
-                                              SubscriptionIsOver,
-                                              NoSuitableRecipeWasFound)
-from recipes.management.commands.keyboards import (ASK_FOR_PHONE_KEYBOARD,
-                                                   MAIN_KEYBOARD,
-                                                   make_digit_keyboard,
-                                                   make_dynamic_keyboard,
-                                                   make_keyboard)
-from recipes.models import (Allergy,
-                            MealType,
-                            PromoCode,
-                            Recipe,
-                            TelegramUser,
-                            Subscription as Subscription_model)
+from recipes.management.commands.crud import (
+    create_new_user,
+    get_meal_types_names,
+    get_promo_code,
+    get_random_suitable_recipe,
+    get_recipe_ingredients,
+    get_recipe_steps,
+    get_user_subscription_plan,
+    get_subscription_plans_names,
+    get_user_subscriptions_list,
+    get_user,
+    get_user_allergies_pk_list,
+    create_user_subscription,
+    delete_user_subscription,
+    SubscriptionIsOver,
+    NoSuitableRecipeWasFound,
+)
+from recipes.management.commands.keyboards import (
+    ASK_FOR_PHONE_KEYBOARD,
+    MAIN_KEYBOARD,
+    make_digit_keyboard,
+    make_dynamic_keyboard,
+    make_keyboard,
+)
+from recipes.models import (
+    Allergy,
+    MealType,
+    PromoCode,
+    Recipe,
+    TelegramUser,
+    Subscription as Subscription_model,
+)
 
 
 class GetRecipe(StatesGroup):
@@ -81,10 +96,7 @@ class Command(BaseCommand):
         env = Env()
         env.read_env()
 
-        bot_init = Bot(
-            token=env.str("BOT_TOKEN"),
-            parse_mode=ParseMode.HTML
-        )
+        bot_init = Bot(token=env.str("BOT_TOKEN"), parse_mode=ParseMode.HTML)
         storage = MemoryStorage()
         bot = Dispatcher(bot_init, storage=storage)
 
@@ -92,14 +104,14 @@ class Command(BaseCommand):
         async def hello(message: Message):
             user_id = message.from_user.id
             try:
-                user_data = await get_telegram_user(telegram_id=user_id)
+                user_data = await get_user(telegram_id=user_id)
                 await message.answer(
-                    f"{user_data.first_name}, hello again!",
-                    reply_markup=MAIN_KEYBOARD
+                    f"{user_data.first_name}, hello again!", reply_markup=MAIN_KEYBOARD
                 )
             except TelegramUser.DoesNotExist:
-                await message.answer("Здравствуйте!\n\n"
-                                     "Как Вас зовут?\n(введите имя)")
+                await message.answer(
+                    "Здравствуйте!\n\n" "Как Вас зовут?\n(введите имя)"
+                )
                 await UserProfile.first_name.set()
 
         @bot.message_handler(commands="main", state="*")
@@ -108,10 +120,7 @@ class Command(BaseCommand):
         )
         async def return_to_main(message: Message, state: FSMContext):
             await state.finish()
-            await message.reply(
-                "Возвращаемся на главную",
-                reply_markup=MAIN_KEYBOARD
-            )
+            await message.reply("Возвращаемся на главную", reply_markup=MAIN_KEYBOARD)
 
         @bot.message_handler(state=UserProfile.first_name)
         async def get_user_name(message: Message, state: FSMContext):
@@ -125,15 +134,16 @@ class Command(BaseCommand):
         async def get_user_surname(message: Message, state: FSMContext):
             await state.update_data(last_name=message.text)
             await message.answer(
-                ("Супер!\n\nОсталось отправить "
-                 "номер телефона для управления подписками."),
+                (
+                    "Супер!\n\nОсталось отправить "
+                    "номер телефона для управления подписками."
+                ),
                 reply_markup=ASK_FOR_PHONE_KEYBOARD,
             )
             await UserProfile.phone_number.set()
 
         @bot.message_handler(
-            state=UserProfile.phone_number,
-            content_types=ContentTypes.CONTACT
+            state=UserProfile.phone_number, content_types=ContentTypes.CONTACT
         )
         async def get_user_phone(message: Message, state: FSMContext):
             await state.update_data(phone_number=message.contact.phone_number)
@@ -146,17 +156,16 @@ class Command(BaseCommand):
 
         @bot.message_handler(lambda message: message.text == "Мои подписки")
         async def get_user_subscriptions(message: Message):
-            user = await get_telegram_user(telegram_id=message.from_user.id)
-            subscriptions = await get_subscriptions(user)
+            user = await get_user(telegram_id=message.from_user.id)
+            subscriptions = await get_user_subscriptions_list(user)
             subscriptions_names = get_subscriptions_names(subscriptions)
 
             if subscriptions_names:
                 await message.answer(
                     "Выберите вашу подписку из списка внизу",
                     reply_markup=make_keyboard(
-                        buttons=subscriptions_names,
-                        row_width=1
-                    )
+                        buttons=subscriptions_names, row_width=1
+                    ),
                 )
                 await GetRecipe.menu.set()
             else:
@@ -166,56 +175,53 @@ class Command(BaseCommand):
                 )
 
         @bot.message_handler(state=GetRecipe.menu)
-        async def get_recipe_from_subscription(message: Message,
-                                               state: FSMContext):
-            user = await get_telegram_user(telegram_id=message.from_user.id)
+        async def get_recipe_from_subscription(message: Message, state: FSMContext):
+            user = await get_user(telegram_id=message.from_user.id)
             await state.update_data(menu=message.text)
             try:
-                random_recipe = await get_random_allowed_recipe(
-                    user=user,
-                    menu=message.text
+                random_recipe = await get_random_suitable_recipe(
+                    user=user, menu=message.text
                 )
 
                 keyboard = InlineKeyboardMarkup(row_width=1).add(
                     InlineKeyboardButton(
-                        text='Необходимые ингредиенты',
-                        callback_data='get_ingredient'
+                        text="Необходимые ингредиенты", callback_data="get_ingredient"
                     ),
                     InlineKeyboardButton(
-                        text='Рецепт пошагово',
-                        callback_data='step_by_step'
+                        text="Рецепт пошагово", callback_data="step_by_step"
                     ),
                     InlineKeyboardButton(
-                        text='Выбрать другое блюдо',
-                        callback_data='other_recipe'
-                    )
+                        text="Выбрать другое блюдо", callback_data="other_recipe"
+                    ),
                 )
                 await message.answer(
-                    'Как скажете. Выбираю рецепт..',
-                    reply_markup=MAIN_KEYBOARD
+                    "Как скажете. Выбираю рецепт..", reply_markup=MAIN_KEYBOARD
                 )
                 await message.answer_photo(
                     photo=random_recipe.image_url,
                     caption=random_recipe.name,
-                    reply_markup=keyboard
+                    reply_markup=keyboard,
                 )
                 await state.finish()
             except SubscriptionIsOver:
                 await message.answer(
-                    ('Похоже, что срок действия вашей подписки закончился.\n\n'
-                     'Хотите продлить?'),
+                    (
+                        "Похоже, что срок действия вашей подписки закончился.\n\n"
+                        "Хотите продлить?"
+                    ),
                     reply_markup=make_keyboard(
-                        ['Продлить подписку', 'Удалить подписку'],
-                        row_width=1
-                    )
+                        ["Продлить подписку", "Удалить подписку"], row_width=1
+                    ),
                 )
                 await GetRecipe.expired.set()
             except NoSuitableRecipeWasFound:
                 await message.answer(
-                    ('Вы знаете, не смог найти рецепт удовлетворяющий вашему'
-                     'запросу.\n\n'
-                     'Я сообщил администратору, он все проверит и починит'),
-                    reply_markup=MAIN_KEYBOARD
+                    (
+                        "Вы знаете, не смог найти рецепт удовлетворяющий вашему"
+                        "запросу.\n\n"
+                        "Я сообщил администратору, он все проверит и починит"
+                    ),
+                    reply_markup=MAIN_KEYBOARD,
                 )
                 await state.finish()
 
@@ -223,53 +229,45 @@ class Command(BaseCommand):
         async def expired_subscription(message: Message, state: FSMContext):
             user_id = message.from_user.id
             state_data = await state.get_data()
-            if message.text == 'Продлить подписку':
+            if message.text == "Продлить подписку":
                 await message.answer(
-                    'Для продления свяжитесь с администратором бота.',
-                    reply_markup=MAIN_KEYBOARD
+                    "Для продления свяжитесь с администратором бота.",
+                    reply_markup=MAIN_KEYBOARD,
                 )
-            elif message.text == 'Удалить подписку':
-                user = await get_telegram_user(telegram_id=user_id)
-                await delete_subscription(user, state_data['menu'])
-                await message.answer(
-                    'Подписка удалена.',
-                    reply_markup=MAIN_KEYBOARD
-                )
+            elif message.text == "Удалить подписку":
+                user = await get_user(telegram_id=user_id)
+                await delete_user_subscription(user, state_data["menu"])
+                await message.answer("Подписка удалена.", reply_markup=MAIN_KEYBOARD)
             await state.finish()
 
-        @bot.callback_query_handler(lambda callback:
-                                    callback.data == 'other_recipe')
+        @bot.callback_query_handler(lambda callback: callback.data == "other_recipe")
         async def other_recipe(callback_query: CallbackQuery):
-            user = await get_telegram_user(
-                telegram_id=callback_query.from_user.id
-            )
-            subscriptions = await get_subscriptions(user)
+            user = await get_user(telegram_id=callback_query.from_user.id)
+            subscriptions = await get_user_subscriptions_list(user)
             subscriptions_names = get_subscriptions_names(subscriptions)
             await bot_init.send_message(
                 chat_id=callback_query.from_user.id,
                 text="Напомните пожалуйста для какого меню подобрать блюдо.",
-                reply_markup=make_keyboard(subscriptions_names, 1)
+                reply_markup=make_keyboard(subscriptions_names, 1),
             )
             await GetRecipe.menu.set()
 
-        @bot.callback_query_handler(lambda callback:
-                                    callback.data == 'get_ingredient')
+        @bot.callback_query_handler(lambda callback: callback.data == "get_ingredient")
         async def get_ingredients(callback_query: CallbackQuery):
             recipe = await sync_to_async(Recipe.objects.get)(
                 name=callback_query.message.caption
             )
             recipe_ingredients = await get_recipe_ingredients(recipe=recipe)
-            ingredient_message = 'ИНГРЕДИЕНТЫ\n'
+            ingredient_message = "ИНГРЕДИЕНТЫ\n"
             for ingredient, how_much in recipe_ingredients.items():
-                ingredient_message += f'\n{ingredient}: {how_much}'
+                ingredient_message += f"\n{ingredient}: {how_much}"
             await bot_init.send_message(
                 chat_id=callback_query.from_user.id,
                 text=ingredient_message,
-                reply_markup=MAIN_KEYBOARD
+                reply_markup=MAIN_KEYBOARD,
             )
 
-        @bot.callback_query_handler(lambda callback:
-                                    callback.data == 'step_by_step')
+        @bot.callback_query_handler(lambda callback: callback.data == "step_by_step")
         async def step_by_step(callback_query: CallbackQuery):
             recipe = await sync_to_async(Recipe.objects.get)(
                 name=callback_query.message.caption
@@ -280,32 +278,28 @@ class Command(BaseCommand):
                 await bot_init.send_photo(
                     chat_id=callback_query.from_user.id,
                     photo=step["image_url"],
-                    caption=step["instruction"]
+                    caption=step["instruction"],
                 )
             await bot_init.send_message(
-                chat_id=callback_query.from_user.id,
-                text='Приятного аппетита!'
+                chat_id=callback_query.from_user.id, text="Приятного аппетита!"
             )
             await bot_init.send_message(
                 chat_id=callback_query.from_user.id,
-                text='😋',
-                reply_markup=MAIN_KEYBOARD
+                text="😋",
+                reply_markup=MAIN_KEYBOARD,
             )
 
-        @bot.message_handler(lambda message:
-                             message.text == "Создать подписку")
+        @bot.message_handler(lambda message: message.text == "Создать подписку")
         async def create_subscription(message: Message):
             await message.answer(
-                "Как назовем меню?",
-                reply_markup=make_keyboard(row_width=1)
+                "Как назовем меню?", reply_markup=make_keyboard(row_width=1)
             )
             await Subscription.name.set()
 
         @bot.message_handler(state=Subscription.name)
-        async def get_subscription_name(message: Message,
-                                        state: FSMContext):
+        async def get_subscription_name(message: Message, state: FSMContext):
             await state.update_data(name=message.text)
-            meal_types = await get_meal_types()
+            meal_types = await get_meal_types_names()
             await message.answer(
                 "Укажите тип меню.", reply_markup=make_keyboard(meal_types, 1)
             )
@@ -315,14 +309,12 @@ class Command(BaseCommand):
         async def get_type_menu(message: Message, state: FSMContext):
             await state.update_data(type_menu=message.text)
             await message.answer(
-                "Отлично, укажите количество персон",
-                reply_markup=make_digit_keyboard()
+                "Отлично, укажите количество персон", reply_markup=make_digit_keyboard()
             )
             await Subscription.persons.set()
 
         @bot.message_handler(state=Subscription.persons)
-        async def get_number_of_persons(message: Message,
-                                        state: FSMContext):
+        async def get_number_of_persons(message: Message, state: FSMContext):
             await state.update_data(persons=message.text)
             await message.answer(
                 "Отлично, укажите количество приемов пищи",
@@ -331,8 +323,7 @@ class Command(BaseCommand):
             await Subscription.eatings.set()
 
         @bot.message_handler(state=Subscription.eatings)
-        async def get_number_of_eatings(message: Message,
-                                        state: FSMContext):
+        async def get_number_of_eatings(message: Message, state: FSMContext):
             global allergens
             allergens = [x.name for x in await get_allergens_objects()]
 
@@ -379,8 +370,7 @@ class Command(BaseCommand):
                 await Subscription.allergens.set()
 
         @bot.message_handler(state=Subscription.period)
-        async def get_subscription_period(message: Message,
-                                          state: FSMContext):
+        async def get_subscription_period(message: Message, state: FSMContext):
             await state.update_data(period=message.text)
             await message.answer(
                 "Введите промокод", reply_markup=make_keyboard(["Пропустить"])
@@ -390,7 +380,7 @@ class Command(BaseCommand):
         @bot.message_handler(state=Subscription.promo)
         async def get_promo(message: Message, state: FSMContext):
             plan = await state.get_data()
-            subscription_plan = await get_subscription_plan(
+            subscription_plan = await get_user_subscription_plan(
                 name=plan.get("period")
             )
 
@@ -410,8 +400,10 @@ class Command(BaseCommand):
 
                 except PromoCode.DoesNotExist:
                     await message.reply(
-                        ("Такого промокода нет.\n\n"
-                         "Введите корректный или пропустите шаг."),
+                        (
+                            "Такого промокода нет.\n\n"
+                            "Введите корректный или пропустите шаг."
+                        ),
                         reply_markup=make_keyboard(["Пропустить"]),
                     )
                     await Subscription.promo.set()
@@ -447,21 +439,17 @@ class Command(BaseCommand):
                 error_message="FUCK!",
             )
 
-        @bot.message_handler(
-            content_types=ContentTypes.SUCCESSFUL_PAYMENT, state="*"
-        )
+        @bot.message_handler(content_types=ContentTypes.SUCCESSFUL_PAYMENT, state="*")
         async def got_payment(message: Message, state: FSMContext):
             state_data = await state.get_data()
-            user = await get_telegram_user(telegram_id=message.from_user.id)
+            user = await get_user(telegram_id=message.from_user.id)
             user_meal_type = await sync_to_async(MealType.objects.get)(
                 name=state_data["type_menu"]
             )
-            user_allergies = await make_user_allergies_list(
-                state_data["allergens"]
-            )
+            user_allergies = await get_user_allergies_pk_list(state_data["allergens"])
             today = datetime.date.today()
 
-            subscription_plan = await get_subscription_plan(
+            subscription_plan = await get_user_subscription_plan(
                 name=state_data.get("period")
             )
 
@@ -480,11 +468,11 @@ class Command(BaseCommand):
                 "is_paid": True,
                 "allergies": user_allergies,
             }
-            await save_subscription(subscription_details)
+            await create_user_subscription(subscription_details)
 
             await message.answer(
-                'Поздравляю!\nПодписка успешно оплачена и сохранена.\n\n'
-                'Настало время воспользоваться ей. '
+                "Поздравляю!\nПодписка успешно оплачена и сохранена.\n\n"
+                "Настало время воспользоваться ей. "
                 'Для этого нажмите "Мои подписки" и выберете нужную',
                 reply_markup=MAIN_KEYBOARD,
             )
@@ -494,13 +482,11 @@ class Command(BaseCommand):
         async def run_test(message: Message):
             pass
 
-        @bot.message_handler(lambda message:
-                             message.text != "Загружаю рецепт...")
+        @bot.message_handler(lambda message: message.text != "Загружаю рецепт...")
         async def wrong_message(message: Message, state: FSMContext):
             await state.finish()
             await message.reply(
-                "Перехват не распознанных сообщений",
-                reply_markup=MAIN_KEYBOARD
+                "Перехват не распознанных сообщений", reply_markup=MAIN_KEYBOARD
             )
 
         executor.start_polling(bot)

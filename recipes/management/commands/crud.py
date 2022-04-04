@@ -1,6 +1,5 @@
 import datetime
 import random
-from typing import Optional
 
 from asgiref.sync import sync_to_async
 from django.core.management.base import BaseCommand
@@ -44,47 +43,30 @@ def create_new_user(user_profile: dict) -> TelegramUser:
     return new_user
 
 
-def check_user_exist(user_profile: dict) -> Optional[TelegramUser]:
-    try:
-        telegram_id = user_profile.get("id")
-        TelegramUser.objects.get(telegram_id=telegram_id)
-        return True
-
-    except TelegramUser.DoesNotExist:
-        return False
+@sync_to_async
+def get_user(telegram_id: str):
+    return TelegramUser.objects.get(telegram_id=telegram_id)
 
 
 @sync_to_async
-def get_existing_user(user_profile: dict) -> Optional[TelegramUser]:
-    try:
-        telegram_id = user_profile.get("id")
-        existing_user = TelegramUser.objects.get(telegram_id=telegram_id)
-        return existing_user
-
-    except TelegramUser.DoesNotExist:
-        return None
+def get_user_subscription_plan(name: str):
+    return SubscriptionPlan.objects.get(name=name)
 
 
 @sync_to_async
-def get_subscriptions(user: TelegramUser):
-    return list(Subscription.objects.filter(owner=user).all())
+def get_user_subscriptions_list(user: TelegramUser):
+    return [
+        subscription for subscription in Subscription.objects.filter(owner=user).all()
+    ]
 
 
 @sync_to_async
-def delete_subscription(user: TelegramUser, subscription_name: str):
-    subscription_to_delete = Subscription.objects.filter(
-        owner=user, name=subscription_name
-    ).delete()
-    return subscription_to_delete
-
-
-@sync_to_async
-def make_user_allergies_list(allergies):
+def get_user_allergies_pk_list(allergies):
     return [Allergy.objects.get(name=allergy_name).pk for allergy_name in allergies]
 
 
 @sync_to_async
-def save_subscription(subscription_details: dict):
+def create_user_subscription(subscription_details: dict):
     subscription = Subscription.objects.create(
         name=subscription_details.get("name"),
         owner=subscription_details.get("owner"),
@@ -104,7 +86,15 @@ def save_subscription(subscription_details: dict):
 
 
 @sync_to_async
-def get_random_allowed_recipe(user: TelegramUser, menu: str) -> Recipe:
+def delete_user_subscription(user: TelegramUser, subscription_name: str):
+    subscription_to_delete = Subscription.objects.filter(
+        owner=user, name=subscription_name
+    ).delete()
+    return subscription_to_delete
+
+
+@sync_to_async
+def get_random_suitable_recipe(user: TelegramUser, menu: str) -> Recipe:
     subscription = Subscription.objects.get(owner=user, name=menu)
 
     if subscription.end_date < datetime.date.today():
@@ -160,33 +150,15 @@ def get_promo_code(user_code: str):
 
 
 @sync_to_async
-def get_allergies() -> list:
-    return [allergy.name for allergy in Allergy.objects.all()]
-
-
-@sync_to_async
 def get_subscription_plans_names() -> list:
     return [
-        subscription_plan.name
-        for subscription_plan
-        in SubscriptionPlan.objects.all()
+        subscription_plan.name for subscription_plan in SubscriptionPlan.objects.all()
     ]
 
 
 @sync_to_async
-def get_subscription_plan(name: str):
-    test = SubscriptionPlan.objects.filter(name=name).first()
-    return test
-
-
-@sync_to_async
-def get_meal_types() -> list:
+def get_meal_types_names() -> list:
     return [meal_type.name for meal_type in MealType.objects.all()]
-
-
-@sync_to_async
-def get_telegram_user(telegram_id: str):
-    return TelegramUser.objects.get(telegram_id=telegram_id)
 
 
 class Command(BaseCommand):
