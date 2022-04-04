@@ -24,7 +24,8 @@ from recipes.management.commands.crud import (create_new_user, get_meal_types,
                                               get_telegram_user,
                                               make_user_allergies_list,
                                               save_subscription,
-                                              SubscriptionIsOver)
+                                              SubscriptionIsOver,
+                                              delete_subscription)
 from recipes.management.commands.keyboards import (ASK_FOR_PHONE_KEYBOARD,
                                                    MAIN_KEYBOARD,
                                                    make_digit_keyboard,
@@ -40,6 +41,7 @@ from recipes.models import (Allergy,
 
 class GetRecipe(StatesGroup):
     menu = State()
+    expired = State()
 
 
 class UserProfile(StatesGroup):
@@ -163,6 +165,7 @@ class Command(BaseCommand):
         async def get_recipe_from_subscription(message: Message,
                                                state: FSMContext):
             user = await get_telegram_user(telegram_id=message.from_user.id)
+            await state.update_data(menu=message.text)
             try:
                 random_recipe = await get_random_allowed_recipe(
                     user=user,
@@ -181,41 +184,42 @@ class Command(BaseCommand):
                     InlineKeyboardButton(
                         text='Выбрать другое блюдо',
                         callback_data='other_recipe'
-                    ),
-                    InlineKeyboardButton(
-                        'Удалить подписку',
-                        callback_data='delete_subscription'
                     )
-                )
-                await message.answer(
-                    random_recipe.name,
-                    reply_markup=MAIN_KEYBOARD
                 )
                 await message.answer_photo(
                     photo=random_recipe.image_url,
+                    caption=random_recipe.name,
                     reply_markup=keyboard
                 )
-
+                await state.finish()
             except SubscriptionIsOver:
-                keyboard = InlineKeyboardMarkup(
-                    row_width=1
-                ).add(
-                    InlineKeyboardButton(
-                        'Продлить действие подписки',
-                        callback_data='renew_subscription'
-                    ),
-                    InlineKeyboardButton(
-                        'Удалить подписку',
-                        callback_data='delete_subscription'
-                    )
-                )
                 await message.answer(
                     ('Похоже, что срок действия вашей подписки закончился.\n\n'
                      'Хотите продлить?'),
-                    reply_markup=keyboard
+                    reply_markup=make_keyboard(
+                        ['Продлить подписку', 'Удалить подписку'],
+                        row_width=1
+                    ) 
                 )
-            finally:
-                await state.finish()
+                await GetRecipe.expired.set()
+
+        @bot.message_handler(state=GetRecipe.expired)
+        async def expired_subscription(message: Message, state: FSMContext):
+            user_id = message.from_user.id
+            state_data = await state.get_data()
+            if message.text == 'Продлить подписку':
+                await message.answer(
+                    'Для продления свяжитесь с администратором бота.',
+                    reply_markup=MAIN_KEYBOARD
+                )
+            elif message.text == 'Удалить подписку':
+                user = await get_telegram_user(telegram_id=user_id)
+                await delete_subscription(user, state_data['menu'])
+                await message.answer(
+                    'Подписка удалена.',
+                    reply_markup=MAIN_KEYBOARD
+                )
+            await state.finish()
 
         @bot.callback_query_handler(lambda callback:
                                     callback.data == 'other_recipe')
@@ -235,6 +239,7 @@ class Command(BaseCommand):
         @bot.callback_query_handler(lambda callback:
                                     callback.data == 'get_ingredient')
         async def get_ingredients(callback_query: CallbackQuery):
+            print(callback_query)
             recipe = await sync_to_async(Recipe.objects.get)(
                 name=callback_query.message.caption
             )
@@ -271,32 +276,6 @@ class Command(BaseCommand):
                 text='😋',
                 reply_markup=MAIN_KEYBOARD
             )
-
-        @bot.callback_query_handler(lambda callback:
-                                    callback.data == 'renew_subscription')
-        async def renew_subscription(callback_query: CallbackQuery):
-            user = await get_telegram_user(
-                telegram_id=callback_query.from_user.id
-            )
-
-        @bot.callback_query_handler(lambda callback:
-                                    callback.data == 'delete_subscription')
-        async def delete_subscription(callback_query: CallbackQuery):
-            user = await get_telegram_user(
-                telegram_id=callback_query.from_user.id
-            )
-            print(callback_query)
-
-
-
-
-
-
-
-
-
-
-
 
         @bot.message_handler(lambda message:
                              message.text == "Создать подписку")
