@@ -47,7 +47,7 @@ def create_new_user(user_profile: dict) -> TelegramUser:
 def check_user_exist(user_profile: dict) -> Optional[TelegramUser]:
     try:
         telegram_id = user_profile.get("id")
-        user = TelegramUser.objects.get(telegram_id=telegram_id)
+        TelegramUser.objects.get(telegram_id=telegram_id)
         return True
 
     except TelegramUser.DoesNotExist:
@@ -63,13 +63,6 @@ def get_existing_user(user_profile: dict) -> Optional[TelegramUser]:
 
     except TelegramUser.DoesNotExist:
         return None
-
-
-# @sync_to_async
-# def get_subscriptions(user_telegram_id: str) -> Subscription:
-#     user = TelegramUser.objects.get(telegram_id=user_telegram_id)
-#     subscriptions = Subscription.objects.filter(owner=user).all()
-#     return subscriptions
 
 
 @sync_to_async
@@ -90,19 +83,8 @@ def make_user_allergies_list(allergies):
     return [Allergy.objects.get(name=allergy_name).pk for allergy_name in allergies]
 
 
-# @sync_to_async
-# def save_subscription(user_telegram_id: str, subscription_details: dict):
-#     user = TelegramUser.objects.get(telegram_id=user_telegram_id)
-#     user_meal_type = MealType.objects.get(name=subscription_details.get("meal_type"))
-#     user_allergies = [
-#         Allergy.objects.get(name=allergy_name).pk
-#         for allergy_name in subscription_details.get("allergies")
-#     ]
-
-
 @sync_to_async
 def save_subscription(subscription_details: dict):
-    print(subscription_details)
     subscription = Subscription.objects.create(
         name=subscription_details.get("name"),
         owner=subscription_details.get("owner"),
@@ -123,7 +105,6 @@ def save_subscription(subscription_details: dict):
 
 @sync_to_async
 def get_random_allowed_recipe(user: TelegramUser, menu: str) -> Recipe:
-    # var menu is subscription name
     subscription = Subscription.objects.get(owner=user, name=menu)
 
     if subscription.end_date < datetime.date.today():
@@ -186,7 +167,9 @@ def get_allergies() -> list:
 @sync_to_async
 def get_subscription_plans_names() -> list:
     return [
-        subscription_plan.name for subscription_plan in SubscriptionPlan.objects.all()
+        subscription_plan.name
+        for subscription_plan
+        in SubscriptionPlan.objects.all()
     ]
 
 
