@@ -1,7 +1,7 @@
 # FoodPlan Service
 
 This project helps with `Telegram bot` and `Django` powered backend creation for food recipes delivery.
-It maintains users, their paid subscriptions, food recipes, ingredients and many more.
+It maintains users, their paid subscriptions, food recipes, ingredients and many more.  
 You can install and run it on your local machine or use preconfigured [Heroku app](https://dvmn-recipes.herokuapp.com/admin)
 Or use [this](https://t.me/dvmn_march_11_bot) Telegram bot.
 
@@ -12,7 +12,7 @@ Or use [this](https://t.me/dvmn_march_11_bot) Telegram bot.
 1. Clone project
 ```bash
 git clone https://github.com/gennadis/dvmn-recipes.git
-cd dvmn_recipes
+cd dvmn-recipes
 ```
 
 2. Create virtual environment
@@ -63,6 +63,14 @@ python manage.py start_bot
 1. Open `Recipes` app admin panel in browser [http://127.0.0.1:8000/admin/](http://127.0.0.1:8000/admin/)
 
 2. Start using bot by typing `/start` command
+
+3. Use this test credit card on `Subscription` payment step:
+```
+Card number    4111 1111 1111 1111
+Valid thru     12/24
+CVC            123
+Confirmation   12345678
+```
 
 # About Bot
 1. if bot was restarted, send any message and bot will restart your interface.  
