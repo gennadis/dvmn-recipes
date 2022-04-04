@@ -152,7 +152,10 @@ class Command(BaseCommand):
             if subscriptions_names:
                 await message.answer(
                     "Выберите вашу подписку из списка внизу",
-                    reply_markup=make_keyboard(subscriptions_names, 1),
+                    reply_markup=make_keyboard(
+                        buttons=subscriptions_names,
+                        row_width=1
+                    )
                 )
                 await GetRecipe.menu.set()
             else:
@@ -186,6 +189,10 @@ class Command(BaseCommand):
                         callback_data='other_recipe'
                     )
                 )
+                await message.answer(
+                    'Как скажете. Выбираю рецепт..',
+                    reply_markup=MAIN_KEYBOARD
+                )
                 await message.answer_photo(
                     photo=random_recipe.image_url,
                     caption=random_recipe.name,
@@ -199,7 +206,7 @@ class Command(BaseCommand):
                     reply_markup=make_keyboard(
                         ['Продлить подписку', 'Удалить подписку'],
                         row_width=1
-                    ) 
+                    )
                 )
                 await GetRecipe.expired.set()
 
@@ -239,7 +246,6 @@ class Command(BaseCommand):
         @bot.callback_query_handler(lambda callback:
                                     callback.data == 'get_ingredient')
         async def get_ingredients(callback_query: CallbackQuery):
-            print(callback_query)
             recipe = await sync_to_async(Recipe.objects.get)(
                 name=callback_query.message.caption
             )
