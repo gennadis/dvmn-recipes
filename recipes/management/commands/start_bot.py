@@ -24,8 +24,9 @@ from recipes.management.commands.crud import (create_new_user, get_meal_types,
                                               get_telegram_user,
                                               make_user_allergies_list,
                                               save_subscription,
+                                              delete_subscription,
                                               SubscriptionIsOver,
-                                              delete_subscription)
+                                              NoSuitableRecipeWasFound)
 from recipes.management.commands.keyboards import (ASK_FOR_PHONE_KEYBOARD,
                                                    MAIN_KEYBOARD,
                                                    make_digit_keyboard,
@@ -209,6 +210,14 @@ class Command(BaseCommand):
                     )
                 )
                 await GetRecipe.expired.set()
+            except NoSuitableRecipeWasFound:
+                await message.answer(
+                    ('Вы знаете, не смог найти рецепт удовлетворяющий вашему'
+                     'запросу.\n\n'
+                     'Я сообщил администратору, он все проверит и починит'),
+                    reply_markup=MAIN_KEYBOARD
+                )
+                await state.finish()
 
         @bot.message_handler(state=GetRecipe.expired)
         async def expired_subscription(message: Message, state: FSMContext):
