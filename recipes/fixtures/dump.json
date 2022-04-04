@@ -544,6 +544,121 @@
         }
     },
     {
+        "model": "recipes.ingredient",
+        "pk": 83,
+        "fields": {
+            "name": "кешью",
+            "unit": "гр.",
+            "allergy": [
+                5
+            ]
+        }
+    },
+    {
+        "model": "recipes.ingredient",
+        "pk": 84,
+        "fields": {
+            "name": "мёд",
+            "unit": "гр.",
+            "allergy": [
+                4
+            ]
+        }
+    },
+    {
+        "model": "recipes.ingredient",
+        "pk": 85,
+        "fields": {
+            "name": "свекла",
+            "unit": "шт.",
+            "allergy": []
+        }
+    },
+    {
+        "model": "recipes.ingredient",
+        "pk": 86,
+        "fields": {
+            "name": "капуста квашеная",
+            "unit": "гр.",
+            "allergy": []
+        }
+    },
+    {
+        "model": "recipes.ingredient",
+        "pk": 87,
+        "fields": {
+            "name": "огурцы соленые",
+            "unit": "шт.",
+            "allergy": []
+        }
+    },
+    {
+        "model": "recipes.ingredient",
+        "pk": 88,
+        "fields": {
+            "name": "сельд филе",
+            "unit": "гр.",
+            "allergy": [
+                1
+            ]
+        }
+    },
+    {
+        "model": "recipes.ingredient",
+        "pk": 89,
+        "fields": {
+            "name": "свиные ребра",
+            "unit": "гр.",
+            "allergy": [
+                2
+            ]
+        }
+    },
+    {
+        "model": "recipes.ingredient",
+        "pk": 90,
+        "fields": {
+            "name": "крупа ячневая",
+            "unit": "гр.",
+            "allergy": [
+                3
+            ]
+        }
+    },
+    {
+        "model": "recipes.ingredient",
+        "pk": 91,
+        "fields": {
+            "name": "орех миндальный",
+            "unit": "гр.",
+            "allergy": [
+                5
+            ]
+        }
+    },
+    {
+        "model": "recipes.ingredient",
+        "pk": 92,
+        "fields": {
+            "name": "ветчина",
+            "unit": "гр.",
+            "allergy": [
+                2
+            ]
+        }
+    },
+    {
+        "model": "recipes.ingredient",
+        "pk": 93,
+        "fields": {
+            "name": "скумбрия",
+            "unit": "шт.",
+            "allergy": [
+                1
+            ]
+        }
+    },
+    {
         "model": "recipes.recipe",
         "pk": 17,
         "fields": {
@@ -610,6 +725,294 @@
             "proteins": "0.00",
             "calories": "0.00",
             "created_at": "2022-04-01T20:01:18.706Z",
+            "meal_type": [
+                1
+            ]
+        }
+    },
+    {
+        "model": "recipes.recipe",
+        "pk": 21,
+        "fields": {
+            "name": "Винегрет",
+            "servings": 1,
+            "image_url": "https://gotovim-doma.ru/images/recipe/e/14/e1480b2a33fbab254325081948582042_l.jpg",
+            "working_time": 35,
+            "fats": "0.00",
+            "carbohydrates": "0.00",
+            "proteins": "0.00",
+            "calories": "0.00",
+            "created_at": "2022-04-03T16:13:55.826Z",
+            "meal_type": [
+                3
+            ]
+        }
+    },
+    {
+        "model": "recipes.recipe",
+        "pk": 22,
+        "fields": {
+            "name": "Селедка под шубой",
+            "servings": 2,
+            "image_url": "https://gotovim-doma.ru/images/recipe/1/6a/16a63bff9e1b441e11ab9040585f5daf_l.jpg",
+            "working_time": 25,
+            "fats": "0.00",
+            "carbohydrates": "0.00",
+            "proteins": "0.00",
+            "calories": "0.00",
+            "created_at": "2022-04-03T16:23:05.002Z",
+            "meal_type": [
+                4
+            ]
+        }
+    },
+    {
+        "model": "recipes.recipe",
+        "pk": 23,
+        "fields": {
+            "name": "Помидоры (закусочный и салатный вариант)",
+            "servings": 2,
+            "image_url": "https://gotovim-doma.ru/images/recipe/a/05/a05ac9589d49968d3194ead7a4754ff5_l.jpg",
+            "working_time": 15,
+            "fats": "0.00",
+            "carbohydrates": "0.00",
+            "proteins": "0.00",
+            "calories": "0.00",
+            "created_at": "2022-04-03T16:26:25.532Z",
+            "meal_type": [
+                2
+            ]
+        }
+    },
+    {
+        "model": "recipes.recipe",
+        "pk": 24,
+        "fields": {
+            "name": "Борщ украинский",
+            "servings": 4,
+            "image_url": "https://gotovim-doma.ru/images/recipe/7/21/721ab61cbe01ffe285e5971b9d32f180_l.jpg",
+            "working_time": 50,
+            "fats": "0.00",
+            "carbohydrates": "0.00",
+            "proteins": "0.00",
+            "calories": "0.00",
+            "created_at": "2022-04-03T16:32:12.459Z",
+            "meal_type": [
+                1
+            ]
+        }
+    },
+    {
+        "model": "recipes.recipe",
+        "pk": 25,
+        "fields": {
+            "name": "Легкий овощной суп с рисом",
+            "servings": 2,
+            "image_url": "https://gotovim-doma.ru/images/recipe/d/1e/d1e740823c4b9914d9c73405597238fe_l.jpg",
+            "working_time": 40,
+            "fats": "0.00",
+            "carbohydrates": "0.00",
+            "proteins": "0.00",
+            "calories": "0.00",
+            "created_at": "2022-04-03T16:37:46.144Z",
+            "meal_type": [
+                2
+            ]
+        }
+    },
+    {
+        "model": "recipes.recipe",
+        "pk": 26,
+        "fields": {
+            "name": "Куриное филе сочное",
+            "servings": 3,
+            "image_url": "https://gotovim-doma.ru/images/recipe/f/fa/ffa7e55daf83cf2f68fa64e43caf2886_l.jpg",
+            "working_time": 30,
+            "fats": "0.00",
+            "carbohydrates": "0.00",
+            "proteins": "0.00",
+            "calories": "0.00",
+            "created_at": "2022-04-03T16:43:10.057Z",
+            "meal_type": [
+                4
+            ]
+        }
+    },
+    {
+        "model": "recipes.recipe",
+        "pk": 27,
+        "fields": {
+            "name": "Мясной гуляш",
+            "servings": 2,
+            "image_url": "https://gotovim-doma.ru/images/recipe/9/d1/9d15eba18c792a3c32095b238ccef6b8_l.jpg",
+            "working_time": 30,
+            "fats": "0.00",
+            "carbohydrates": "0.00",
+            "proteins": "0.00",
+            "calories": "0.00",
+            "created_at": "2022-04-03T16:45:26.275Z",
+            "meal_type": [
+                2
+            ]
+        }
+    },
+    {
+        "model": "recipes.recipe",
+        "pk": 28,
+        "fields": {
+            "name": "Молочная ячневая каша",
+            "servings": 2,
+            "image_url": "https://gotovim-doma.ru/images/recipe/3/11/311be95ba81dbfa8b07d4e48bc55fecf_l.jpg",
+            "working_time": 20,
+            "fats": "0.00",
+            "carbohydrates": "0.00",
+            "proteins": "0.00",
+            "calories": "0.00",
+            "created_at": "2022-04-03T16:47:19.157Z",
+            "meal_type": [
+                2
+            ]
+        }
+    },
+    {
+        "model": "recipes.recipe",
+        "pk": 29,
+        "fields": {
+            "name": "Рис, обжаренный с яйцом по-китайски",
+            "servings": 2,
+            "image_url": "https://gotovim-doma.ru/images/recipe/b/c9/bc9df3e46884198fb0b66e9169593e31_l.jpg",
+            "working_time": 40,
+            "fats": "0.00",
+            "carbohydrates": "0.00",
+            "proteins": "0.00",
+            "calories": "0.00",
+            "created_at": "2022-04-03T16:48:58.336Z",
+            "meal_type": [
+                3
+            ]
+        }
+    },
+    {
+        "model": "recipes.recipe",
+        "pk": 30,
+        "fields": {
+            "name": "Дарницкий хлеб на закваске",
+            "servings": 2,
+            "image_url": "https://gotovim-doma.ru/images/recipe/2/6f/26fda80c9b011106f16ecaba79adc578_l.jpg",
+            "working_time": 50,
+            "fats": "0.00",
+            "carbohydrates": "0.00",
+            "proteins": "0.00",
+            "calories": "0.00",
+            "created_at": "2022-04-03T16:51:23.919Z",
+            "meal_type": [
+                2
+            ]
+        }
+    },
+    {
+        "model": "recipes.recipe",
+        "pk": 31,
+        "fields": {
+            "name": "Полезное \"молоко\" в пост",
+            "servings": 2,
+            "image_url": "https://gotovim-doma.ru/images/recipe/0/79/079cc3dd64cd1cddc275ac1bbd691c1d_l.jpg",
+            "working_time": 10,
+            "fats": "0.00",
+            "carbohydrates": "0.00",
+            "proteins": "0.00",
+            "calories": "0.00",
+            "created_at": "2022-04-03T16:54:27.616Z",
+            "meal_type": [
+                3
+            ]
+        }
+    },
+    {
+        "model": "recipes.recipe",
+        "pk": 32,
+        "fields": {
+            "name": "Рулетики из ветчины с сыром и чесноком",
+            "servings": 3,
+            "image_url": "https://gotovim-doma.ru/images/recipe/d/08/d08cd510a2b4de993bc70e8351b8e558_l.jpg",
+            "working_time": 40,
+            "fats": "0.00",
+            "carbohydrates": "0.00",
+            "proteins": "0.00",
+            "calories": "0.00",
+            "created_at": "2022-04-03T16:57:20.654Z",
+            "meal_type": [
+                1
+            ]
+        }
+    },
+    {
+        "model": "recipes.recipe",
+        "pk": 33,
+        "fields": {
+            "name": "Морковь по-корейски",
+            "servings": 2,
+            "image_url": "https://gotovim-doma.ru/images/recipe/f/52/f52f1ac31e8cdc408f3a2004062473ae_l.jpg",
+            "working_time": 0,
+            "fats": "0.00",
+            "carbohydrates": "0.00",
+            "proteins": "0.00",
+            "calories": "0.00",
+            "created_at": "2022-04-03T16:59:30.679Z",
+            "meal_type": [
+                4
+            ]
+        }
+    },
+    {
+        "model": "recipes.recipe",
+        "pk": 34,
+        "fields": {
+            "name": "Скумбрия соленая",
+            "servings": 2,
+            "image_url": "https://gotovim-doma.ru/images/recipe/6/75/675425b5a08186e26c9fec5196b1d444_l.jpg",
+            "working_time": 10,
+            "fats": "0.00",
+            "carbohydrates": "0.00",
+            "proteins": "0.00",
+            "calories": "0.00",
+            "created_at": "2022-04-03T17:00:56.079Z",
+            "meal_type": [
+                4
+            ]
+        }
+    },
+    {
+        "model": "recipes.recipe",
+        "pk": 35,
+        "fields": {
+            "name": "Бртуч",
+            "servings": 2,
+            "image_url": "https://gotovim-doma.ru/images/recipe/5/e6/5e610b184b617f7f19615525b5c87782_l.jpg",
+            "working_time": 15,
+            "fats": "0.00",
+            "carbohydrates": "0.00",
+            "proteins": "0.00",
+            "calories": "0.00",
+            "created_at": "2022-04-03T17:02:06.370Z",
+            "meal_type": [
+                2
+            ]
+        }
+    },
+    {
+        "model": "recipes.recipe",
+        "pk": 36,
+        "fields": {
+            "name": "Гренки сладкие для детей",
+            "servings": 2,
+            "image_url": "https://gotovim-doma.ru/images/recipe/6/fa/6fa6b1c5ec7527c84b50c216ea4e2cfe_l.jpg",
+            "working_time": 15,
+            "fats": "0.00",
+            "carbohydrates": "0.00",
+            "proteins": "0.00",
+            "calories": "0.00",
+            "created_at": "2022-04-03T17:03:40.197Z",
             "meal_type": [
                 1
             ]
@@ -763,6 +1166,596 @@
             "instruction": "В сухую посуду насыпать 1 ст.просеянной муки и ввести в неё кефирно-яичную смесь,при этом тщательно размешиваем тесто.\r\nПод конец положить туда соду на кончике ножа, 1 ст.л. сахара,2-3 ст.л. растительного масла(ванилин-по желанию).\r\nБлинчики получаются тонкие и кружевные.",
             "image_url": "https://gotovim-doma.ru/images/recipe/a/a5/aa5a13a195d70d5db4ff186f9658fa91_m.jpg",
             "step_recipe": 20
+        }
+    },
+    {
+        "model": "recipes.recipestep",
+        "pk": 16,
+        "fields": {
+            "order": 1,
+            "instruction": "Подготовить ингредиенты.",
+            "image_url": "https://gotovim-doma.ru/images/recipe/b/c0/bc03a9426a29cfbe0104082e39774594_m.jpg",
+            "step_recipe": 21
+        }
+    },
+    {
+        "model": "recipes.recipestep",
+        "pk": 17,
+        "fields": {
+            "order": 2,
+            "instruction": "Картофель, свеклу, морковь хорошо вымыть.\r\nОвощи сложить в кастрюлю, залить водой, довести до кипения и отварить до готовности.\r\nСовет. По-желанию, овощи можно завернуть в фольгу и запечь в духовке, при температуре 180°C до готовности. В фольгу нужно заворачивать каждый овощ отдельно.\r\nТакже овощи можно отварить в пароварке.\r\nСвеклу, картофель и морковь остудить и очистить от кожуры.\r\nНарезать овощи небольшими кубиками.\r\nОгурцы нарезать кубиками.\r\nКвашеную капусту отжать от рассола.\r\nРепчатый лук очистить и мелко нарезать.",
+            "image_url": "https://gotovim-doma.ru/images/recipe/3/34/33409b52f2b27c7c89d1fb761c29f5ad_m.jpg",
+            "step_recipe": 21
+        }
+    },
+    {
+        "model": "recipes.recipestep",
+        "pk": 18,
+        "fields": {
+            "order": 3,
+            "instruction": "Свеклу выложить в миску, добавить немного растительного масла и перемешать - тогда свекла не окрасит остальные овощи.\r\nДобавить к свекле нарезанные картофель, морковь, огурцы, капусту, лук, посолить, поперчить, заправить маслом и перемешать.\r\nСовет. В винегрет можно добавить зеленый горошек, отварную фасоль, консервированные грибы.\r\nПеред подачей охладить винегрет в холодильнике.",
+            "image_url": "https://gotovim-doma.ru/images/recipe/c/d9/cd992d8576feb086aebd62141065c1ad_m.jpg",
+            "step_recipe": 21
+        }
+    },
+    {
+        "model": "recipes.recipestep",
+        "pk": 19,
+        "fields": {
+            "order": 1,
+            "instruction": "Овощи сварить до готовности, остудить и очистить.",
+            "image_url": "https://gotovim-doma.ru/images/recipe/2/4e/24e431c81fdab10ed9b657282edf32b4_m.jpg",
+            "step_recipe": 22
+        }
+    },
+    {
+        "model": "recipes.recipestep",
+        "pk": 20,
+        "fields": {
+            "order": 2,
+            "instruction": "Яйца сварить и очистить.\r\nМалосольную селедку разделать на филе. Отрезать голову, разрезать брюшко и удалить внутренности, ополоснуть рыбу холодной водой.\r\nСделать глубокий разрез вдоль хребта и аккуратно отделить филе от хребтовой кости, помогая маленьким ножом отделять крупные кости.\r\nТаким же образом отделить второе филе от хребта (мелкие косточки из филе можно вытащить пинцетом).",
+            "image_url": "https://gotovim-doma.ru/images/recipe/4/0f/40fb559dda850cf64318ecab3fa11403_m.jpg",
+            "step_recipe": 22
+        }
+    },
+    {
+        "model": "recipes.recipestep",
+        "pk": 21,
+        "fields": {
+            "order": 3,
+            "instruction": "Каждый ингредиент посолить по вкусу, поперчить свежемолотым перцем, заправить майонезом и перемешать.\r\nВ глубокий салатник или на плоское блюдо укладывать подготовленные ингредиенты слоями:\r\nКартофель (соль, перец, майонез)",
+            "image_url": "https://gotovim-doma.ru/images/recipe/f/ed/fed325f53a45dfc74bbc5da023a6c38e_m.jpg",
+            "step_recipe": 22
+        }
+    },
+    {
+        "model": "recipes.recipestep",
+        "pk": 22,
+        "fields": {
+            "order": 4,
+            "instruction": "Морковь (соль, перец, майонез)",
+            "image_url": "https://gotovim-doma.ru/images/recipe/0/fc/0fc89dc95368c041be595f50fc5ef6f1_m.jpg",
+            "step_recipe": 22
+        }
+    },
+    {
+        "model": "recipes.recipestep",
+        "pk": 23,
+        "fields": {
+            "order": 5,
+            "instruction": "Яйца (соль, перец, майонез)",
+            "image_url": "https://gotovim-doma.ru/images/recipe/c/96/c969cb465bcac9ba978e4078109037c3_m.jpg",
+            "step_recipe": 22
+        }
+    },
+    {
+        "model": "recipes.recipestep",
+        "pk": 24,
+        "fields": {
+            "order": 6,
+            "instruction": "Свекла (соль, майонез)",
+            "image_url": "https://gotovim-doma.ru/images/recipe/b/06/b06b1aa02e108b961e28f58f679671f4_m.jpg",
+            "step_recipe": 22
+        }
+    },
+    {
+        "model": "recipes.recipestep",
+        "pk": 25,
+        "fields": {
+            "order": 7,
+            "instruction": "Сверху смазать свеклу тонким слоем майонеза и посыпать тертым на терке яйцом.\r\nВ \"Сельдь под шубой\" можно добавить кислое яблоко, оно очень хорошо \"звучит\" в этом салате. Натрите яблоко без кожуры на крупной терке и выложите его либо в слой селедки с луком (выложите на лук) либо перед слоем свеклы и слегка смажьте майонезом.\r\nМайонез выбирайте по вкусу, а не по цене или калорийности. Найдите такую марку, которая больше всего отвечает Вашим вкусовым предпочтениям. В крайнем случае, для сочности, слои салата можно поливать растительным маслом (вместе с майонезом или вместо).\r\nСалатницу затянуть пищевой пленкой и убрать в холодильник на ночь, чтобы салат хорошо пропитался.",
+            "image_url": "https://gotovim-doma.ru/images/recipe/d/9f/d9fa2d150871ddb5b3087cc59c5e27c3_m.jpg",
+            "step_recipe": 22
+        }
+    },
+    {
+        "model": "recipes.recipestep",
+        "pk": 26,
+        "fields": {
+            "order": 1,
+            "instruction": "Если нужно везти на пикник - масло не добавляйте! А добавьте на месте, перед употреблением:)))\r\nПомидор порубить крупными кусками(мелкие дадут сок, 1 помидор можно порубить на 4 части)\r\nЛук нарезать полукольцами, чеснок раздавить под прессом и нарезать на маленькие кусочки.\r\nВ салатницу выкладывать слоями помидоры, кольцами лук, присыпать чесночком, солью, перцем и сахаром. Когда последний слой уложен - полить уксусом и маслом пожеланию. оставить промариноваться на 30-40 минут.",
+            "image_url": "https://gotovim-doma.ru/images/recipe/a/05/a05ac9589d49968d3194ead7a4754ff5_l.jpg",
+            "step_recipe": 23
+        }
+    },
+    {
+        "model": "recipes.recipestep",
+        "pk": 27,
+        "fields": {
+            "order": 1,
+            "instruction": "Моем ребрышки, кладем в кастрюлю и заливаем холодной водой.\r\nДоводим до кипения.\r\nСнимаем пену.\r\nУменьшаем огонь и варим при слабом кипении до готовности мяса. Я варю 2 часа, люблю, когда мясо очень мягкое и распадается на волокна.\r\nМясо готово.",
+            "image_url": "https://gotovim-doma.ru/images/recipe/3/7d/37d463e9a2ca82aef2b275952767c489_m.jpg",
+            "step_recipe": 24
+        }
+    },
+    {
+        "model": "recipes.recipestep",
+        "pk": 28,
+        "fields": {
+            "order": 2,
+            "instruction": "Достаем ребрышки из бульона. И нарезаем. Можно снять мясо с ребрышек или оставить на косточке – это как вы любите.",
+            "image_url": "https://gotovim-doma.ru/images/recipe/9/22/922188b17044c511344846b4366ce919_m.jpg",
+            "step_recipe": 24
+        }
+    },
+    {
+        "model": "recipes.recipestep",
+        "pk": 29,
+        "fields": {
+            "order": 3,
+            "instruction": "Возвращаем мясо в бульон.\r\nКартофель нарезаем маленькими кубиками.\r\nКапусту тонко шинкуем.\r\nКладем в бульон картофель и капусту.\r\nВарим при слабом кипении около 15-20 минут.",
+            "image_url": "https://gotovim-doma.ru/images/recipe/1/73/1733884881436cba25ef25aca2e98b6f_m.jpg",
+            "step_recipe": 24
+        }
+    },
+    {
+        "model": "recipes.recipestep",
+        "pk": 30,
+        "fields": {
+            "order": 4,
+            "instruction": "Готовим свекольную заправку.\r\nМорковь режем маленькими кубиками.\r\nМелко нарезаем лук.\r\nСвеклу нарезаем тонкой соломкой. Можно натереть на крупной терке.\r\nВ глубокой сковороде разогреваем растительное масло.\r\nКладем свеклу.\r\nИ обжариваем 2-3 минуты.\r\nДобавляем лук.\r\nИ обжариваем еще 1-2 минуты.",
+            "image_url": "https://gotovim-doma.ru/images/recipe/6/b0/6b0c08536b316d6a3e7e8d759eaf9c33_m.jpg",
+            "step_recipe": 24
+        }
+    },
+    {
+        "model": "recipes.recipestep",
+        "pk": 31,
+        "fields": {
+            "order": 5,
+            "instruction": "Кладем болгарский перец, нарезанный кубиками, у меня замороженный, и обжариваем еще минуту.\r\nДобавляем морковь и тоже жарим 1-2 минуты.",
+            "image_url": "https://gotovim-doma.ru/images/recipe/6/b0/6b0c08536b316d6a3e7e8d759eaf9c33_m.jpg",
+            "step_recipe": 24
+        }
+    },
+    {
+        "model": "recipes.recipestep",
+        "pk": 32,
+        "fields": {
+            "order": 6,
+            "instruction": "В конце добавляем нарезанные кубиками свежие помидоры, если есть, или томаты в собственном соку, если готовите борщ в зимнее время.",
+            "image_url": "https://gotovim-doma.ru/images/recipe/4/ca/4ca602169afd178f815ff66a73801a33_m.jpg",
+            "step_recipe": 24
+        }
+    },
+    {
+        "model": "recipes.recipestep",
+        "pk": 33,
+        "fields": {
+            "order": 7,
+            "instruction": "Солим по вкусу, и можно добавить щепотку сахара.\r\nВливаем пару черпаков нашего мясного бульона и тушим овощи на медленном огне около 10 минут.",
+            "image_url": "https://gotovim-doma.ru/images/recipe/0/5c/05c0e11b88d1bb45dcc8047037eb0c2b_m.jpg",
+            "step_recipe": 24
+        }
+    },
+    {
+        "model": "recipes.recipestep",
+        "pk": 34,
+        "fields": {
+            "order": 8,
+            "instruction": "Добавляем нашу заправку в суп.\r\nИ варим еще 10 минут.",
+            "image_url": "https://gotovim-doma.ru/images/recipe/a/b7/ab79074ac415534aa4164621772a54e1_m.jpg",
+            "step_recipe": 24
+        }
+    },
+    {
+        "model": "recipes.recipestep",
+        "pk": 35,
+        "fields": {
+            "order": 9,
+            "instruction": "В конце добавляем рубленую зелень.\r\nИ свежемолотый перец по вкусу.",
+            "image_url": "https://gotovim-doma.ru/images/recipe/0/01/001b63187487b6d7b122c8f893f04ab3_m.jpg",
+            "step_recipe": 24
+        }
+    },
+    {
+        "model": "recipes.recipestep",
+        "pk": 36,
+        "fields": {
+            "order": 10,
+            "instruction": "Наш вкусный, сытный и наваристый украинский борщ готов! Зовем скорее всю семью за стол и подаем горячий борщ со сметаной. Вкусно, как у бабушки и просто за уши не оттащишь!",
+            "image_url": "https://gotovim-doma.ru/images/recipe/f/3f/f3ffa47aad0c20b991fdd7859dcb035c_m.jpg",
+            "step_recipe": 24
+        }
+    },
+    {
+        "model": "recipes.recipestep",
+        "pk": 37,
+        "fields": {
+            "order": 1,
+            "instruction": "Лук очистить и мелко порезать.\r\nПомидоры вымыть, сделать крестообразный надрез на кожице, положить в кипяток на ~1 минуту, затем аккуратно снять кожицу. Помидоры порезать небольшими кубиками.\r\nПерец вымыть, вырезать семенную коробку, еще раз промыть и нарезать небольшими кубиками.\r\nПетрушку вымыть, обсушить и порубить.\r\nРис промыть.",
+            "image_url": "https://gotovim-doma.ru/images/recipe/e/60/e60cd2a2b0d3c67433d03dca7bd1a055_m.jpg",
+            "step_recipe": 25
+        }
+    },
+    {
+        "model": "recipes.recipestep",
+        "pk": 38,
+        "fields": {
+            "order": 2,
+            "instruction": "В кастрюле нагреть растительное масло и положить лук. Обжаривать лук ~2-3 минуты, помешивая.",
+            "image_url": "https://gotovim-doma.ru/images/recipe/4/55/455228b0988f4b7a5d631eb138fc312c_m.jpg",
+            "step_recipe": 25
+        }
+    },
+    {
+        "model": "recipes.recipestep",
+        "pk": 39,
+        "fields": {
+            "order": 3,
+            "instruction": "Добавить петрушку и помидоры - жарить еще ~2 минуты.\r\nПоложить перец, перемешать и обжаривать ~1 минуту.",
+            "image_url": "https://gotovim-doma.ru/images/recipe/3/f4/3f4fd14c4b9114a9faffbfa9e1218f27_m.jpg",
+            "step_recipe": 25
+        }
+    },
+    {
+        "model": "recipes.recipestep",
+        "pk": 40,
+        "fields": {
+            "order": 4,
+            "instruction": "Влить в кастрюлю горячую воду или овощной бульон, довести до кипения, положить промытый рис и хорошо перемешать.\r\nКастрюлю накрыть крышкой и варить суп, с момента закипания при слабом кипении, ~13-15 минут, периодически помешивая.\r\nВ кастрюлю с супом добавить паприку, соль, перец. Суп перемешать, выключить и дать настояться под крышкой ~10-15 минут.",
+            "image_url": "https://gotovim-doma.ru/images/recipe/c/e6/ce610b99e75608758ccc7eedbd8646e4_m.jpg",
+            "step_recipe": 25
+        }
+    },
+    {
+        "model": "recipes.recipestep",
+        "pk": 41,
+        "fields": {
+            "order": 5,
+            "instruction": "При подаче посыпать рубленой свежей петрушкой.",
+            "image_url": "https://gotovim-doma.ru/images/recipe/3/b2/3b269717985f1fa014681371ab8ff6a8_m.jpg",
+            "step_recipe": 25
+        }
+    },
+    {
+        "model": "recipes.recipestep",
+        "pk": 42,
+        "fields": {
+            "order": 1,
+            "instruction": "* Сперва займёмся филейкой a_friends У каждой филешки есть \"малое\" филе\r\nнож накрыть этим кусочком и аккуратненько отрезать\r\n* Теперь аккуратненько врезаемся ножом в серединку самой толстой стороны\r\nприжимаем ладошкой и стараемся разрезать\r\nна 2 одинаковых слайсика a_tender",
+            "image_url": "https://gotovim-doma.ru/images/recipe/d/a9/da97d053228f7e3ab71cb31937ff8db7_m.jpg",
+            "step_recipe": 26
+        }
+    },
+    {
+        "model": "recipes.recipestep",
+        "pk": 43,
+        "fields": {
+            "order": 2,
+            "instruction": "* Чеснок и перчик измельчить надо, чем меньше - тем лучше, в мисочку их, горчичку туда, соль\r\nи растереть венчиком",
+            "image_url": "https://gotovim-doma.ru/images/recipe/2/a7/2a7f51308b215f9e1c134a6ce44731a3_m.jpg",
+            "step_recipe": 26
+        }
+    },
+    {
+        "model": "recipes.recipestep",
+        "pk": 44,
+        "fields": {
+            "order": 3,
+            "instruction": "* Добавить всё остальное и растереть-взбить в эмульсию",
+            "image_url": "https://gotovim-doma.ru/images/recipe/0/78/07847fe6fdd479079339bb6ee3951063_m.jpg",
+            "step_recipe": 26
+        }
+    },
+    {
+        "model": "recipes.recipestep",
+        "pk": 45,
+        "fields": {
+            "order": 4,
+            "instruction": "* Теперь плюхаем-обваливаем два слайсика в маринаде\r\nповерх кладём ещё два слайсика\r\nпереворачиваем стопочку\r\nи т.д - два слайсика-переворт, пока не закончится филейка a_girl_yes",
+            "image_url": "https://gotovim-doma.ru/images/recipe/f/49/f49034c5be8d55d90b7435d729d9b52e_m.jpg",
+            "step_recipe": 26
+        }
+    },
+    {
+        "model": "recipes.recipestep",
+        "pk": 46,
+        "fields": {
+            "order": 5,
+            "instruction": "* Обжарить быренько на разогретой сково с одной стороны до побеления местами\r\n, затем перевернуть, выключить, накрыть крышкой и через минутку-две подать с любым гарниром, у меня, например, с гречкой сегодня a_vkusno",
+            "image_url": "https://gotovim-doma.ru/images/recipe/d/10/d10e88cb0206d4b355d2cb33f0133e9b_m.jpg",
+            "step_recipe": 26
+        }
+    },
+    {
+        "model": "recipes.recipestep",
+        "pk": 47,
+        "fields": {
+            "order": 6,
+            "instruction": "Если обжарить на растительном масле - будет румяненько , если без масла - будет \"лохматенько\", но диетичненько и так-и-так одинаково сочненько a_vkusno",
+            "image_url": "https://gotovim-doma.ru/images/recipe/3/c9/3c9d7a149d13779650363319c91ffa47_m.jpg",
+            "step_recipe": 26
+        }
+    },
+    {
+        "model": "recipes.recipestep",
+        "pk": 48,
+        "fields": {
+            "order": 7,
+            "instruction": "* Можно нарезать несколько слайсиков соломкой\r\n* Добавить на сковородку к обжаренным луку-морковке полосочки болгарского перчика, или кабачка, или баклажана,обжарить немного, теперь соломку филейки, минуту-две погонять-пожарить и вуа-ля - тёплый салат,или мясная составляющая к любому гарниру.\r\n* Туда-же можно добавить сливки, или томаты,или сметанку, или йогурт, и вот уже вся эта прелесть в нежном соусе a_vkusno .",
+            "image_url": "https://gotovim-doma.ru/images/recipe/0/85/0854b1c6164a48bbd5f2c4d1aab8d9b8_m.jpg",
+            "step_recipe": 26
+        }
+    },
+    {
+        "model": "recipes.recipestep",
+        "pk": 49,
+        "fields": {
+            "order": 1,
+            "instruction": "Мясо вымыть, обсушить и нарезать кубиками.\r\nЛук мелко нарезать.\r\nВ глубокой сковороде разогреть масло и обжарить мясо на сильном огне около 5 минут.\r\nДобавить к мясу лук и жарить, периодически помешивая, 5-7 минут на среднем огне.",
+            "image_url": "https://gotovim-doma.ru/images/recipe/a/0c/a0cd1712f70e43caf86fa6ded4b32329_m.jpg",
+            "step_recipe": 27
+        }
+    },
+    {
+        "model": "recipes.recipestep",
+        "pk": 50,
+        "fields": {
+            "order": 2,
+            "instruction": "Гуляш посолить, поперчить, посыпать мукой, хорошо перемешать и жарить еще 2-3 минуты, периодически помешивая.\r\nДобавить томатный соус, хорошо перемешать.\r\nВлить в гуляш 2-3 стакана воды или мясного бульона, перемешать, добавить лавровый лист, накрыть крышкой и тушить на маленьком огне, при слабом кипении 1-1,5 часа.",
+            "image_url": "https://gotovim-doma.ru/images/recipe/0/77/077b426babccd035cdd5a5e041c96334_m.jpg",
+            "step_recipe": 27
+        }
+    },
+    {
+        "model": "recipes.recipestep",
+        "pk": 51,
+        "fields": {
+            "order": 3,
+            "instruction": "При подаче посыпать гуляш рубленой зеленью.\r\nПриятного Вам аппетита!",
+            "image_url": "https://gotovim-doma.ru/images/recipe/3/43/343c79099f078218a198c8c19bc3dd1a_m.jpg",
+            "step_recipe": 27
+        }
+    },
+    {
+        "model": "recipes.recipestep",
+        "pk": 52,
+        "fields": {
+            "order": 1,
+            "instruction": "Ячневую крупу промыть, залить двумя стаканами воды, посолить и поставить на огонь. Когда вода закипит, убавить огонь и варить кашу, не накрывая крышкой, до загустения. Когда каша загустеет, добавить стакан молока, перемешать, снова довести до кипения, накрыть крышкой и варить на маленькой огне 2-3 минуты. Потом снять с огня и дать каше настояться минут 10. Добавить сливочное масло и подавать.\r\nИз указанного количества продуктов получается довольно большая порция, я на завтрак для двоих обычно варю пол-порции.",
+            "image_url": "https://gotovim-doma.ru/images/recipe/3/11/311be95ba81dbfa8b07d4e48bc55fecf_l.jpg",
+            "step_recipe": 28
+        }
+    },
+    {
+        "model": "recipes.recipestep",
+        "pk": 53,
+        "fields": {
+            "order": 1,
+            "instruction": "Если в рисе есть комочки, предварительно разбейте их ложкой или вилкой, чтобы рис снова стал рассыпчатым.\r\nЯйца разбейте в миску, добавьте немного соли и слегка взболтайте вилкой.\r\nЗелёный лук мелко нарежьте.\r\n\r\nНа средне-сильном огне разогрейте в воке или сковороде масло, добавьте рис и обжаривайте пару минут.\r\nНемного сдвиньте рис от края сковороды к середине, влейте на освободившееся место яйца и сразу же очень быстро и интенсивно начинайте перемешивать рис с яйцом, чтобы каждая рисинка стала \"яичной\".\r\nВ конце добавьте зелёный лук, перемешайте, и блюдо можно подавать.",
+            "image_url": "https://gotovim-doma.ru/images/recipe/9/37/9373a427d3485ce26c9bfc2efab6a0fe_m.jpg",
+            "step_recipe": 29
+        }
+    },
+    {
+        "model": "recipes.recipestep",
+        "pk": 54,
+        "fields": {
+            "order": 1,
+            "instruction": "С вечера перемешать все для закваски и оставить на 16 часов бродить. Такая закваска у меня получилась с утра.",
+            "image_url": "https://gotovim-doma.ru/images/recipe/d/ed/ded3453ff072a50064d4e6f7d03a9ca5_m.jpg",
+            "step_recipe": 30
+        }
+    },
+    {
+        "model": "recipes.recipestep",
+        "pk": 55,
+        "fields": {
+            "order": 2,
+            "instruction": "От закваски отделяем 300 гр., а остальное убираем в баночку и в холодильник (стартер для следующего хлебушка готов). Смешиваем все ингредиенты для теста и замешиваем мягкое тесто. Я вымешиваю на комбайне 4-5 минут. Тесто получается липкое, но для ржаного хлеба так и должно быть. Накрываем тесто кухонным полотенцем и оставляем на 20 минут отдохнуть.",
+            "image_url": "https://gotovim-doma.ru/images/recipe/c/3a/c3a4a1900679317fe898d288c9fa4f5e_m.jpg",
+            "step_recipe": 30
+        }
+    },
+    {
+        "model": "recipes.recipestep",
+        "pk": 56,
+        "fields": {
+            "order": 3,
+            "instruction": "Форму для хлеба смазываем маслом, выкладываем тесто в форму и приглаживаем мокрой рукой или силиконовой лопаткой. Накрываем полотенцем и оставляем на расстойку от 2 до 4 часов. Когда закваска молодая, то хлеб расстаивается соответственно дольше. Тесто должно увеличиться в 2 раза.",
+            "image_url": "https://gotovim-doma.ru/images/recipe/9/c1/9c1e732b6d7f7565303cc5374daf967b_m.jpg",
+            "step_recipe": 30
+        }
+    },
+    {
+        "model": "recipes.recipestep",
+        "pk": 57,
+        "fields": {
+            "order": 4,
+            "instruction": "Духовку прогреть до 250 градусов. Выпекать хлеб первые 10 минут с паром (вниз духовки поставить емкость с горячей водой). Затем уменьшить температуру до 200 градусов, убрать воду и выпекать хлеб до готовности еще 40 минут. За 5 минут до окончания я вынимаю аккуратно хлеб из формы и ставлю обратно в духовку, чтобы образовалась хрустящая корочка. Но это делать не обязательно. Чтобы хлебушек блестел, можно смазать его 2 раза водой в процессе выпекания. Готовый хлеб остудить на решетке.",
+            "image_url": "https://gotovim-doma.ru/images/recipe/2/6d/26d16f38840e498b09499f075d7a478a_m.jpg",
+            "step_recipe": 30
+        }
+    },
+    {
+        "model": "recipes.recipestep",
+        "pk": 58,
+        "fields": {
+            "order": 1,
+            "instruction": "1 ст. овсяных хлопьев (не быстрого приготовления!) залить 3 ст. холодной воды, добавить щепотку соли по вкусу и оставить на ночь. Утром измельчить всё блендером, можно добавить по вкусу ещё соли, сахара или мёда, ванили или корицы. Процедить через мелкое сито или марлю, и можно пить!",
+            "image_url": "https://gotovim-doma.ru/images/recipe/9/b0/9b0df7c7fae7e82c7929f5738c39ebc3_m.jpg",
+            "step_recipe": 31
+        }
+    },
+    {
+        "model": "recipes.recipestep",
+        "pk": 59,
+        "fields": {
+            "order": 2,
+            "instruction": "Приготовление:\r\nПропорции орехов и воды - 1:2\r\nВыход молока: около 250-300 мл\r\n\r\n1 стакан миндальных орехов (необжаренных) залить холодной водой на ночь. Утром слить эту воду и ошпарить миндаль кипятком на 10 минут, после этого его очень легко очистить от кожицы.",
+            "image_url": "https://gotovim-doma.ru/images/recipe/3/f9/3f9cd53b37439b192bbb7229255d45e4_m.jpg",
+            "step_recipe": 31
+        }
+    },
+    {
+        "model": "recipes.recipestep",
+        "pk": 60,
+        "fields": {
+            "order": 3,
+            "instruction": "Затем очищенные ядра залить 2 ст. холодной воды, добавить по вкусу немного сахара или мёда (в качестве подсластителя можно также использовать финики). Измельчить всё как следует блендером, процедить, хорошо отжать и пить готовое молоко охлаждённым.",
+            "image_url": "https://gotovim-doma.ru/images/recipe/2/3f/23f628309d46e449365a156dfa118c04_m.jpg",
+            "step_recipe": 31
+        }
+    },
+    {
+        "model": "recipes.recipestep",
+        "pk": 61,
+        "fields": {
+            "order": 4,
+            "instruction": "Оставшиеся измельчённые ядра миндаля (на фото сверху) можно слегка подсушить на противне в духовке при 100 градусах и добавлять в тесто (например, в печенье или кекс), но вкус у такого миндаля будет не очень насыщенным.",
+            "image_url": "https://gotovim-doma.ru/images/recipe/7/82/78258a9ce3b423d54cc588096ef9cdf5_m.jpg",
+            "step_recipe": 31
+        }
+    },
+    {
+        "model": "recipes.recipestep",
+        "pk": 62,
+        "fields": {
+            "order": 5,
+            "instruction": "1 ст. очищенных тыквенных семечек замочить на 1-2 часа в 2 ст. холодной воды. Добавить по вкусу немного сахара или мёда и измельчить всё блендером, процедить через сито или марлю и можно пить тыквенное",
+            "image_url": "https://gotovim-doma.ru/images/recipe/9/c7/9c7a5ba886679e2cd44d980252409e19_m.jpg",
+            "step_recipe": 31
+        }
+    },
+    {
+        "model": "recipes.recipestep",
+        "pk": 63,
+        "fields": {
+            "order": 1,
+            "instruction": "Ветчину (если она не в нарезке) нарезать тонкими ломтиками при помощи терки \"Бернера\".\r\nУ вареных яиц желтки отделить от белков.\r\nЖелтки натереть на мелкой терке (отложить немного для украшения).\r\nБелки натереть на крупной терке в другую миску.\r\nПлавленые сырки натереть на крупной терке.\r\nЗелень вымыть, обсушить и мелко порубить.\r\nЧеснок очистить и пропустить через чесноковыжималку или мелко порубить.",
+            "image_url": "https://gotovim-doma.ru/images/recipe/e/ee/eee9384777ad5080ae02d2213a3ef207_m.jpg",
+            "step_recipe": 32
+        }
+    },
+    {
+        "model": "recipes.recipestep",
+        "pk": 64,
+        "fields": {
+            "order": 2,
+            "instruction": "Соединить тертые сырки, яичные белки, желтки, зелень, чеснок и свежемолотый перец.\r\nДобавить майонез и хорошо перемешать начинку.",
+            "image_url": "https://gotovim-doma.ru/images/recipe/6/81/681f3a166c35889726ae447c13c1fe76_m.jpg",
+            "step_recipe": 32
+        }
+    },
+    {
+        "model": "recipes.recipestep",
+        "pk": 65,
+        "fields": {
+            "order": 3,
+            "instruction": "На край ломтика ветчины положить ~1 десертную или столовую ложку начинки.",
+            "image_url": "https://gotovim-doma.ru/images/recipe/b/23/b237de7c9a4654cc28050c131da369c9_m.jpg",
+            "step_recipe": 32
+        }
+    },
+    {
+        "model": "recipes.recipestep",
+        "pk": 66,
+        "fields": {
+            "order": 4,
+            "instruction": "И свернуть рулетиком.",
+            "image_url": "https://gotovim-doma.ru/images/recipe/b/1e/b1eb0ac05678d08403aafe2db333ab10_m.jpg",
+            "step_recipe": 32
+        }
+    },
+    {
+        "model": "recipes.recipestep",
+        "pk": 67,
+        "fields": {
+            "order": 5,
+            "instruction": "Разложить рулетики на блюде, застеленном листьями салата, посыпать желтком и украсить зеленью.\r\nПеред подачей охладить в холодильнике.",
+            "image_url": "https://gotovim-doma.ru/images/recipe/b/22/b22a6654a16e75ef255d7811e5810b03_m.jpg",
+            "step_recipe": 32
+        }
+    },
+    {
+        "model": "recipes.recipestep",
+        "pk": 68,
+        "fields": {
+            "order": 1,
+            "instruction": "Морковь вымыть, очистить и нарезать тонкой соломкой (или натереть на терке для корейской моркови).",
+            "image_url": "https://gotovim-doma.ru/images/recipe/4/10/410e48ce22e85da06daae5188852b323_m.jpg",
+            "step_recipe": 33
+        }
+    },
+    {
+        "model": "recipes.recipestep",
+        "pk": 69,
+        "fields": {
+            "order": 2,
+            "instruction": "Чеснок очистить и мелко порубить или пропустить через чесночный пресс.\r\nКориандр положить на разделочную доску, прижать плоской стороной широкого ножа и раздавить.\r\nМорковь посыпать кориандром, красным и черным молотым перцем (вместо этих специй можно взять покупную смесь специй для корейской моркови), солью, сахаром, добавить чеснок.",
+            "image_url": "https://gotovim-doma.ru/images/recipe/1/de/1def750be25fc9eb40fbd0b8e10f3132_m.jpg",
+            "step_recipe": 33
+        }
+    },
+    {
+        "model": "recipes.recipestep",
+        "pk": 70,
+        "fields": {
+            "order": 3,
+            "instruction": "Луковицу очистить и мелко нарезать.\r\nНа сковороде хорошо разогреть растительное масло, выложить лук и жарить, пока лук не станет зажаристо-коричневым.",
+            "image_url": "https://gotovim-doma.ru/images/recipe/d/fc/dfc5c0b09f88306981aef619a43e1068_m.jpg",
+            "step_recipe": 33
+        }
+    },
+    {
+        "model": "recipes.recipestep",
+        "pk": 71,
+        "fields": {
+            "order": 4,
+            "instruction": "Лук удалить из сковороды при помощи специальной ложки с отверстиями (масло должно остаться в сковороде) и выбросить.\r\nГорячим маслом полить морковь с чесноком и специями и хорошо перемешать.\r\nДобавить в морковь уксус и перемешать.\r\nМорковь убрать в холодильник и охладить.",
+            "image_url": "https://gotovim-doma.ru/images/recipe/5/e0/5e08ad63b5382c516af3f8adc1b9164f_m.jpg",
+            "step_recipe": 33
+        }
+    },
+    {
+        "model": "recipes.recipestep",
+        "pk": 72,
+        "fields": {
+            "order": 1,
+            "instruction": "Рыбу выпотрошить, помыть, разрезать на кусочки. Хорошенько обвалять в смеси сахара, соли и специй, проложить лавровым листом и оставить при комнатной температуре на 2-3 ч (без гнёта). Затем слить образовавшуюся жидкость и убрать в холодильник на 12 ч. Рыбу промыть и употребить по назначению. a_beer a_grin Получается малосольная душистая рыбка. Попробуете? a_wink",
+            "image_url": "https://gotovim-doma.ru/images/recipe/6/75/675425b5a08186e26c9fec5196b1d444_l.jpg",
+            "step_recipe": 34
+        }
+    },
+    {
+        "model": "recipes.recipestep",
+        "pk": 73,
+        "fields": {
+            "order": 1,
+            "instruction": "Готовим начинку: все измельчаем ножом или на крупной терке.\r\nНа лаваш выкладываем начинку, заворачиваем конвертом и быстро обжариваем на раст. масле с обеих сторон до золотистого цвета.\r\nВсе, вариант армянского фаст-фуда готов.",
+            "image_url": "https://gotovim-doma.ru/images/recipe/3/96/39674a31e3851c273b11ff3584777f05_m.jpg",
+            "step_recipe": 35
+        }
+    },
+    {
+        "model": "recipes.recipestep",
+        "pk": 74,
+        "fields": {
+            "order": 1,
+            "instruction": "Боюсь повториться, предыдущие бутерброды были не сладкие. Я свои называю *Гренки сладкие*.\r\nПонадобится - 1 яйцо, немного молока (грамм 100-150), сахар ~ 3 ч. л.\r\nРазмешать, взять несколько ломтиков белого хлеба. Обмакивать хлеб в эту массу и обжаривать на растительном масле на умеренном огне.\r\nДети эти гренки съедают за 5 мин. a_girl_yes",
+            "image_url": "https://gotovim-doma.ru/images/recipe/6/fa/6fa6b1c5ec7527c84b50c216ea4e2cfe_l.jpg",
+            "step_recipe": 36
         }
     },
     {
@@ -1042,6 +2035,852 @@
             "ingredient": 73,
             "recipe": 20,
             "amount": "3.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 117,
+        "fields": {
+            "ingredient": 52,
+            "recipe": 21,
+            "amount": "4.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 118,
+        "fields": {
+            "ingredient": 54,
+            "recipe": 21,
+            "amount": "2.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 119,
+        "fields": {
+            "ingredient": 85,
+            "recipe": 21,
+            "amount": "1.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 120,
+        "fields": {
+            "ingredient": 86,
+            "recipe": 21,
+            "amount": "150.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 121,
+        "fields": {
+            "ingredient": 87,
+            "recipe": 21,
+            "amount": "3.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 122,
+        "fields": {
+            "ingredient": 53,
+            "recipe": 21,
+            "amount": "1.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 123,
+        "fields": {
+            "ingredient": 73,
+            "recipe": 21,
+            "amount": "3.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 124,
+        "fields": {
+            "ingredient": 42,
+            "recipe": 21,
+            "amount": "2.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 125,
+        "fields": {
+            "ingredient": 72,
+            "recipe": 21,
+            "amount": "2.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 126,
+        "fields": {
+            "ingredient": 88,
+            "recipe": 22,
+            "amount": "0.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 127,
+        "fields": {
+            "ingredient": 85,
+            "recipe": 22,
+            "amount": "2.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 128,
+        "fields": {
+            "ingredient": 52,
+            "recipe": 22,
+            "amount": "2.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 129,
+        "fields": {
+            "ingredient": 54,
+            "recipe": 22,
+            "amount": "2.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 130,
+        "fields": {
+            "ingredient": 53,
+            "recipe": 22,
+            "amount": "1.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 131,
+        "fields": {
+            "ingredient": 39,
+            "recipe": 22,
+            "amount": "3.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 132,
+        "fields": {
+            "ingredient": 42,
+            "recipe": 22,
+            "amount": "1.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 133,
+        "fields": {
+            "ingredient": 72,
+            "recipe": 22,
+            "amount": "1.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 134,
+        "fields": {
+            "ingredient": 58,
+            "recipe": 23,
+            "amount": "3.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 135,
+        "fields": {
+            "ingredient": 42,
+            "recipe": 23,
+            "amount": "2.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 136,
+        "fields": {
+            "ingredient": 72,
+            "recipe": 23,
+            "amount": "2.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 137,
+        "fields": {
+            "ingredient": 53,
+            "recipe": 23,
+            "amount": "1.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 138,
+        "fields": {
+            "ingredient": 61,
+            "recipe": 23,
+            "amount": "2.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 139,
+        "fields": {
+            "ingredient": 37,
+            "recipe": 23,
+            "amount": "10.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 140,
+        "fields": {
+            "ingredient": 73,
+            "recipe": 23,
+            "amount": "2.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 141,
+        "fields": {
+            "ingredient": 89,
+            "recipe": 24,
+            "amount": "500.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 142,
+        "fields": {
+            "ingredient": 47,
+            "recipe": 24,
+            "amount": "3500.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 143,
+        "fields": {
+            "ingredient": 52,
+            "recipe": 24,
+            "amount": "3.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 144,
+        "fields": {
+            "ingredient": 65,
+            "recipe": 24,
+            "amount": "200.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 145,
+        "fields": {
+            "ingredient": 59,
+            "recipe": 24,
+            "amount": "1.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 146,
+        "fields": {
+            "ingredient": 42,
+            "recipe": 24,
+            "amount": "2.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 147,
+        "fields": {
+            "ingredient": 72,
+            "recipe": 24,
+            "amount": "1.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 148,
+        "fields": {
+            "ingredient": 61,
+            "recipe": 24,
+            "amount": "1.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 149,
+        "fields": {
+            "ingredient": 85,
+            "recipe": 24,
+            "amount": "1.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 150,
+        "fields": {
+            "ingredient": 53,
+            "recipe": 24,
+            "amount": "1.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 151,
+        "fields": {
+            "ingredient": 54,
+            "recipe": 24,
+            "amount": "1.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 152,
+        "fields": {
+            "ingredient": 58,
+            "recipe": 24,
+            "amount": "2.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 153,
+        "fields": {
+            "ingredient": 47,
+            "recipe": 25,
+            "amount": "1500.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 154,
+        "fields": {
+            "ingredient": 58,
+            "recipe": 25,
+            "amount": "2.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 155,
+        "fields": {
+            "ingredient": 72,
+            "recipe": 25,
+            "amount": "1.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 156,
+        "fields": {
+            "ingredient": 77,
+            "recipe": 25,
+            "amount": "50.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 157,
+        "fields": {
+            "ingredient": 53,
+            "recipe": 25,
+            "amount": "1.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 158,
+        "fields": {
+            "ingredient": 55,
+            "recipe": 25,
+            "amount": "1.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 159,
+        "fields": {
+            "ingredient": 59,
+            "recipe": 25,
+            "amount": "1.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 160,
+        "fields": {
+            "ingredient": 42,
+            "recipe": 25,
+            "amount": "1.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 161,
+        "fields": {
+            "ingredient": 74,
+            "recipe": 26,
+            "amount": "1.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 162,
+        "fields": {
+            "ingredient": 61,
+            "recipe": 26,
+            "amount": "5.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 163,
+        "fields": {
+            "ingredient": 42,
+            "recipe": 26,
+            "amount": "2.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 164,
+        "fields": {
+            "ingredient": 76,
+            "recipe": 26,
+            "amount": "2.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 165,
+        "fields": {
+            "ingredient": 46,
+            "recipe": 26,
+            "amount": "2.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 166,
+        "fields": {
+            "ingredient": 64,
+            "recipe": 27,
+            "amount": "500.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 167,
+        "fields": {
+            "ingredient": 53,
+            "recipe": 27,
+            "amount": "2.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 168,
+        "fields": {
+            "ingredient": 43,
+            "recipe": 27,
+            "amount": "50.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 169,
+        "fields": {
+            "ingredient": 58,
+            "recipe": 27,
+            "amount": "1.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 170,
+        "fields": {
+            "ingredient": 59,
+            "recipe": 27,
+            "amount": "1.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 171,
+        "fields": {
+            "ingredient": 42,
+            "recipe": 27,
+            "amount": "1.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 172,
+        "fields": {
+            "ingredient": 72,
+            "recipe": 27,
+            "amount": "1.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 173,
+        "fields": {
+            "ingredient": 90,
+            "recipe": 28,
+            "amount": "0.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 174,
+        "fields": {
+            "ingredient": 47,
+            "recipe": 28,
+            "amount": "400.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 175,
+        "fields": {
+            "ingredient": 48,
+            "recipe": 28,
+            "amount": "200.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 176,
+        "fields": {
+            "ingredient": 42,
+            "recipe": 28,
+            "amount": "1.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 177,
+        "fields": {
+            "ingredient": 37,
+            "recipe": 28,
+            "amount": "20.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 178,
+        "fields": {
+            "ingredient": 77,
+            "recipe": 29,
+            "amount": "250.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 179,
+        "fields": {
+            "ingredient": 39,
+            "recipe": 29,
+            "amount": "3.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 180,
+        "fields": {
+            "ingredient": 42,
+            "recipe": 29,
+            "amount": "3.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 181,
+        "fields": {
+            "ingredient": 71,
+            "recipe": 29,
+            "amount": "1.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 182,
+        "fields": {
+            "ingredient": 47,
+            "recipe": 30,
+            "amount": "180.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 183,
+        "fields": {
+            "ingredient": 43,
+            "recipe": 30,
+            "amount": "180.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 184,
+        "fields": {
+            "ingredient": 42,
+            "recipe": 30,
+            "amount": "10.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 185,
+        "fields": {
+            "ingredient": 73,
+            "recipe": 30,
+            "amount": "20.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 186,
+        "fields": {
+            "ingredient": 78,
+            "recipe": 31,
+            "amount": "100.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 187,
+        "fields": {
+            "ingredient": 47,
+            "recipe": 31,
+            "amount": "150.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 188,
+        "fields": {
+            "ingredient": 91,
+            "recipe": 31,
+            "amount": "50.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 189,
+        "fields": {
+            "ingredient": 92,
+            "recipe": 32,
+            "amount": "300.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 190,
+        "fields": {
+            "ingredient": 80,
+            "recipe": 32,
+            "amount": "50.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 191,
+        "fields": {
+            "ingredient": 39,
+            "recipe": 32,
+            "amount": "3.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 192,
+        "fields": {
+            "ingredient": 61,
+            "recipe": 32,
+            "amount": "1.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 193,
+        "fields": {
+            "ingredient": 59,
+            "recipe": 32,
+            "amount": "1.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 194,
+        "fields": {
+            "ingredient": 54,
+            "recipe": 33,
+            "amount": "500.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 195,
+        "fields": {
+            "ingredient": 53,
+            "recipe": 33,
+            "amount": "1.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 196,
+        "fields": {
+            "ingredient": 61,
+            "recipe": 33,
+            "amount": "3.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 197,
+        "fields": {
+            "ingredient": 73,
+            "recipe": 33,
+            "amount": "30.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 198,
+        "fields": {
+            "ingredient": 37,
+            "recipe": 33,
+            "amount": "1.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 199,
+        "fields": {
+            "ingredient": 72,
+            "recipe": 33,
+            "amount": "1.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 200,
+        "fields": {
+            "ingredient": 93,
+            "recipe": 34,
+            "amount": "2.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 201,
+        "fields": {
+            "ingredient": 42,
+            "recipe": 34,
+            "amount": "4.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 202,
+        "fields": {
+            "ingredient": 37,
+            "recipe": 34,
+            "amount": "2.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 203,
+        "fields": {
+            "ingredient": 66,
+            "recipe": 35,
+            "amount": "100.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 204,
+        "fields": {
+            "ingredient": 59,
+            "recipe": 35,
+            "amount": "1.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 205,
+        "fields": {
+            "ingredient": 80,
+            "recipe": 35,
+            "amount": "100.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 206,
+        "fields": {
+            "ingredient": 39,
+            "recipe": 36,
+            "amount": "1.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 207,
+        "fields": {
+            "ingredient": 48,
+            "recipe": 36,
+            "amount": "100.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 208,
+        "fields": {
+            "ingredient": 37,
+            "recipe": 36,
+            "amount": "3.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 209,
+        "fields": {
+            "ingredient": 66,
+            "recipe": 36,
+            "amount": "400.0"
+        }
+    },
+    {
+        "model": "recipes.recipeingredientamount",
+        "pk": 210,
+        "fields": {
+            "ingredient": 73,
+            "recipe": 36,
+            "amount": "50.0"
         }
     },
     {

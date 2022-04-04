@@ -34,11 +34,14 @@ class TelegramUser(models.Model):
     )
     phone_number = PhoneNumberField()
 
+    def get_telegram_username(self):
+        return f"@{self.telegram_username}"
+
     class Meta:
         ordering = ["telegram_id"]
 
     def __str__(self) -> str:
-        return f"telegram_id {self.telegram_id}"
+        return f"@{self.telegram_username}, {self.phone_number}"
 
 
 class MealType(models.Model):
@@ -46,6 +49,9 @@ class MealType(models.Model):
         verbose_name="Meal type",
         max_length=100,
     )
+
+    def get_recipes_count(self):
+        return Recipe.objects.filter(meal_type=self).count()
 
     class Meta:
         ordering = ["name"]
@@ -83,6 +89,9 @@ class Ingredient(models.Model):
         related_name="ingredients",
         blank=True,
     )
+
+    def get_ingredient_allergies(self):
+        return ", ".join([str(allergy) for allergy in self.allergy.all()])
 
     class Meta:
         ordering = ["name"]
@@ -154,7 +163,10 @@ class Recipe(models.Model):
         allergies = []
         for ingredient in self.ingredients.filter(allergy__isnull=False):
             allergies.append(ingredient.allergy.first())
-        return allergies
+        return ", ".join([str(allergy) for allergy in allergies])
+
+    def get_recipe_meal_types(self):
+        return ", ".join([str(meal_type) for meal_type in self.meal_type.all()])
 
     def __str__(self) -> str:
         return f"{self.name}"
@@ -232,6 +244,9 @@ class PromoCode(models.Model):
     )
     valid_thru = models.DateField(verbose_name="Code valid thru date")
 
+    def get_activation_count(self):
+        return Subscription.objects.filter(promo_code=self).count()
+
     class Meta:
         ordering = ["discount"]
 
@@ -268,8 +283,11 @@ class SubscriptionPlan(models.Model):
         default=Duration.ONE,
     )
 
+    def get_plan_activation_count(self):
+        return Subscription.objects.filter(plan=self).count()
+
     def __str__(self) -> str:
-        return f"{self.name} - {self.duration}"
+        return f"{self.name}"
 
 
 class Subscription(models.Model):
@@ -322,6 +340,9 @@ class Subscription(models.Model):
         verbose_name="Subscription payment status",
         default=False,
     )
+
+    def get_subscription_allergies(self):
+        return ", ".join([str(allergy) for allergy in self.allergy.all()])
 
     class Meta:
         ordering = ["start_date"]
