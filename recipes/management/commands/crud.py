@@ -44,29 +44,29 @@ def create_new_user(user_profile: dict) -> TelegramUser:
 
 
 @sync_to_async
-def get_user(telegram_id: str):
+def get_user(telegram_id: str) -> TelegramUser:
     return TelegramUser.objects.get(telegram_id=telegram_id)
 
 
 @sync_to_async
-def get_user_subscription_plan(name: str):
+def get_user_subscription_plan(name: str) -> SubscriptionPlan:
     return SubscriptionPlan.objects.get(name=name)
 
 
 @sync_to_async
-def get_user_subscriptions_list(user: TelegramUser):
+def get_user_subscriptions_list(user: TelegramUser) -> list[Subscription]:
     return [
         subscription for subscription in Subscription.objects.filter(owner=user).all()
     ]
 
 
 @sync_to_async
-def get_user_allergies_pk_list(allergies):
+def get_user_allergies_pk_list(allergies) -> list[Subscription.pk]:
     return [Allergy.objects.get(name=allergy_name).pk for allergy_name in allergies]
 
 
 @sync_to_async
-def create_user_subscription(subscription_details: dict):
+def create_user_subscription(subscription_details: dict) -> Subscription:
     subscription = Subscription.objects.create(
         name=subscription_details.get("name"),
         owner=subscription_details.get("owner"),
@@ -86,7 +86,9 @@ def create_user_subscription(subscription_details: dict):
 
 
 @sync_to_async
-def delete_user_subscription(user: TelegramUser, subscription_name: str):
+def delete_user_subscription(
+    user: TelegramUser, subscription_name: str
+) -> Subscription:
     subscription_to_delete = Subscription.objects.filter(
         owner=user, name=subscription_name
     ).delete()
@@ -129,7 +131,7 @@ def get_recipe_ingredients(recipe: Recipe) -> dict:
 
 
 @sync_to_async
-def get_recipe_steps(recipe: Recipe) -> dict:
+def get_recipe_steps(recipe: Recipe) -> list[dict]:
     recipe_steps = RecipeStep.objects.filter(step_recipe=recipe.pk)
     steps = []
     for step in recipe_steps:
@@ -145,19 +147,19 @@ def get_recipe_steps(recipe: Recipe) -> dict:
 
 
 @sync_to_async
-def get_promo_code(user_code: str):
+def get_promo_code(user_code: str) -> PromoCode:
     return PromoCode.objects.get(code=user_code.upper())
 
 
 @sync_to_async
-def get_subscription_plans_names() -> list:
+def get_subscription_plans_names() -> list[str]:
     return [
         subscription_plan.name for subscription_plan in SubscriptionPlan.objects.all()
     ]
 
 
 @sync_to_async
-def get_meal_types_names() -> list:
+def get_meal_types_names() -> list[str]:
     return [meal_type.name for meal_type in MealType.objects.all()]
 
 
