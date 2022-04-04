@@ -434,7 +434,7 @@ class Command(BaseCommand):
                 title="Счет на оплату",
                 description=f'Подписка "{subscription_plan.name}"',
                 payload=str(payment_id),
-                provider_token=env.str("SBER_TOKEN"),
+                provider_token=env.str("PAYMENT_TOKEN"),
                 currency="RUB",
                 prices=[LabeledPrice("ooops", price * 100)],
             )
