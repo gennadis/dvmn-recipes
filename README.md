@@ -1,6 +1,7 @@
 # FoodPlan Service
 
-This project automates ...
+This project helps with `Telegram bot` and `Django` powered backend creation for food recipes delivery.
+It maintains users, their paid subscriptions, food recipes, ingredients and many more.
 You can install and run it on your local machine or use preconfigured [Heroku app](https://dvmn-recipes.herokuapp.com/admin)
 Or use [this](https://t.me/dvmn_march_11_bot) Telegram bot.
 
